@@ -16,52 +16,6 @@
         font-weight: bold;
         color: #282a35;
       }
-<<<<<<< Updated upstream
-      body {
-        margin: 0;
-        padding: 0;
-        background: linear-gradient(100deg, #000915, #003465);
-      }
-      .userImg {
-          width: 30px;
-          height: 30px;
-          margin-top: 10px;
-        }
-      .pwImg {
-          width: 30px;
-          height: 30px;
-          margin-top: 10px;
-        }
-        .userName {
-          display: flex;
-          flex-direction: row;
-        }
-        .password {
-          display: flex;
-          flex-direction: row;
-        }
-        .forget-pass {
-          text-decoration: none;
-          color: #5b548a;
-        }
-        .form-control {
-          margin-left: 10px;
-        }
-        .forget-pass:hover {
-          color: #1e7dea;
-        }
-        .create {
-          text-decoration: none;
-          color: #5b548a;
-        }
-        .create:hover {
-          color: #1e7dea;
-        }
-        .btn-signIn{
-          background-color: #06d001 !important;
-          border-color: #06d001;
-        }
-=======
 
       .body {
         margin: 0;
@@ -154,28 +108,10 @@
       }
       
 
->>>>>>> Stashed changes
     </style>
     <title>Sign In</title>
 </head>
 <body class="body">
-<<<<<<< Updated upstream
-<section class="vh-100">
-  <div class="container py-5 h-100">
-    <div class="row d-flex align-items-center justify-content-center h-100">
-      <div class="col-md-8 col-lg-7 col-xl-6">
-        <img id="genarateImg"
-          class="img-fluid " src="src/img1.png" alt="Phone image">
-      </div>
-      <div class="col-md-7 col-lg-5 col-xl-5 offset-xl-1">
-        <form>
-          <h1 class="text-center">Sign In</h1>
-          <!-- userName input -->
-          <div data-mdb-input-init class="form-outline mb-4 userName">
-            <img src="src/User.png" alt="user" class="userImg">
-            <input type="text" name="userName" class="form-control form-control-lg" placeholder="UserName"/>
-          </div>
-=======
   <section class="vh-100">
     <div class="container py-5 h-100">
       <div class="row d-flex align-items-center justify-content-center h-100">
@@ -189,7 +125,6 @@
               <div class="d-flex justify-content-end my-4 me-md-2">
                 <div class="row"> <label>Don't have an account?<a href="signUp.php" class="create"> Sign Up</a></label> </div>
               </div>
->>>>>>> Stashed changes
 
 
               <!--|Log in with google & facebook|-->
