@@ -1,53 +1,61 @@
-/**original*/
-h1 {
-  font-family: "palatino linotype", palatino, serif;
-  color: azure;
+.SignIn-icon {
+    width: 31px;
+    position: relative;
+    height: 31px;
+    object-fit: cover;
 }
-.movie-heading {
-  text-align: start;
-  font-family: "palatino linotype", palatino, serif;
-  color: azure;
+.sign-in {
+    width: 68px;
+    position: relative;
+    display: inline-block;
+    flex-shrink: 0;
 }
-label {
-  color: azure;
-}
-body {
-  margin: 0;
-  padding: 0;
-  background: linear-gradient(100deg, #000915, #003465);
-}
-.top_pannel {
-  display: flex;
-  flex-direction: row;
-}
-
-.btns {
-  align-items: end;
-  margin: 5;
-  border: 0px;
-  width: 70px;
-  border-radius: 10px;
-  background-color: azure;
-  color:#000915;
-}
-
-.logo {
-  
-  width: auto;
-  height: 50px;
-}
-.logoTitle{
-  text-align: left;
-  color: azure;
-  
-}
-.card {
-  height: 250px;
-  width: 250px;
-}
-.navbarColor{
-  background-color: #000915;
+.SignIn-btn {
+    display: flex;
+    height: 35px;
+    font-weight: 700;
+    font-size: .9rem;
+    font-family: inter;
+    position: relative;
+    border-radius: 56px;
+    background-color: #1ebba3;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 10px;
+    box-sizing: border-box;
+    gap: 10px;
+    text-align: right;
+    font-size: 16px;
+    color: #000;
+    border-width: 0;
 }
 
-
-
+body{
+    overflow-x: hidden
+    
+}
+.navbar{
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: .9rem;
+    background-color: rga(0, 0, 0, 0.6) !important;
+}
+.navbar-logo img{
+    height: 32px;
+}
+.navbar-nav li{
+    justify-content: space-between;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+.navbar-dark .navbar-nav  .nav-link{
+    color: white;
+    padding-top: 15px;
+}
+.navbar-dark .navbar-nav .nav-link.active,
+.navbar-dark .navbar-nav .nav-link:hover{
+    color: #1ebba3;
+}

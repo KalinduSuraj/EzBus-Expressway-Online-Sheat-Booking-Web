@@ -7,7 +7,12 @@
 
     <!-- Style Sheet -->
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/FooterStyle.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lexend Deca:wght@400&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Livvic:wght@100;700&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lohit Tamil:wght@400&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Viga:wght@400&display=swap" />
+
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
@@ -17,47 +22,60 @@
 
     <title>EzBus</title>
 </head>
-<div class="container-fluid navbarColor">
-    <nav class="container navbar justify-content pt-3">
-        <div>
-            <a href="index.php"><img class="logo" src="src/Logo.png" alt=""></a>
-        </div>
-        <!-- 
-            <div>
-            <h1 class="logoTitle ">MovieLK</h1>
-            </div>
-         -->
-        <div class="justify-content-end">
-            <a href="signIn.php"><button class="btns ">LogIn</button></a>
-            <a href="signUp.php"><button class="btns ">SignUp</button></a>
-        </div>
-    </nav>
-</div>
-
 <!------------------------------------------------------------------------------>
-<body>
 
+<body data-spy="scroll" data-target="#navbarResponsive" >
+    <!-- Star Home Section -->
+    <div id="Home">
+        <!-- Navigation -->
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top ">
+            <div class="container">
+                <a class="navbar-logo " href="index.php"><img src="src/" alt="Logo"></a> <!-- Add logo -->
+                <button class="navbar-toggler justify-content-end" type="button" data-toggle="collapse" data-target="#navbarResponsive">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse justify-content-center" id="navbarResponsive">
+                    <ul class="navbar-nav ml-auto ">
+                        <li class="nav-item">
+                            <a class="nav-link " href="#Home">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link " href="#Booking">Booking</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link " href="#About">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link " href="#Contact">Contact</a>
+                        </li>
+                    </ul>
+                </div>
+                <a class="text-decoration-none" href="signIn.php"><button class="SignIn-btn" type="button" ><img class="SignIn-icon" src="src/profile .png">Sign In</button></a>
+            </div>
+        </nav>
+        <!-- End Navigation -->
+
+    </div>
+    <!-- End Home Section -->
+
+    <!-- Star Booking Section -->
+    <div id="Booking" class="offset">
+
+    </div>
+    <!-- End Booking Section -->
+
+    <!-- Star About Section -->
+    <div id="About" class="offset">
+
+    </div>
+    <!-- End About Section -->
+
+    <!-- Star Contact Section -->
+    <div id="Contact" class="offset">
+
+    </div>
+    <!-- End Contact Section -->
 </body>
-
-<!------------------------------------------------------------------------------>
-<footer class="footer container-fluid">
-    <div class="container">
-        <div class="row">
-            <div class="col-5">
-
-            </div>
-            <div class="col-4 ">
-
-            </div>
-            <div class="col-3 ">
-
-            </div>
-
-        </div>
-    </div>
-    <div class="CopyRightDiv">
-        <p class="CopyRight"> EzBus &copy; 2024</p>
-    </div>
-</footer>
 
 </html>

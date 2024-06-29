@@ -4,28 +4,80 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!--Link Style-->
-    <link rel="stylesheet" href="signupStyle.css">
-    
+    <!--Link Style.css
+    <link rel="stylesheet" href="style.css">
+    -->
     <!--Boostrap CDN-->
     <link rel="stylesheet" href=" 	https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <script src=" 	https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" > </script>
 
-    
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        background: linear-gradient(100deg, #000915, #003465);
+      }
+      button {
+        border-radius: 30px;
+      }
+      h1 {
+        font-family: "palatino linotype", palatino, serif;
+        color: azure;
+      }
+      label{
+        color: azure;
+      }
+      .userImg {
+          width: 30px;
+          height: 30px;
+          margin-top: 10px;
+        }
+      .pwImg {
+          width: 30px;
+          height: 30px;
+          margin-top: 10px;
+        }
+        .nameImg {
+          width: 30px;
+          height: 30px;
+          margin-top: 10px;
+        }
+        .emailImg {
+          width: 30px;
+          height: 30px;
+          margin-top: 10px;
+        }
+        .userName {
+          display: flex;
+          flex-direction: row;
+        }
+        .password {
+          display: flex;
+          flex-direction: row;
+        }
+        .email {
+          display: flex;
+          flex-direction: row;
+        }
+        .name {
+          display: flex;
+          flex-direction: row;
+        }
+        .form-control {
+          margin-left: 10px;
+        }
+        .btn-signUp{
+          background-color: #06d001 !important;
+          border-color: #06d001;
+        }
+        .create {
+          text-decoration: none;
+          color:aquamarine;
+        }
+    </style>
     <title>Sign Up</title>
 </head>
 <body class="body">
-  <!-- Navigation -->
-  <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top ">
-    <div class="container">
-      <a class="navbar-brand" href="index.php"><img src="src/" alt="Logo"></a> <!-- Add logo -->
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-    </div>
-  </nav>
-  <!-- End Navigation -->
-
 <section class="vh-100">
   <div class="container py-5 h-100">
     <div class="row d-flex align-items-center justify-content-center h-100">
@@ -35,7 +87,7 @@
       </div>
       <div class="col-md-7 col-lg-5 col-xl-5 offset-xl-1">
         <form>
-          <h1 class="text-center title">Sign Up</h1>
+          <h1 class="text-center">Sign Up</h1>
           <!-- email input -->
           <div data-mdb-input-init class="form-outline mb-4 email">
             <img src="src/Email.png" alt="user" class="emailImg">
