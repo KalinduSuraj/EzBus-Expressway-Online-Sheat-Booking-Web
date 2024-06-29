@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 <<<<<<< Updated upstream
     <!--Link Style.css
     <link rel="stylesheet" href="style.css">
@@ -83,6 +84,8 @@
           color:aquamarine;
         }
 =======
+=======
+>>>>>>> 7d7644f555142be66d49aad51209418de7336b70
     <!--Link Style.css-->
     <link rel="stylesheet" href="signinStyle.css">
 
@@ -199,6 +202,7 @@
     <title>Sign Up</title>
 </head>
 <body class="body">
+<<<<<<< HEAD
     <title>Sign Up</title>
 </head>
 <body class="body">
@@ -236,6 +240,8 @@
             <input type="text" name="name" class="form-control form-control-lg" placeholder="Name"/>
           </div>
 =======
+=======
+>>>>>>> 7d7644f555142be66d49aad51209418de7336b70
   <section class="vh-100">
     <div class="container py-5 h-100">
       <div class="row d-flex align-items-center justify-content-center h-100">
@@ -257,7 +263,6 @@
                 <!--|Facebook|-->
                 <button class="facebook-btn"><span>Facebook</span> <img src="src/facebook.png"> </button>
               </div>
->>>>>>> Stashed changes
 
               <span class="d-flex justify-content-center text-secondary mt-4">OR</span>
               <div class="d-flex justify-content-center">
