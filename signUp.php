@@ -276,9 +276,7 @@
                   <!-- Contact input -->
                    <div class="contact-info">
                     <input type="text" class="form-control form-control-lg clss-94 mb-3 mx-auto" value="+94" readonly/>
-                    <input type="tel" name="contactNo" id="contactNo" class="form-control form-control-lg mb-3 mx-auto" placeholder="Contact-No"/>
-
-                     
+                    <input type="tel" name="contactNo" id="contactNo" class="form-control form-control-lg mb-3 mx-auto" placeholder="Contact-No"/>                   
                    </div>
 
                 </div>
