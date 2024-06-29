@@ -4,14 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<<<<<<< HEAD
 <<<<<<< Updated upstream
     <!--Link Style.css
     <link rel="stylesheet" href="style.css">
     -->
+=======
+    <!--Link Style-->
+    <link rel="stylesheet" href="signupStyle.css">
+    
+>>>>>>> main
     <!--Boostrap CDN-->
     <link rel="stylesheet" href=" 	https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <script src=" 	https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" > </script>
 
+<<<<<<< HEAD
     <style>
       body {
         margin: 0;
@@ -187,12 +194,26 @@
         height: 30rem;
         width: 30rem; 
       }
->>>>>>> Stashed changes
+
     </style>
     <title>Sign Up</title>
 </head>
 <body class="body">
-<<<<<<< Updated upstream
+    <title>Sign Up</title>
+</head>
+<body class="body">
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top ">
+    <div class="container">
+      <a class="navbar-brand" href="index.php"><img src="src/" alt="Logo"></a> <!-- Add logo -->
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </div>
+  </nav>
+  <!-- End Navigation -->
+
+>>>>>>> main
 <section class="vh-100">
   <div class="container py-5 h-100">
     <div class="row d-flex align-items-center justify-content-center h-100">
@@ -202,7 +223,7 @@
       </div>
       <div class="col-md-7 col-lg-5 col-xl-5 offset-xl-1">
         <form>
-          <h1 class="text-center">Sign Up</h1>
+          <h1 class="text-center title">Sign Up</h1>
           <!-- email input -->
           <div data-mdb-input-init class="form-outline mb-4 email">
             <img src="src/Email.png" alt="user" class="emailImg">
