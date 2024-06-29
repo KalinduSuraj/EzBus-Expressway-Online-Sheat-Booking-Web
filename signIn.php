@@ -107,7 +107,10 @@
         font-weight: 700;
       }
       
-
+      .background-img {
+        height: 30rem;
+        width: 30rem; 
+      }
     </style>
     <title>Sign In</title>
 </head>
@@ -116,7 +119,7 @@
     <div class="container py-5 h-100">
       <div class="row d-flex align-items-center justify-content-center h-100">
         <div class="col-md-8 col-lg-7 col-xl-6 mb-5">
-          <img class="img-fluid " src="src/login-img.png" alt="login image">
+          <img class="img-fluid background-img" src="src/login-img.png" alt="login image">
         </div>
         <div class="col-md-7 col-lg-5 col-xl-5 offset-xl-1 loginpanel " >
           <div class="container px-4">
