@@ -1,0 +1,63 @@
+.body {
+    margin: 0;
+    padding: 0;
+    background-color: #212529;
+  }
+  button {
+    border-radius: 30px;
+  }
+  
+  
+  label{
+    color: azure;
+  }
+  .userImg {
+      width: 30px;
+      height: 30px;
+      margin-top: 10px;
+    }
+.title{
+    color: azure;
+}
+  .pwImg {
+      width: 30px;
+      height: 30px;
+      margin-top: 10px;
+    }
+    .nameImg {
+      width: 30px;
+      height: 30px;
+      margin-top: 10px;
+    }
+    .emailImg {
+      width: 30px;
+      height: 30px;
+      margin-top: 10px;
+    }
+    .userName {
+      display: flex;
+      flex-direction: row;
+    }
+    .password {
+      display: flex;
+      flex-direction: row;
+    }
+    .email {
+      display: flex;
+      flex-direction: row;
+    }
+    .name {
+      display: flex;
+      flex-direction: row;
+    }
+    .form-control {
+      margin-left: 10px;
+    }
+    .btn-signUp{
+      background-color: #06d001 !important;
+      border-color: #06d001;
+    }
+    .create {
+      text-decoration: none;
+      color:aquamarine;
+    }

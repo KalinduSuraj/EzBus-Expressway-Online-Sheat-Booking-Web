@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!--Link Style.css-->
-    <link rel="stylesheet" href="signinStyle.css">
-
+    <!--Link Style.css
+    <link rel="stylesheet" href="style.css">
+    -->
     <!--Boostrap CDN-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <script src=" 	https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" > </script>
@@ -22,10 +22,10 @@
       label{
         color: azure;
       }
-      .body {
+      body {
         margin: 0;
         padding: 0;
-        background-color: #212529;
+        background: linear-gradient(100deg, #000915, #003465);
       }
       .userImg {
           width: 30px;
@@ -66,14 +66,10 @@
           background-color: #06d001 !important;
           border-color: #06d001;
         }
-        .loginpanel{
-          background-color: whi;
-        }
     </style>
     <title>Sign In</title>
 </head>
 <body class="body">
-  
 <section class="vh-100">
   <div class="container py-5 h-100">
     <div class="row d-flex align-items-center justify-content-center h-100">
@@ -81,7 +77,7 @@
         <img id="genarateImg"
           class="img-fluid " src="src/img1.png" alt="Phone image">
       </div>
-      <div class="col-md-7 col-lg-5 col-xl-5 offset-xl-1 loginpanel" >
+      <div class="col-md-7 col-lg-5 col-xl-5 offset-xl-1">
         <form>
           <h1 class="text-center">Sign In</h1>
           <!-- userName input -->
