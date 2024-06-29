@@ -69,6 +69,7 @@
         padding: 0.2rem 1rem;
         cursor: pointer;
       }
+      /**/ 
 
       .google-btn {
         margin-right: 1rem;
