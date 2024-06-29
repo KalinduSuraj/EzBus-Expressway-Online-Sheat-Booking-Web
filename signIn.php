@@ -99,6 +99,10 @@
         padding: 0.2rem;
         cursor: pointer;
         font-weight: 600;
+      
+      }
+      .forgte-btn{
+        text-decoration: none;
       }
 
       .btn-login {
@@ -155,7 +159,7 @@
               </div>
               <div class="d-flex justify-content-center mt-4" id="bottem-btns">
                 <!--|forget password|-->
-                <input type="button" class="bottum-btns text-secondary" value="Forget Password?">
+               <a href="forgotPassword.php" class="forgte-btn"><input type="button" class="bottum-btns  text-secondary" value="Forget Password?"></a> 
                 <!-- Submit button -->
                 <input type="submit" class="bottum-btns btn-login" value="Login">
               </div>
