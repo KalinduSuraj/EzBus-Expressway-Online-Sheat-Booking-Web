@@ -1,0 +1,53 @@
+/**original*/
+h1 {
+  font-family: "palatino linotype", palatino, serif;
+  color: azure;
+}
+.movie-heading {
+  text-align: start;
+  font-family: "palatino linotype", palatino, serif;
+  color: azure;
+}
+label {
+  color: azure;
+}
+body {
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(100deg, #000915, #003465);
+}
+.top_pannel {
+  display: flex;
+  flex-direction: row;
+}
+
+.btns {
+  align-items: end;
+  margin: 5;
+  border: 0px;
+  width: 70px;
+  border-radius: 10px;
+  background-color: azure;
+  color:#000915;
+}
+
+.logo {
+  
+  width: auto;
+  height: 50px;
+}
+.logoTitle{
+  text-align: left;
+  color: azure;
+  
+}
+.card {
+  height: 250px;
+  width: 250px;
+}
+.navbarColor{
+  background-color: #000915;
+}
+
+
+
