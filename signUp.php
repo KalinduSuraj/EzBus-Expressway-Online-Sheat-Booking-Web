@@ -55,7 +55,7 @@
         /*background-color: rgba(255, 255, 255, 0.2);    transperant background: ;*/
         background-color: white;
         border-radius: 10px;
-        height: 37rem;
+        height: 40rem;
         width: 28rem;
       }
 
@@ -151,6 +151,9 @@
                   <input type="email" name="email" class="form-control form-control-lg mb-3 mx-auto" placeholder="Email"/>
                   <!-- Password input -->
                   <input type="password" name="password" class="form-control form-control-lg mb-3 mx-auto" placeholder="Password"/>
+                  <!-- confirm-Password input -->
+                  <input type="password" name="confirm-password" class="form-control form-control-lg mb-3 mx-auto" placeholder="Confirm Password"/>
+                  <!-- Contact input -->
                   <!-- Contact input -->
                    <div class="contact-info">
                     <input type="text" class="form-control form-control-lg clss-94 mb-3 mx-auto" value="+94" readonly/>
