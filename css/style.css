@@ -38,7 +38,7 @@ body{
     
 }
 .navbar{
-    text-transform: uppercase;
+    text-transform: ercase;
     font-weight: 700;
     font-size: .9rem;
     background-color: rga(0, 0, 0, 0.6) !important;
