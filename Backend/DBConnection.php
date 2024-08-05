@@ -6,11 +6,21 @@ class DBConnection
 
     public function connect()
     {
-        //awardspace.net
-        $this->connection = mysqli_connect("fdb1029.awardspace.net", "4500036_ezbus", "EzBus@1234", "4500036_ezbus");
-        if (!$this->connection) {
-            echo "Connection failed: " . mysqli_connect_error();
+        // $conn = new mysqli($servername, $username, $password, $dbname);
+
+        // infinityfree connection
+        //$conn = new mysqli('sql305.infinityfree.com', 'if0_36817372', 'YOmTan81T2kFf', 'if0_36817372_ezbusdb');
+
+        //Kalindu's db
+        $conn = mysqli_connect("localhost", "suraj", "20030115", "ezbusdb");
+
+        // Check connection
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+            echo "<script> console.log('Database connection failed'); </script>";
         }
+        //echo "Connected successfully";
+        echo "<script> console.log('Database connection successful'); </script>";
     }
     public function disconnect()
     {
@@ -26,3 +36,13 @@ class DBConnection
         return $this->connection;
     }
 }
+
+// $db = new DBConnection();
+// $db->connect();
+// $conn = $db->getConnection();
+
+// // Perform database operations here
+
+// $db->disconnect();
+?>
+

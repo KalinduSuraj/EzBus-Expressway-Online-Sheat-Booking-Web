@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
     <!-- Bootstrap Bundle JS (includes Popper.js) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    
+
     <style>
         * {
             margin: 0;
@@ -46,6 +46,7 @@
         a {
             text-decoration: none;
         }
+
         /* Main */
         main {
             padding: 24px 20px 20px 20px;
@@ -81,12 +82,48 @@
     <main class="">
         <h1 class="title mb-10">SCHEDULE</h1>
         <ul class="list-unstyled breadcrumbs d-flex gap-2">
-            <li><a href="AdminView.php">Home</a></li> <!-- ## -->
+            <li><a href="ScheduleView.php">Home</a></li> <!-- ## -->
             <li class="divider">/</li> <!-- ## -->
             <li><a href="#" class="active">Schedule</a></li>
         </ul>
     </main>
+    <div class="col-sm-6 p-0 flex justify-content-lg-end justify-content-center">
+        <a href="#" onclick="document.getElementById('Delete').style.display='block'" class="btn btn-danger" data-toggle="modal">
+            <i class="bi bi-trash"></i><span>Delete Schedule</span>
+        </a>
+    </div>
 
+
+    
+
+
+    <!----delete-modal start--------->
+    <div class="modal " tabindex="-1" id="Delete" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Delete Employees</h5>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete this Records</p>
+                    <p class="text-warning"><small>this action Cannot be Undone,</small></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" onclick="document.getElementById('Delete').style.display='none'" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" onclick="document.getElementById('Delete').style.display='none'" id="DeleteSchedule">Delete</button>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+    <script>
+        $(document).ready(function() {
+            $('#DeleteSchedule').on('click', function(event) {
+                alert("Delete")
+            })
+        })
+    </script>
 
 </body>
 

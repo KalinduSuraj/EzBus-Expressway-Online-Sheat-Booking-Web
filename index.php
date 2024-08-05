@@ -16,12 +16,14 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
-
     <!-- Bootstrap Bundle JS (includes Popper.js) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- jquery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 
-
-    
+    <style>
+        
+    </style>
     <title>EzBus</title>
 </head>
 <!------------------------------------------------------------------------------>
@@ -53,7 +55,7 @@
                         </li>
                     </ul>
                 </div>
-                <a class="text-decoration-none" href="signIn.php"><button class="SignIn-btn" type="button" ><img class="SignIn-icon" src="src/profile .png">Sign In</button></a>
+                <a class="text-decoration-none text-light" href=""><button class="SignIn-btn text-light" type="button" id="SignIn" >Sign In</button></a>
             </div>
         </nav>
         <!-- End Navigation -->
@@ -78,6 +80,24 @@
 
     </div>
     <!-- End Contact Section -->
+
+
+
+    <!-- Placeholder for the Signin modal -->
+    <div id="SigninmodalContainer"></div>
+
+
+    <script>
+    $(document).ready(function() {
+      $('#SignIn').click(function(event) {
+        // alert("SignIn");
+        event.preventDefault();
+        $('#SigninmodalContainer').load('SignInSignUpModel.php', function() {
+          $('#SignInModal').modal('show');
+        });
+      });
+    });
+  </script>
 </body>
 
 </html>

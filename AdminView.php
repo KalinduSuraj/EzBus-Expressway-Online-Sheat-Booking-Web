@@ -13,6 +13,8 @@
     <!-- Bootstrap Bundle JS (includes Popper.js) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    
     <style>
         * {
             margin: 0;
@@ -347,8 +349,18 @@
                 <!-- Toggle Sidebar Button -->
                 <i class="bi bi-list toggle-sidebar"></i>
 
+
                 <!-- Navbar Items Aligned to the Right -->
                 <div class="ms-auto d-flex gap-2">
+
+                    <!-- Show Name -->
+                    <div class="text-muted pt-2 text-capitalize d-flex">
+                        <h6>Hi, </h6>
+                        <h6 id="ShowUserName">Kalindu Suraj</h6>
+                    </div>
+                    <!-- Divider -->
+                    <span class="divider"></span>
+
                     <!-- Bell Icon with Badge -->
                     <a href="#" class="nav-link">
                         <i class='bx bxs-bell bx-tada-hover icon'></i>
@@ -385,6 +397,8 @@
 
 
 
+
+
     <script>
         // Select all dropdown menus
         const dropdownMenus = document.querySelectorAll('#sidebar .collapse');
@@ -414,7 +428,7 @@
             });
 
 
-            //form load
+            // form load
             const viewSection = document.getElementById('view');
 
             async function loadContent(url) {
@@ -423,12 +437,22 @@
                     if (response.ok) {
                         const content = await response.text();
                         viewSection.innerHTML = content;
+                        executeScripts(viewSection);
                     } else {
                         viewSection.innerHTML = `<p>Failed to load content. Status: ${response.status}</p>`;
                     }
                 } catch (error) {
                     viewSection.innerHTML = `<p>Error: ${error.message}</p>`;
                 }
+            }
+
+            function executeScripts(container) {
+                const scripts = container.querySelectorAll('script');
+                scripts.forEach(script => {
+                    const newScript = document.createElement('script');
+                    newScript.textContent = script.textContent;
+                    document.body.appendChild(newScript).parentNode.removeChild(newScript);
+                });
             }
 
             function setActiveLink(link) {
@@ -450,7 +474,7 @@
                 setActiveLink(defaultLink);
             }
 
-             // Handle Profile Menu Click
+            // Handle Profile Menu Click
             const profileMenuLink = document.querySelector('#Profile');
             if (profileMenuLink) {
                 profileMenuLink.addEventListener('click', function(event) {
@@ -502,13 +526,14 @@
         });
 
         function confirmLogout() {
-			if (confirm('Are you sure you want to log out?')) {
-				window.location.href = 'signIn.php';
-			} else {
-				window.location.href = 'index.php';
-			}
-		}
+            if (confirm('Are you sure you want to log out?')) {
+                window.location.href = 'signIn.php';
+            } else {
+                window.location.href = 'index.php';
+            }
+        }
     </script>
+
 </body>
 
 </html>
