@@ -4,6 +4,7 @@ class Counter extends User{
     public function register(string $name, string $password, string $contact, string $email){
         try{
 
+            mysqli_begin_transaction($this->db->getConnection());
             //auto increment userID
             $userID = $this->userIDIncrement();
 
@@ -27,8 +28,8 @@ class Counter extends User{
 
             if (!(mysqli_num_rows($res) == 1)) {
                 //inner join
-                $queary1 = "insert into user_account
-                values('$contact','$email','$name','$password','$userID','Counter');";
+                $queary1 = "insert into user_account(UserID,Name,Email,Contact,Password,UserType)
+                values('$userID','$name','$email','$contact','$password','Counter');";
                 $queary2 = "insert into counter
                 values('$counterId','$userID');";
 
@@ -36,21 +37,25 @@ class Counter extends User{
                 $result2 = mysqli_query($this->db->getConnection(), $queary2);
                 $this->db->disconnect();
                 if ($result1 && $result2) {
+                    mysqli_commit($this->db->getConnection());
                     echo "<script> console.log('Added'); </script>";
                     echo "<script>alert('Counter Registered Successfully');</script>";
 
                     //redirection file->
                     //echo "<script>window.location.href = 'signIn.php';</script>";
                 } else {
+                    mysqli_rollback($this->db->getConnection());
                     echo "<script> alert('not Added'); </>";
                 }
                 return true;
             } else {
+                mysqli_rollback($this->db->getConnection());
                 echo "<script> alert('there is the Counter in this $email'); </script>";
                 return false;
             }
         }
         catch(Exception $e){
+            mysqli_rollback($this->db->getConnection());
             echo $e;
         }
 
