@@ -77,7 +77,7 @@
         }
 
         /* Main */
-        .overflow{
+        .overflow {
             overflow-y: auto;
             scrollbar-width: none;
         }
@@ -98,50 +98,122 @@
     <div class="container overflow">
         <form action="" method="post" style="width: 100%; min-width: 300px;">
             <div class="modal-header flex-column align-items-center">
-                
-                <div class="row mb-3 w-100 ">
+
+                <div class="row  w-100 ">
                     <b>
-                    <div class="col text-center">
-                        <!--  UserID
-                        <label class="form-label">User ID : </label>
-                        <label class="form-label" id="ShowUserID">U001</label>
-                         -->
-                        <label class="form-label ms-5">Admin ID : </label>
-                        <label class="form-label" id="ShowAdminID">A001</label>
-                    </div>
+                        <div class="col text-center">
+                            <label class="form-label mx-2">Admin ID : </label>
+                            <label class="form-label" id="ShowAdminID">A001</label>
+                        </div>
                     </b>
-                    
+
                 </div>
             </div>
 
-            <div class="modal-body ms-auto">
+            <div class="modal-body ">
                 <div class="row mb-3">
                     <div class="col">
                         <label class="form-label">Full Name:</label>
-                        <input type="text" class="form-control" name="full_name" id="full_name" placeholder="Kalindu Suraj" >
+                        <input type="text" class="form-control form-control-md" name="full_name" id="full_name" placeholder="Kalindu Suraj">
+                        <span class="errMsg" id="full_name_err"></span>
                     </div>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Email:</label>
-                    <input type="email" class="form-control" name="email" id="email" placeholder="name@example.com" >
+                    <input type="email" class="form-control form-control-md" name="email" id="email" placeholder="name@example.com">
+                    <span class="errMsg" id="email_err"></span>
                 </div>
-                
+
                 <div class="mb-3">
                     <label class="form-label">Contact No :</label>
-                    <input type="text" class="form-control" name="contact" id="contact" placeholder="07X XXXX XXX" >
+                    <input type="text" class="form-control form-control-md" name="contact" id="contact" placeholder="07X XXXX XXX">
+                    <span class="errMsg" id="contact_err"></span>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Password :</label>
-                    <input type="password" class="form-control mb-2"  name="password" id="password" placeholder="Password" >
-                    
+                    <input type="password" class="form-control form-control-md" name="password" id="password" placeholder="Password">
+                    <span class="errMsg" id="password_err"></span>
+
                 </div>
             </div>
             <div class="modal-footer gap-2">
                 <button type="button" class="btn btn-success" data-bs-dismiss="modal" id="editButton">Edit</button>
-                <button type="submit" class="btn btn-success"  id="updateButton">Update</button>
+                <button type="button" class="btn btn-success" id="updateButton">Update</button>
             </div>
         </form>
     </div>
+
+    <script>
+        function clearErr() {
+            $('.errMsg').text('');
+        }
+
+        $(document).ready(function() {
+
+            document.getElementById("full_name").disable = true;
+
+            $('#updateButton').on('click', function(event) {
+                alert("click");
+                event.preventDefault(); // Prevent the form from submitting normally
+                // Clear previous error messages
+                clearErr();
+
+                var isValid = true;
+
+                var full_name = $('#full_name').val().trim();
+                var email = $('#email').val().trim();
+                var contact = $('#contact').val().trim();
+                var password = $('#password').val().trim();
+
+                //Simple validation
+                if (full_name === '') {
+                    $('#full_name_err').text('Name is required');
+                    isValid = false;
+                    return;
+                }
+
+                var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+                if (email === '') {
+                    $('#email_err').text('Email is required');
+                    isValid = false;
+                    return;
+                } else if (!emailRegex.test(email)) {
+                    $('#email_err').text('Please enter a valid email address.');
+                    isValid = false;
+                    return;
+                }
+
+                if (contact === '') {
+                    $('#contact_err').text('Contact is required');
+                    isValid = false;
+                    return;
+                } else if (contact.length !== 10) {
+                    $('#contact_err').text('Contact number must be exactly 10 digits');
+                    isValid = false;
+                    return;
+                }
+
+                if (password === '') {
+                    $('#password_err').text('Password is required');
+                    isValid = false;
+                    return;
+                }
+
+                if (isValid == true) {
+                    alert(isValid);
+                }
+
+            });
+
+            $('#editButton').on('click', function(event) {
+                alert("click");
+                document.getElementById("full_name").disable = false;
+
+            })
+
+        })
+    </script>
 </body>
 
 </html>

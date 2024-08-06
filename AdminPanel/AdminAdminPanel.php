@@ -45,7 +45,6 @@
             --red: #fc3b56;
         }
 
-
         .has-error .form-control {
             border-color: red;
         }
@@ -119,7 +118,43 @@
         <a href="#" onclick="document.getElementById('Delete').style.display='block'" class="btn btn-danger" data-toggle="modal">
             <i class="bi bi-trash"></i><span>Delete Admin</span>
         </a>
-        
+    </div>
+    <div class="mt-5">
+        <table class="table table-hover table-striped " border="1.5" id="AdminViewTable">
+            <thead>
+                <tr class="table-success">
+                    <th width="5%" scope="col">#</th>
+                    <th width="20%" scope="col">Name</th>
+                    <th width="25%" scope="col">Email</th>
+                    <th width="20%" scope="col">Contact</th>
+                    <th width="20%" scope="col">Password</th>
+                    <th width="10%"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">A001</th>
+                    <td>Kalindu Suraj</td>
+                    <td>mksuraj0316@gmail.com</td>
+                    <td>0783031728</td>
+                    <td>20030115</td>
+                    <td>
+                        <a href=""><i class="bi bi-pencil-square btn-success"></i></a>
+                        <a href=""><i class="bi bi-trash btn-danger"></i></a>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">A002</th>
+                    <td>Kalindu Suraj</td>
+                    <td>mksuraj0316@gmail.com</td>
+                    <td>0783031728</td>
+                    <td>20030115</td>
+                    <td>
+                        <a href=""><i class="bi bi-pencil-square "></i></a>
+                        <a href=""><i class="bi bi-trash"></i></a>
+                    </td>
+                </tr>
+            </tbody>
     </div>
 
 
@@ -200,9 +235,9 @@
 
         </div>
     </div>
-    
+
     <script>
-        function clearErr(){
+        function clearErr() {
             $('.errMsg').text('');
         }
 
@@ -240,7 +275,7 @@
                     $('#email_err').text('Email is required');
                     isValid = false;
                     return;
-                }else if (!emailRegex.test(email)) {
+                } else if (!emailRegex.test(email)) {
                     $('#email_err').text('Please enter a valid email address.');
                     isValid = false;
                     return;

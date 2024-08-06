@@ -173,9 +173,9 @@
                             <span class="d-flex justify-content-center text-secondary mt-4">OR</span>
                             <div class="d-flex justify-content-center">
                                 <div class="w-100">
-                                    <!-- Email-->
-                                    <input type="email" name="email" id="email" class="form-control form-control-md mt-4 mx-auto" placeholder="Email" />
-                                    <span class="errMsg" id="email_err"></span>
+                                    <!-- Email or Contact No-->
+                                    <input type="text" name="username" id="username" class="form-control form-control-md mt-4 mx-auto" placeholder="Email or Contact No" />
+                                    <span class="errMsg" id="username_err"></span>
                                     <!-- Password input -->
                                     <input type="password" name="password" id="password" class="form-control form-control-md mt-4  mx-auto" placeholder="Password" />
                                     <span class="errMsg" id="password_err"></span>
@@ -354,18 +354,19 @@
 
             var isValid = true;
 
-            var email = $('#email').val().trim();
+            var username = $('#username').val().trim();
             var password = $('#password').val().trim();
 
             //Simple validation
             var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            var contactNoRegex = /^\d{10}$/;
 
-            if (email === '') {
-                $('#email_err').text('Email is required');
+            if (username === '') {
+                $('#username_err').text('Email or Contact No is required');
                 isValid = false;
                 return;
-            } else if (!emailRegex.test(email)) {
-                $('#email_err').text('Please enter a valid email address.');
+            } else if (!emailRegex.test(username) && !contactNoRegex.test(username)){
+                $('#username_err').text('Please enter a valid email or Contact No address.');
                 isValid = false;
                 return;
             }
