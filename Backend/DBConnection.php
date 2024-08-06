@@ -14,10 +14,13 @@ class DBConnection
         //Kalindu's db
         $conn = mysqli_connect("localhost", "suraj", "20030115", "ezbusdb");
 
+        //$conn = mysqli_connect("localhost", "chanuka", "Chanuka@20021004", "ezbus");
+
         // Check connection
         if ($conn->connect_error) {
-            die("Connection failed: " . $conn->connect_error);
             echo "<script> console.log('Database connection failed'); </script>";
+            die("Connection failed: " . $conn->connect_error);
+
         }
         //echo "Connected successfully";
         echo "<script> console.log('Database connection successful'); </script>";
