@@ -14,7 +14,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    
+
     <style>
         * {
             margin: 0;
@@ -362,7 +362,7 @@
                     <span class="divider"></span>
 
                     <!-- Bell Icon with Badge -->
-                    <a href="#" class="nav-link">
+                    <a href="#" class="nav-link" data-bs-toggle="offcanvas" data-bs-target="#Notification" aria-controls="Notification">
                         <i class='bx bxs-bell bx-tada-hover icon'></i>
                         <span class="badge">5</span>
                     </a>
@@ -393,6 +393,15 @@
     </section>
 
 
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="Notification" aria-labelledby="NotificationLabel">
+        <div class="offcanvas-header">
+            <h5 id="NotificationLabel">Notification</h5>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            ...
+        </div>
+    </div>
 
 
 

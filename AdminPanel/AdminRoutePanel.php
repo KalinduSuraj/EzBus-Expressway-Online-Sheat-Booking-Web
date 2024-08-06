@@ -15,7 +15,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- jquery -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    
+
     <style>
         * {
             margin: 0;
@@ -35,6 +35,7 @@
             --dark-blue: #0c5fcd;
             --red: #fc3b56;
         }
+
         .errMsg {
             color: red;
             font-size: 13px;
@@ -52,6 +53,7 @@
         a {
             text-decoration: none;
         }
+
         /* Main */
         main {
             padding: 24px 20px 20px 20px;
@@ -108,7 +110,7 @@
         <a href="#" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#AddScheduleModal">
             <i class="bi bi-plus-lg"></i><span>Add Schedule</span>
         </a>
-        
+
     </div>
 
 
@@ -123,8 +125,8 @@
                         <div class="row mb-0 w-100 pb-0">
                             <div class="col text-center ">
                                 <b>
-                                <label class="form-label">Route ID : </label>
-                                <label class="form-label" id="ShowRouteID">R00</label>
+                                    <label class="form-label">Route ID : </label>
+                                    <label class="form-label" id="ShowRouteID">R00</label>
                                 </b>
                             </div>
                         </div>
@@ -172,10 +174,19 @@
                         <button type="button" class="btn-close position-absolute end-0 top-0 m-2" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
+                    <b>
+                                    <label class="form-label">Route ID : </label>
+                                    <label class="form-label" id="ShowRouteID">R00</label>
+                                </b>
                         <div class="mb-3">
                             <div class="col">
+                                <label class="form-label">Date :</label>
+                                <input type="date" class="form-control" name="date" id="date" placeholder="">
+                                <span class="errMsg" id="date_err"></span>
+                            </div>
+                            <div class="col">
                                 <label class="form-label">Time :</label>
-                                <input type="time" class="form-control" name="time" id="time" placeholder="12:00">
+                                <input type="time" class="form-control" name="time" id="time" placeholder="">
                                 <span class="errMsg" id="time_err"></span>
                             </div>
                         </div>
@@ -212,7 +223,7 @@
         </div>
     </div>
     <script>
-        function clearErr(){
+        function clearErr() {
             $('.errMsg').text('');
         }
 
@@ -227,7 +238,7 @@
 
                 var from = $('#from').val().trim();
                 var to = $('#to').val().trim();
-                
+
 
                 //Simple validation
                 if (from === '') {
@@ -247,7 +258,7 @@
 
             });
 
-            
+
             $('#AddSchedule').on('click', function(event) {
                 // alert("click");
                 event.preventDefault(); // Prevent the form from submitting normally
@@ -256,15 +267,21 @@
 
                 var isValid = true;
 
+                var date = $('#date').val().trim();
                 var time = $('#time').val().trim();
-               
+
                 //Simple validation
-                if (time === '') {
-                    $('#time_err').text('Required');
+                if (date === '') {
+                    $('#date_err').text('Date is Required');
                     isValid = false;
                     return;
                 }
-                
+                if (time === '') {
+                    $('#time_err').text('Time is Required');
+                    isValid = false;
+                    return;
+                }
+
 
                 if (isValid == true) {
                     alert(isValid);
