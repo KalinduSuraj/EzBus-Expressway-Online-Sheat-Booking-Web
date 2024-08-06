@@ -12,8 +12,8 @@ class DBConnection
         //$conn = new mysqli('sql305.infinityfree.com', 'if0_36817372', 'YOmTan81T2kFf', 'if0_36817372_ezbusdb');
 
         //Kalindu's db
-        //$conn = mysqli_connect("localhost", "suraj", "20030115", "ezbusdb");
-        $conn = mysqli_connect("localhost", "chanuka", "Chanuka@20021004", "ezbus");
+        $conn = mysqli_connect("localhost", "suraj", "20030115", "ezbusdb");
+        //$conn = mysqli_connect("localhost", "chanuka", "Chanuka@20021004", "ezbus");
 
         // Check connection
         if ($conn->connect_error) {
