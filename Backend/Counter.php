@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . "/DBConnection.php";
+require_once __DIR__ . "/User.php";
 
 class Counter extends User{
     public function register(string $name, string $password, string $contact, string $email){
@@ -59,5 +61,22 @@ class Counter extends User{
             echo $e;
         }
 
+    }
+    public function ViewCounter()
+    {
+        // echo $return = "View Counter Data";
+        $queary = "SELECT * FROM counterview ";
+        $queary_run = mysqli_query($this->db->getConnection(), $queary);
+        $res_array=[];
+
+        if(mysqli_num_rows($queary_run)>0){
+            foreach($queary_run as $row){
+                array_push($res_array,$row);
+            }
+            header('Content-type: application/json');
+            echo json_encode($res_array);
+        }else{
+            echo $return = "<h4>No Record Found</h4>";
+        }
     }
 }

@@ -1,6 +1,8 @@
 <?php
+require_once __DIR__ . "/DBConnection.php";
     abstract class User{
         protected $db;
+        
 
         public function __construct(){
             $this->db= new DBConnection();

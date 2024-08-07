@@ -106,12 +106,7 @@
         View Route
      -->
     <br>
-    <div class="col-sm-6 p-0 flex justify-content-lg-end justify-content-center">
-        <a href="#" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#AddScheduleModal">
-            <i class="bi bi-plus-lg"></i><span>Add Schedule</span>
-        </a>
-
-    </div>
+   
 
 
     <!-- Add Route Form -->
@@ -155,51 +150,7 @@
         </div>
     </div>
 
-    <!-- Add Schedule Form -->
-    <div class="modal fade" id="AddScheduleModal" tabindex="-1" aria-labelledby="AddScheduleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <form action="" method="post" style="width: 100%; min-width: 300px;">
-                    <div class="modal-header flex-column align-items-center mb-0">
-                        <h5 class="modal-title" id="AddScheduleModalLabel">Add New Schedule</h5>
-                        <p class="text-muted text-center mb-3">Complete the form below to add a new Schedule</p>
-                        <div class="row mb-0 w-100 pb-0">
-                            <div class="col text-center ">
-                                <b>
-                                    <label class="form-label">Schedule ID : </label>
-                                    <label class="form-label" id="ShowScheduleID">S00</label>
-                                </b>
-                            </div>
-                        </div>
-                        <button type="button" class="btn-close position-absolute end-0 top-0 m-2" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                    <b>
-                                    <label class="form-label">Route ID : </label>
-                                    <label class="form-label" id="ShowRouteID">R00</label>
-                                </b>
-                        <div class="mb-3">
-                            <div class="col">
-                                <label class="form-label">Date :</label>
-                                <input type="date" class="form-control" name="date" id="date" placeholder="">
-                                <span class="errMsg" id="date_err"></span>
-                            </div>
-                            <div class="col">
-                                <label class="form-label">Time :</label>
-                                <input type="time" class="form-control" name="time" id="time" placeholder="">
-                                <span class="errMsg" id="time_err"></span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="reset" class="btn btn-secondary btn-outline-danger text-dark" data-bs-dismiss="modal" onclick="clearErr()">Cancel</button>
-                        <button type="button" class="btn btn-success" id="AddSchedule">Add Schedule</button>
-                    </div>
-
-                </form>
-            </div>
-        </div>
-    </div>
+    
 
 
     <!----delete-modal start--------->

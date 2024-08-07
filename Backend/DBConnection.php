@@ -6,24 +6,17 @@ class DBConnection
 
     public function connect()
     {
-        // $conn = new mysqli($servername, $username, $password, $dbname);
-
-        // infinityfree connection
-        //$conn = new mysqli('sql305.infinityfree.com', 'if0_36817372', 'YOmTan81T2kFf', 'if0_36817372_ezbusdb');
-
-        //Kalindu's db
-        $conn = mysqli_connect("localhost", "suraj", "20030115", "ezbusdb");
-
+        
+       // Kalindu's db
+       $this->connection = mysqli_connect("localhost", "suraj", "20030115", "ezbusdb");
+        
         //$conn = mysqli_connect("localhost", "chanuka", "Chanuka@20021004", "ezbus");
 
         // Check connection
-        if ($conn->connect_error) {
-            echo "<script> console.log('Database connection failed'); </script>";
-            die("Connection failed: " . $conn->connect_error);
-
+        if (!$this->connection) {
+            echo "Database connection failed";
+            die("Connection failed: " . mysqli_connect_error());
         }
-        //echo "Connected successfully";
-        echo "<script> console.log('Database connection successful'); </script>";
     }
     public function disconnect()
     {
@@ -36,12 +29,13 @@ class DBConnection
     // Method to get the connection object
     public function getConnection()
     {
+        $this->connect();
         return $this->connection;
     }
 }
 
 // $db = new DBConnection();
-// $db->connect();
+
 // $conn = $db->getConnection();
 
 // // Perform database operations here
