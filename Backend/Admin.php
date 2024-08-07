@@ -1,8 +1,11 @@
 <?php
+require_once __DIR__ . "/DBConnection.php";
+require_once __DIR__ . "/User.php";
+class Admin extends User
+{
 
-class Admin extends User {
-
-    public function register(string $name, string $password, string $contact, string $email) {
+    public function register(string $name, string $password, string $contact, string $email)
+    {
         try {
             // Begin transaction
             mysqli_begin_transaction($this->db->getConnection());
@@ -59,4 +62,25 @@ class Admin extends User {
             $this->db->disconnect();
         }
     }
+
+
+    public function ViewAdmin()
+    {
+        // echo $return = "View Admin Data";
+        $queary = "SELECT * FROM adminview ";
+        $queary_run = mysqli_query($this->db->getConnection(), $queary);
+        $res_array=[];
+
+        if(mysqli_num_rows($queary_run)>0){
+            foreach($queary_run as $row){
+                array_push($res_array,$row);
+            }
+            header('Content-type: application/json');
+            echo json_encode($res_array);
+        }else{
+            echo $return = "<h4>No Record Found</h4>";
+        }
+    }
 }
+
+ 

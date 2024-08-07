@@ -103,6 +103,28 @@
             <i class="bi bi-trash"></i><span>Delete Counters</span>
         </a>
     </div>
+    <div class="mt-5">
+        <table class="table table-hover table-striped " border="1.5" id="AdminViewTable">
+            <thead>
+                <tr class="table-success ">
+                    <th scope="col">#</th>
+                    <th scope="col">Location</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Contact</th>
+                    <th scope="col">Password</th>
+                    <th scope="col">Creator</th>
+                    <th width="" class=""></th>
+                </tr>
+            </thead>
+            <tbody class="CounterData">
+
+            <!-- 
+                View Admin Data
+             -->
+
+            </tbody>
+    </div>
 
 
     <!-- Add Counter Form -->
@@ -184,80 +206,131 @@
     </div>
 
     <script>
-        function clearErr(){
-            $('.errMsg').text('');
-        }
-
         $(document).ready(function() {
+
+            GetCounterData();
+
             $('#AddCounter').on('click', function(event) {
                 // alert("click");
                 event.preventDefault(); // Prevent the form from submitting normally
-                // Clear previous error messages
-                clearErr();
-
-                var isValid = true;
-
-                var first_name = $('#first_name').val().trim();
-                var last_name = $('#last_name').val().trim();
-                var email = $('#email').val().trim();
-                var contact = $('#contact').val().trim();
-                var new_password = $('#new_password').val().trim();
-                var confirm_password = $('#confirm_password').val().trim();
-
-                //Simple validation
-                if (first_name === '') {
-                    $('#first_name_err').text('First Name is required');
-                    isValid = false;
-                    return;
-                }
-                if (last_name === '') {
-                    $('#last_name_err').text('Last Name is required');
-                    isValid = false;
-                    return;
-                }
-
-                var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-                if (email === '') {
-                    $('#email_err').text('Email is required');
-                    isValid = false;
-                    return;
-                }else if (!emailRegex.test(email)) {
-                    $('#email_err').text('Please enter a valid email address.');
-                    isValid = false;
-                    return;
-                }
-
-                if (contact === '') {
-                    $('#contact_err').text('Contact is required');
-                    isValid = false;
-                    return;
-                } else if (contact.length !== 10) {
-                    $('#contact_err').text('Contact number must be exactly 10 digits');
-                    isValid = false;
-                    return;
-                }
-
-                if (new_password === '') {
-                    $('#password_err').text('Password is required');
-                    isValid = false;
-                    return;
-                } else if (new_password !== confirm_password) {
-                    $('#password_err').text('Passwords do not match');
-                    isValid = false;
-                    return;
-                }
-
-                if (isValid == true) {
-                    alert(isValid);
-                }
+                AddCounterValidation()
 
             });
 
             $('#DeleteCounter').on('click', function(event) {
-                alert("Delete")
+                DeleteCounter(); //Delete Counter
             })
+
+
         })
+        // clear errMsg Function
+        function clearErr() {
+            $('.errMsg').text('');
+        }
+
+        //Add Counter Validation Function
+        function AddCounterValidation() {
+            // Clear previous error messages
+            clearErr();
+
+            var isValid = true;
+
+            var first_name = $('#first_name').val().trim();
+            var last_name = $('#last_name').val().trim();
+            var email = $('#email').val().trim();
+            var contact = $('#contact').val().trim();
+            var new_password = $('#new_password').val().trim();
+            var confirm_password = $('#confirm_password').val().trim();
+
+            //Simple validation
+            if (first_name === '') {
+                $('#first_name_err').text('First Name is required');
+                isValid = false;
+                return;
+            }
+            if (last_name === '') {
+                $('#last_name_err').text('Last Name is required');
+                isValid = false;
+                return;
+            }
+
+            var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if (email === '') {
+                $('#email_err').text('Email is required');
+                isValid = false;
+                return;
+            } else if (!emailRegex.test(email)) {
+                $('#email_err').text('Please enter a valid email address.');
+                isValid = false;
+                return;
+            }
+
+            if (contact === '') {
+                $('#contact_err').text('Contact is required');
+                isValid = false;
+                return;
+            } else if (contact.length !== 10) {
+                $('#contact_err').text('Contact number must be exactly 10 digits');
+                isValid = false;
+                return;
+            }
+
+            if (new_password === '') {
+                $('#password_err').text('Password is required');
+                isValid = false;
+                return;
+            } else if (new_password !== confirm_password) {
+                $('#password_err').text('Passwords do not match');
+                isValid = false;
+                return;
+            }
+
+            if (isValid == true) {
+                alert(isValid);
+            }
+        }
+
+        // Delete Counter Function
+        function DeleteCounter() {
+            alert("Delete");
+        }
+
+        function GetCounterData() {
+            $.ajax({
+                type: "GET",
+                url: "http://localhost/testweb/GitHub/EzBus-Expressway-Online-Sheat-Booking-Web/process.php", // Correct URL to Counter.php
+                data: {
+                    action: 'getCounterData'
+                },
+                success: function(response) {
+                    // console.log("Data received:\n", response);
+
+                    $.each(response, function(key, counter) {
+                        // console.log(counter['CounterID']);
+
+                        $('.CounterData').append(
+                            '<tr class="">' +
+                            '<th scope="row">' + counter['CounterID'] + '</th>' +
+                            '<td>' + counter['Location'] + '</td>' +
+                            '<td>' + counter['Name'] + '</td>' +
+                            '<td>' + counter['Email'] + '</td>' +
+                            '<td>' + counter['Contact'] + '</td>' +
+                            '<td>' + counter['Password'] + '</td>' +
+                            '<td>' + counter['AdminID'] + '</td>' +
+                            '<td class="ms-auto d-flex gap-2">' +
+                            '<a href="#"><i class="bi bi-pencil-square btn btn-sm btn-outline-success  pt-0 pb-0"></i></a>' +
+                            '<a href="#"><i class="bi bi-trash btn btn-sm btn-outline-danger pt-0 pb-0"></i></a>' +
+                            '</td>' +
+                            '</tr>'
+                        )
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error fetching admin data: " + status + " - " + error);
+                }
+            });
+        }
     </script>
 
 </body>

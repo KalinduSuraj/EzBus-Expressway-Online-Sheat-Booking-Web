@@ -61,4 +61,22 @@ class Conductor extends User{
         }
 
     }
+
+    public function ViewConductor()
+    {
+        // echo $return = "View Conductor Data";
+        $queary = "SELECT * FROM conductorview ";
+        $queary_run = mysqli_query($this->db->getConnection(), $queary);
+        $res_array=[];
+
+        if(mysqli_num_rows($queary_run)>0){
+            foreach($queary_run as $row){
+                array_push($res_array,$row);
+            }
+            header('Content-type: application/json');
+            echo json_encode($res_array);
+        }else{
+            echo $return = "<h4>No Record Found</h4>";
+        }
+    }
 }

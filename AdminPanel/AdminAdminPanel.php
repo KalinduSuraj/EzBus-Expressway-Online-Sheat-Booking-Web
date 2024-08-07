@@ -102,7 +102,7 @@
     <title></title>
 </head>
 
-<body>
+<body class="body">
     <main class="">
         <h1 class="title mb-10">ADMIN LOGIN DETAILS</h1>
         <ul class="list-unstyled breadcrumbs d-flex gap-2">
@@ -122,38 +122,32 @@
     <div class="mt-5">
         <table class="table table-hover table-striped " border="1.5" id="AdminViewTable">
             <thead>
-                <tr class="table-success">
-                    <th width="5%" scope="col">#</th>
-                    <th width="20%" scope="col">Name</th>
-                    <th width="25%" scope="col">Email</th>
-                    <th width="20%" scope="col">Contact</th>
-                    <th width="20%" scope="col">Password</th>
-                    <th width="10%"></th>
+                <tr class="table-success ">
+                    <th  scope="col">#</th>
+                    <th  scope="col">Name</th>
+                    <th  scope="col">Email</th>
+                    <th  scope="col">Contact</th>
+                    <th  scope="col">Password</th>
+                    <th  scope="col">Creator</th>
+                    <th width="" class=""></th>
                 </tr>
             </thead>
-            <tbody>
-                <tr>
-                    <th scope="row">A001</th>
-                    <td>Kalindu Suraj</td>
-                    <td>mksuraj0316@gmail.com</td>
-                    <td>0783031728</td>
-                    <td>20030115</td>
-                    <td>
-                        <a href=""><i class="bi bi-pencil-square btn-success"></i></a>
-                        <a href=""><i class="bi bi-trash btn-danger"></i></a>
+            <tbody class="AdminData">
+                <!-- <tr class="">
+                    <th scope="row"> AdminID </th>
+                    <td> Name </td>
+                    <td> Email </td>
+                    <td> Contact </td>
+                    <td> Password </td>
+                    <td class="ms-auto d-flex gap-2">
+                        <a href="#"><i class="bi bi-pencil-square btn btn-sm btn-outline-success  pt-0 pb-0"></i></a>
+                        <a href="#"><i class="bi bi-trash btn btn-sm btn-outline-danger pt-0 pb-0"></i></a>
                     </td>
-                </tr>
-                <tr>
-                    <th scope="row">A002</th>
-                    <td>Kalindu Suraj</td>
-                    <td>mksuraj0316@gmail.com</td>
-                    <td>0783031728</td>
-                    <td>20030115</td>
-                    <td>
-                        <a href=""><i class="bi bi-pencil-square "></i></a>
-                        <a href=""><i class="bi bi-trash"></i></a>
-                    </td>
-                </tr>
+                </tr> -->
+                <!-- 
+                View Admin Data
+             -->
+
             </tbody>
     </div>
 
@@ -237,80 +231,129 @@
     </div>
 
     <script>
-        function clearErr() {
-            $('.errMsg').text('');
-        }
-
         $(document).ready(function() {
+
+            GetAdminData();
+
             $('#AddAdmin').on('click', function(event) {
                 // alert("click");
                 event.preventDefault(); // Prevent the form from submitting normally
-                // Clear previous error messages
-                clearErr();
-
-                var isValid = true;
-
-                var first_name = $('#first_name').val().trim();
-                var last_name = $('#last_name').val().trim();
-                var email = $('#email').val().trim();
-                var contact = $('#contact').val().trim();
-                var new_password = $('#new_password').val().trim();
-                var confirm_password = $('#confirm_password').val().trim();
-
-                //Simple validation
-                if (first_name === '') {
-                    $('#first_name_err').text('First Name is required');
-                    isValid = false;
-                    return;
-                }
-                if (last_name === '') {
-                    $('#last_name_err').text('Last Name is required');
-                    isValid = false;
-                    return;
-                }
-
-                var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-                if (email === '') {
-                    $('#email_err').text('Email is required');
-                    isValid = false;
-                    return;
-                } else if (!emailRegex.test(email)) {
-                    $('#email_err').text('Please enter a valid email address.');
-                    isValid = false;
-                    return;
-                }
-
-                if (contact === '') {
-                    $('#contact_err').text('Contact is required');
-                    isValid = false;
-                    return;
-                } else if (contact.length !== 10) {
-                    $('#contact_err').text('Contact number must be exactly 10 digits');
-                    isValid = false;
-                    return;
-                }
-
-                if (new_password === '') {
-                    $('#password_err').text('Password is required');
-                    isValid = false;
-                    return;
-                } else if (new_password !== confirm_password) {
-                    $('#password_err').text('Passwords do not match');
-                    isValid = false;
-                    return;
-                }
-
-                if (isValid == true) {
-                    alert(isValid);
-                }
+                AddAdminValidation(); // validte Add Admin Form
 
             });
 
             $('#DeleteAdmin').on('click', function(event) {
-                alert("Delete")
+                DeleteAdmin(); //Delete Admin
             })
+
         })
+        // clear errMsg Function
+        function clearErr() {
+            $('.errMsg').text('');
+        }
+
+        //Add Admin Validation Function
+        function AddAdminValidation() {
+            // Clear previous error messages
+            clearErr();
+
+            var isValid = true;
+
+            var first_name = $('#first_name').val().trim();
+            var last_name = $('#last_name').val().trim();
+            var email = $('#email').val().trim();
+            var contact = $('#contact').val().trim();
+            var new_password = $('#new_password').val().trim();
+            var confirm_password = $('#confirm_password').val().trim();
+
+            //Simple validation
+            if (first_name === '') {
+                $('#first_name_err').text('First Name is required');
+                isValid = false;
+                return;
+            }
+            if (last_name === '') {
+                $('#last_name_err').text('Last Name is required');
+                isValid = false;
+                return;
+            }
+
+            var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if (email === '') {
+                $('#email_err').text('Email is required');
+                isValid = false;
+                return;
+            } else if (!emailRegex.test(email)) {
+                $('#email_err').text('Please enter a valid email address.');
+                isValid = false;
+                return;
+            }
+
+            if (contact === '') {
+                $('#contact_err').text('Contact is required');
+                isValid = false;
+                return;
+            } else if (contact.length !== 10) {
+                $('#contact_err').text('Contact number must be exactly 10 digits');
+                isValid = false;
+                return;
+            }
+
+            if (new_password === '') {
+                $('#password_err').text('Password is required');
+                isValid = false;
+                return;
+            } else if (new_password !== confirm_password) {
+                $('#password_err').text('Passwords do not match');
+                isValid = false;
+                return;
+            }
+
+            if (isValid == true) {
+                alert(isValid);
+            }
+        }
+
+        // Delete Admin Function
+        function DeleteAdmin() {
+            alert("Delete");
+        }
+
+        function GetAdminData() {
+            $.ajax({
+                type: "GET",
+                url: "http://localhost/testweb/GitHub/EzBus-Expressway-Online-Sheat-Booking-Web/process.php", // Correct URL to Admin.php
+                data: {
+                    action: 'getAdminData'
+                },
+                success: function(response) {
+                    // console.log("Data received:\n", response);
+
+                    $.each(response, function(key, admin) {
+                        // console.log(admin['AdminID']);
+
+                        $('.AdminData').append(
+                            '<tr class="">' +
+                            '<th scope="row">' + admin['AdminID'] + '</th>' +
+                            '<td>' + admin['Name'] + '</td>' +
+                            '<td>' + admin['Email'] + '</td>' +
+                            '<td>' + admin['Contact'] + '</td>' +
+                            '<td>' + admin['Password'] + '</td>' +
+                            '<td>' + admin['Creator'] + '</td>' +
+                            '<td class="ms-auto d-flex gap-2">' +
+                            '<a href="#"><i class="bi bi-pencil-square btn btn-sm btn-outline-success  pt-0 pb-0"></i></a>' +
+                            '<a href="#"><i class="bi bi-trash btn btn-sm btn-outline-danger pt-0 pb-0"></i></a>' +
+                            '</td>' +
+                            '</tr>'
+                        )
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error fetching admin data: " + status + " - " + error);
+                }
+            });
+        }
     </script>
 </body>
 
