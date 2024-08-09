@@ -1,5 +1,6 @@
 <?php
-
+require_once __DIR__ . "/DBConnection.php";
+require_once __DIR__ . "/User.php";
 class Conductor extends User{
 
     public function register(string $name, string $password, string $contact, string $email){
@@ -10,17 +11,7 @@ class Conductor extends User{
             $userID = $this->userIDIncrement();
 
             //auto increment passengerID
-            $sql1= "Select Max(ConductorID) from admin";
-            $r = mysqli_query($this->db->getConnection(), $sql1);
-            if ($row = mysqli_fetch_array($r)) {
-                $maxId = $row["ConductorID"];
-                $numericPart = intval(substr($maxId, 2));
-                $newNumericPart = $numericPart + 1;
-
-                $conductorid = 'CD' . str_pad($newNumericPart, 3, '0', STR_PAD_LEFT);
-            } else {
-                $conductorid = 'CD001';
-            }
+            $conductorid = $this->generateNewConductorID();
 
 
             //registration process
@@ -79,4 +70,36 @@ class Conductor extends User{
             echo $return = "<h4>No Record Found</h4>";
         }
     }
+    public function generateNewConductorID()
+    {
+        try {
+            // Query to get the last inserted CounterID
+            $query = "SELECT ConductorID FROM conductor ORDER BY ConductorID DESC LIMIT 1";
+            $result = mysqli_query($this->db->getConnection(), $query);
+
+            if (!$result) {
+                throw new Exception("Database query failed: " . mysqli_error($this->db->getConnection()));
+            }
+
+            $row = mysqli_fetch_assoc($result);
+            $lastID = $row ? $row['ConductorID'] : null;
+
+            if ($lastID) {
+                // Ensure the prefix is correctly ignored
+                $number = intval(substr($lastID, 4)); // Assumes prefix 'COU-' is 4 characters
+                // Increment the number
+                $newNumber = $number + 1;
+                $newID = 'C' . str_pad($newNumber, 3, '0', STR_PAD_LEFT);
+            } else {
+                // If no records exist
+                $newID = 'C001';
+            }
+
+            return $newID;
+        } catch (Exception $e) {
+            echo "Error generating new CounterID: " . $e->getMessage();
+            return null;
+        }
+    }
+    
 }

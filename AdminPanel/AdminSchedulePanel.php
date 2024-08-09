@@ -91,9 +91,9 @@
         <a href="#" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#AddScheduleModal">
             <i class="bi bi-plus-lg"></i><span>Add Schedule</span>
         </a>
-        <a href="#" onclick="document.getElementById('Delete').style.display='block'" class="btn btn-danger" data-toggle="modal">
+        <!-- <a href="#" onclick="document.getElementById('Delete').style.display='block'" class="btn btn-danger" data-toggle="modal">
             <i class="bi bi-trash"></i><span>Delete Schedule</span>
-        </a>
+        </a> -->
     </div>
 
 
@@ -120,15 +120,23 @@
                     <div class="modal-body">
                         <div class="mb-3">
                             <div class="col">
-                                <label class="form-label">Route ID :</label>
+                                <label class="form-label">Route :</label>
                                 <select type="text" class="selectpicker form-control" name="routeid" id="routeid" data-live-search="true">
-                                    <option value="0">- Select Route ID -</option>
-                                    <option value="0">- R001 -</option>
-                                    <option value="0">- R002 -</option>
-                                    <option value="0">- R003 -</option>
+                                    <option value="0">- Select Route -</option>
+                                    <option value="R001"> R001 </option>
                                 </select>
                                 <!-- <input type="date" class="form-control" name="date" id="date" placeholder=""> -->
-                                <span class="errMsg" id="date_err"></span>
+                                <span class="errMsg" id="route_err"></span>
+                            </div>
+                            <div class="col">
+                                <label class="form-label">Bus :</label>
+                                <select type="text" class="selectpicker form-control" name="busid" id="busid" data-live-search="true">
+                                    <option value="0">- Select Bus -</option>
+                                    <option value="B001"> B001 </option>
+
+                                </select>
+                                <!-- <input type="date" class="form-control" name="date" id="date" placeholder=""> -->
+                                <span class="errMsg" id="bus_err"></span>
                             </div>
                             <div class="col">
                                 <label class="form-label">Date :</label>
@@ -137,7 +145,7 @@
                             </div>
                             <div class="col">
                                 <label class="form-label">Time :</label>
-                                <input type="time" class="form-control" name="time" id="time" placeholder="">
+                                <input type="time" class="form-control" name="time" id="time" value="00:00">
                                 <span class="errMsg" id="time_err"></span>
                             </div>
                         </div>
@@ -174,10 +182,37 @@
     </div>
     <script>
         $(document).ready(function() {
+            //Set Date Limit For Schedule
+            setDateLimit();
+            
+            $('#AddSchedule').click(function (e) { 
+                e.preventDefault();
+                
+            });
+
             $('#DeleteSchedule').on('click', function(event) {
                 alert("Delete")
             })
         })
+
+        //Set Date Limit Function
+        function setDateLimit(){
+            // Get today's date
+            const today = new Date();
+
+            // Format date as YYYY-MM-DD
+            const minDate = today.toISOString().split('T')[0];
+
+            // Calculate date 7 days from today
+            const futureDate = new Date();
+            futureDate.setDate(today.getDate() + 7);
+            const maxDate = futureDate.toISOString().split('T')[0];
+
+            // Set the min and max attributes of the date input
+            const dateInput = document.getElementById('date');
+            dateInput.setAttribute('min', minDate);
+            dateInput.setAttribute('max', maxDate);
+        }
     </script>
 
 </body>

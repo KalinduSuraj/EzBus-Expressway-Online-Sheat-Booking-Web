@@ -1,10 +1,11 @@
 <?php
-require_once '../Backend/Counter.php';
-// Create an instance of the Admin class
-$counter = new Counter();
+require_once '../Backend/Driver.php';
+// Create an instance of the Driver class
+$driver = new Driver();
 
-// Get the CounterID
-$NewCounterID = $counter->generateNewCounterID();
+// Get the DriverID
+$NewDriverID = $driver->generateNewDriverID();
+
 ?>
 
 <!DOCTYPE html>
@@ -97,19 +98,19 @@ $NewCounterID = $counter->generateNewCounterID();
 
 <body>
     <main class="">
-        <h1 class="title mb-10">COUNTER LOGIN DETAILS</h1>
+        <h1 class="title mb-10">DRIVER</h1>
         <ul class="list-unstyled breadcrumbs d-flex gap-2">
             <li><a href="AdminView.php">Home</a></li> <!-- ## -->
             <li class="divider">/</li> <!-- ## -->
-            <li><a href="#" class="active">Users / Counter</a></li>
+            <li><a href="#" class="active">/ Driver</a></li>
         </ul>
     </main>
     <div class="col-sm-6 p-0 flex justify-content-lg-end justify-content-center">
-        <a href="#" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#AddCounterModal">
-            <i class="bi bi-plus-lg"></i><span>Add New Counter</span>
+        <a href="#" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#AddDriverModal">
+            <i class="bi bi-plus-lg"></i><span>Add New Driver</span>
         </a>
         <!-- <a href="#" onclick="document.getElementById('Delete').style.display='block'" class="btn btn-danger" data-toggle="modal">
-            <i class="bi bi-trash"></i><span>Delete Counters</span>
+            <i class="bi bi-trash"></i><span>Delete Drivers</span>
         </a> -->
     </div>
     <div class="mt-5">
@@ -117,16 +118,12 @@ $NewCounterID = $counter->generateNewCounterID();
             <thead>
                 <tr class="table-success ">
                     <th scope="col">#</th>
-                    <th scope="col">Location</th>
                     <th scope="col">Name</th>
-                    <th scope="col">Email</th>
                     <th scope="col">Contact</th>
-                    <th scope="col">Password</th>
-                    <th scope="col">Creator</th>
                     <th width="" class=""></th>
                 </tr>
             </thead>
-            <tbody class="CounterData">
+            <tbody class="DriverData">
 
                 <!-- 
                 View Admin Data
@@ -136,20 +133,22 @@ $NewCounterID = $counter->generateNewCounterID();
     </div>
 
 
-    <!-- Add Counter Form -->
-    <div class="modal fade" id="AddCounterModal" tabindex="-1" aria-labelledby="AddCounterModalLabel" aria-hidden="true">
+    <!-- Add Driver Form -->
+    <div class="modal fade" id="AddDriverModal" tabindex="-1" aria-labelledby="AddDriverModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <form action="" method="post" style="width: 100%; min-width: 300px;">
                     <div class="modal-header flex-column align-items-center mb-0">
-                        <h5 class="modal-title" id="AddCounterModalLabel">Add New Counter</h5>
-                        <p class="text-muted text-center mb-3">Complete the form below to add a new Counter</p>
+                        <h5 class="modal-title" id="AddDriverModalLabel">Add New Driver</h5>
+                        <p class="text-muted text-center mb-3">Complete the form below to add a new Driver</p>
                         <div class="row mb-0 w-100 pb-0">
                             <div class="col text-center ">
                                 <b>
-                                    <label class="form-label">Counter ID : </label>
-                                    <label class="form-label" id="ShowCounterID">
-                                        <?php echo htmlspecialchars($NewCounterID); ?>
+                                    <label class="form-label">Driver ID : </label>
+                                    <label class="form-label" id="ShowDriverID">
+                                        <?php
+                                         echo htmlspecialchars($NewDriverID); 
+                                        ?>
                                     </label>
                                 </b>
                             </div>
@@ -157,38 +156,20 @@ $NewCounterID = $counter->generateNewCounterID();
                         <button type="button" class="btn-close position-absolute end-0 top-0 m-2" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <div class="row mb-3">
-                            <div class="col">
-                                <label class="form-label">First Name:</label>
-                                <input type="text" class="form-control" name="first_name" id="first_name" placeholder="Kalindu">
-                                <span class="errMsg" id="first_name_err"></span>
-                            </div>
-                            <div class="col">
-                                <label class="form-label">Last Name:</label>
-                                <input type="text" class="form-control" name="last_name" id="last_name" placeholder="Suraj">
-                                <span class="errMsg" id="last_name_err"></span>
-                            </div>
+                        <div class="col">
+                            <label class="form-label">Driver Name:</label>
+                            <input type="text" class="form-control" name="driverName" id="driverName" placeholder="Kalindu">
+                            <span class="errMsg" id="driverName_err"></span>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Email:</label>
-                            <input type="email" class="form-control" name="email" id="email" placeholder="name@example.com">
-                            <span class="errMsg" id="email_err"></span>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Contact No:</label>
+                            <label class="form-label">Driver Contact No :</label>
                             <input type="text" class="form-control" name="contact" id="contact" placeholder="07X XXXX XXX">
                             <span class="errMsg" id="contact_err"></span>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Create Password:</label>
-                            <input type="password" class="form-control mb-2" name="new_password" id="new_password" placeholder="Create Password">
-                            <input type="password" class="form-control" name="confirm_password" id="confirm_password" placeholder="Confirm Password">
-                            <span class="errMsg" id="password_err"></span>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="reset" class="btn btn-secondary btn-outline-danger text-dark" data-bs-dismiss="modal" onclick="clearErr()">Cancel</button>
-                        <button type="button" class="btn btn-success" id="AddCounter">Add Counter</button>
+                        <button type="button" class="btn btn-success" id="AddDriver">Add Driver</button>
                     </div>
                 </form>
             </div>
@@ -200,7 +181,7 @@ $NewCounterID = $counter->generateNewCounterID();
         <div class="modal-dialog " role="document">
             <div class="modal-content">
                 <div class="modal-header ">
-                    <h5 class="modal-title">Delete Counters</h5>
+                    <h5 class="modal-title">Delete Drivers</h5>
                 </div>
                 <div class="modal-body">
                     <p>Are you sure you want to delete this Records</p>
@@ -208,7 +189,7 @@ $NewCounterID = $counter->generateNewCounterID();
                 </div>
                 <div class="modal-footer">
                     <button type="button" onclick="document.getElementById('Delete').style.display='none'" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-danger" onclick="document.getElementById('Delete').style.display='none'" id="DeleteCounter">Delete</button>
+                    <button type="button" class="btn btn-danger" onclick="document.getElementById('Delete').style.display='none'" id="DeleteDriver">Delete</button>
                 </div>
             </div>
 
@@ -219,33 +200,34 @@ $NewCounterID = $counter->generateNewCounterID();
     <script>
         $(document).ready(function() {
 
-            GetCounterData();
+            GetDriverData();
 
-            $('#AddCounter').on('click', function(event) {
+
+
+            $('#AddDriver').on('click', function(event) {
                 // alert("click");
                 event.preventDefault(); // Prevent the form from submitting normally
-                var first_name = $('#first_name').val().trim();
-                var last_name = $('#last_name').val().trim();
-                var email = $('#email').val().trim();
-                var contact = $('#contact').val().trim();
-                var new_password = $('#new_password').val().trim();
-                var confirm_password = $('#confirm_password').val().trim();
 
-                var isVaild = false;
-                isVaild = AddCounterValidation(first_name, last_name, email, contact, new_password, confirm_password)
+                var driverName = $('#driverName').val().trim();
+                var contact = $('#contact').val().trim();
+
+                var isValid = AddDriverValidation(driverName, contact)
                 if (isValid == true) {
-                    var name = first_name + " " + last_name;
                     //alert(isValid);
-                    var result = AddCounter(name, email, contact, new_password);
-                    
+                    var result = AddDriver(driverName, contact);
+                    if (result) {
+                        alert("Driver added successfully");
+                    } else {
+                        alert("Driver not added ");
+                    }
                 } else {
-                    alert("Check Your Details");
+
                 }
 
             });
 
-            $('#DeleteCounter').on('click', function(event) {
-                DeleteCounter(); //Delete Counter
+            $('#DeleteDriver').on('click', function(event) {
+                DeleteDriver(); //Delete Driver
             })
 
 
@@ -255,117 +237,83 @@ $NewCounterID = $counter->generateNewCounterID();
             $('.errMsg').text('');
         }
 
-        //Add Counter Validation Function
-        function AddCounterValidation(first_name, last_name, email, contact, new_password, confirm_password) {
+        //Add Driver Validation Function
+        function AddDriverValidation(driverName, contact) {
             // Clear previous error messages
             clearErr();
+
             var isValid = true;
             try {
                 //Simple validation
-                if (first_name === '') {
-                    $('#first_name_err').text('First Name is required');
+                if (driverName === '') {
+                    $('#driverName_err').text('Name is required');
                     isValid = false;
                     return;
                 }
-                if (last_name === '') {
-                    $('#last_name_err').text('Last Name is required');
-                    isValid = false;
-                    return;
-                }
-
-                var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-                if (email === '') {
-                    $('#email_err').text('Email is required');
-                    isValid = false;
-                    return;
-                } else if (!emailRegex.test(email)) {
-                    $('#email_err').text('Please enter a valid email address.');
-                    isValid = false;
-                    return;
-                }
-
                 if (contact === '') {
                     $('#contact_err').text('Contact is required');
                     isValid = false;
                     return;
-                } else if (contact.length !== 10) {
-                    $('#contact_err').text('Contact number must be exactly 10 digits');
-                    isValid = false;
-                    return;
                 }
-
-                if (new_password === '') {
-                    $('#password_err').text('Password is required');
-                    isValid = false;
-                    return;
-                } else if (new_password !== confirm_password) {
-                    $('#password_err').text('Passwords do not match');
-                    isValid = false;
-                    return;
-                }
-
             } catch (err) {
                 alert("Somthing Went Wrong........\n" + err);
             } finally {
                 return isValid;
             }
+
         }
 
-        //Add Counter Data
-        function AddCounter(name, email, contact, new_password) {
+        //Add Driver Data
+        function AddDriver(driverName, contact) {
             $.ajax({
                 type: "POST",
-                url: "http://localhost/testweb/GitHub/EzBus-Expressway-Online-Sheat-Booking-Web/process.php", // Correct URL to Admin.php
+                url: "http://localhost/testweb/GitHub/EzBus-Expressway-Online-Sheat-Booking-Web/process.php", // Correct URL to Driver.php
                 data: {
-                    action: 'addCounter',
+                    action: 'addDriver',
                     'Name': name,
-                    'Email': email,
                     'Contact': contact,
-                    'Password': new_password,
                 },
                 success: function(response) {
                     console.log("Data sent:\n", response);
 
-                    $('#AddCounterModal').modal('hide');
-                    GetCounterData(); // Refresh the Counter list
+                    $('#AddDriverModal').modal('hide');
+                    GetDriverData(); // Refresh the Driver list
                 },
                 error: function(xhr, status, error) {
-                    console.error("Error adding Counter: " + status + " - " + error);
+                    console.error("Error adding Driver: " + status + " - " + error);
                 }
             });
         }
 
-        // Delete Counter Function
-        function DeleteCounter() {
+        // Delete Driver Function
+        function DeleteDriver() {
             alert("Delete");
         }
 
-        //Get Counter Data
-        function GetCounterData() {
-            $('.CounterData').empty(); //Clear Conductor Data View
+        function GetDriverData() {
+            $('.DriverData').empty(); //Clear Conductor Data View
 
             $.ajax({
                 type: "GET",
-                url: "http://localhost/testweb/GitHub/EzBus-Expressway-Online-Sheat-Booking-Web/process.php", // Correct URL to Counter.php
+                url: "http://localhost/testweb/GitHub/EzBus-Expressway-Online-Sheat-Booking-Web/process.php", // Correct URL to Driver.php
                 data: {
-                    action: 'getCounterData'
+                    action: 'getDriverData'
                 },
                 success: function(response) {
                     // console.log("Data received:\n", response);
 
-                    $.each(response, function(key, counter) {
-                        // console.log(counter['CounterID']);
+                    $.each(response, function(key, driver) {
+                        // console.log(Driver['DriverID']);
 
-                        $('.CounterData').append(
+                        $('.DriverData').append(
                             '<tr class="">' +
-                            '<th scope="row">' + counter['CounterID'] + '</th>' +
-                            '<td>' + counter['Location'] + '</td>' +
-                            '<td>' + counter['Name'] + '</td>' +
-                            '<td>' + counter['Email'] + '</td>' +
-                            '<td>' + counter['Contact'] + '</td>' +
-                            '<td>' + counter['Password'] + '</td>' +
-                            '<td>' + counter['AdminID'] + '</td>' +
+                            '<th scope="row">' + driver['DriverID'] + '</th>' +
+                            '<td>' + driver['Location'] + '</td>' +
+                            '<td>' + driver['Name'] + '</td>' +
+                            '<td>' + driver['Email'] + '</td>' +
+                            '<td>' + driver['Contact'] + '</td>' +
+                            '<td>' + driver['Password'] + '</td>' +
+                            '<td>' + driver['AdminID'] + '</td>' +
                             '<td class="ms-auto d-flex gap-2">' +
                             '<a href="#"><i class="bi bi-pencil-square btn btn-sm btn-outline-success  pt-0 pb-0"></i></a>' +
                             '<a href="#"><i class="bi bi-trash btn btn-sm btn-outline-danger pt-0 pb-0"></i></a>' +
@@ -375,7 +323,7 @@ $NewCounterID = $counter->generateNewCounterID();
                     });
                 },
                 error: function(xhr, status, error) {
-                    console.error("Error fetching admin data: " + status + " - " + error);
+                    console.error("Error fetching driver data: " + status + " - " + error);
                 }
             });
         }
