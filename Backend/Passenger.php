@@ -8,19 +8,10 @@ class Passenger extends User {
 
             // Auto increment userID
             $userID = $this->userIDIncrement();
-
-            // Auto increment passengerID
-            $sql1 = "SELECT MAX(PassengerID) FROM passenger";
-            $r = mysqli_query($this->db->getConnection(), $sql1);
-            if ($row = mysqli_fetch_array($r)) {
-                $maxId = $row["PassengerID"];
-                $numericPart = intval(substr($maxId, 1));
-                $newNumericPart = $numericPart + 1;
-
-                $passengerId = 'P' . str_pad($newNumericPart, 3, '0', STR_PAD_LEFT);
-            } else {
-                $passengerId = 'P001';
-            }
+            //PassengerID
+            $passengerId = $this->generateNewPassengerID();
+            
+            
 
             // Registration process
             $sql2 = "SELECT Email FROM user WHERE Email='$email'";
@@ -56,6 +47,35 @@ class Passenger extends User {
             echo $e;
         } finally {
             $this->db->disconnect();
+        }
+    }
+
+    // Auto increment passengerID
+    public function generateNewPassengerID()
+    {
+        try {
+            // Query to get the last inserted PassengerID
+            $query = "SELECT PassengerID FROM passenger ORDER BY PassengerID DESC LIMIT 1";
+            $result = mysqli_query($this->db->getConnection(), $query);
+            $lastID = mysqli_fetch_assoc($result)['PassengerID'];
+
+            if ($lastID) {
+                // Extract the numeric part of the last ID
+                $number = intval(substr($lastID, 1));
+                // Increment the number
+                $newNumber = $number + 1;
+            } else {
+                // If no records exist, start with 1
+                $newNumber = 1;
+            }
+
+            // Format the new ID with leading zeros
+            $newID = 'COU-' . str_pad($newNumber, 3, '0', STR_PAD_LEFT);
+
+            return $newID;
+        } catch (Exception $e) {
+            echo "Error generating new PassengerID: " . $e->getMessage();
+            return null;
         }
     }
 }

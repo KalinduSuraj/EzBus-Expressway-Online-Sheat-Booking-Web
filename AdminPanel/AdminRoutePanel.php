@@ -98,14 +98,29 @@
         <a href="#" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#AddRouteModal">
             <i class="bi bi-plus-lg"></i><span>Add Route</span>
         </a>
-        <a href="#" onclick="document.getElementById('Delete').style.display='block'" class="btn btn-danger" data-toggle="modal">
+        <!-- <a href="#" onclick="document.getElementById('Delete').style.display='block'" class="btn btn-danger" data-toggle="modal">
             <i class="bi bi-trash"></i><span>Delete Routes</span>
-        </a>
+        </a> -->
     </div>
-    <!-- 
-        View Route
-     -->
-    <br>
+    <div class="mt-5">
+        <table class="table table-hover table-striped " border="1.5" id="RouteViewTable">
+            <thead>
+                <tr class="table-success ">
+                    <th scope="col" width='20%'>#</th>
+                    <th scope="col" width='20%'>From</th>
+                    <th scope="col" width='20%'>To</th>
+                    <th scope="col" width='20%'>Ticket Price</th>
+                    <th width='20%' class="">opt</th>
+                </tr>
+            </thead>
+            <tbody class="RouteData">
+
+            <!-- 
+                View Route Data
+             -->
+
+            </tbody>
+    </div>
    
 
 
@@ -140,6 +155,11 @@
                                 <span class="errMsg" id="to_err"></span>
                             </div>
                         </div>
+                        <div class="col">
+                                <label class="form-label">Ticket Price</label>
+                                <input type="text" class="form-control" name="price" id="price" placeholder="100.00">
+                                <span class="errMsg" id="price_err"></span>
+                            </div>
                     </div>
                     <div class="modal-footer">
                         <button type="reset" class="btn btn-secondary btn-outline-danger text-dark" data-bs-dismiss="modal">Cancel</button>
@@ -189,7 +209,7 @@
 
                 var from = $('#from').val().trim();
                 var to = $('#to').val().trim();
-
+                var price = $('#price').val().trim();
 
                 //Simple validation
                 if (from === '') {
@@ -199,6 +219,11 @@
                 }
                 if (to === '') {
                     $('#to_err').text('Required');
+                    isValid = false;
+                    return;
+                }
+                if(price == ''){
+                    $('#price_err').text('Enter Ticket Price');
                     isValid = false;
                     return;
                 }

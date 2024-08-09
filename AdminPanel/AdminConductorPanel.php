@@ -1,3 +1,11 @@
+<?php
+require_once '../Backend/Conductor.php';
+// Create an instance of the Admin class
+$conductor = new Conductor();
+
+// Get the adminID
+$NewConductorID = $conductor->generateNewConductorID();
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -99,9 +107,9 @@
         <a href="#" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#AddConductorModal">
             <i class="bi bi-plus-lg"></i><span>Add New Conductor</span>
         </a>
-        <a href="#" onclick="document.getElementById('Delete').style.display='block'" class="btn btn-danger" data-toggle="modal">
+        <!-- <a href="#" onclick="document.getElementById('Delete').style.display='block'" class="btn btn-danger" data-toggle="modal">
             <i class="bi bi-trash"></i><span>Delete Conductor</span>
-        </a>
+        </a> -->
     </div>
     <div class="mt-5">
         <table class="table table-hover table-striped " border="1.5" id="ConductorViewTable">
@@ -137,7 +145,9 @@
                             <div class="col text-center ">
                                 <b>
                                     <label class="form-label">Conductor ID : </label>
-                                    <label class="form-label" id="ShowConductorID">C00</label>
+                                    <label class="form-label" id="ShowConductorID">
+                                    <?php echo htmlspecialchars($NewConductorID); ?>
+                                    </label>
                                 </b>
                             </div>
                         </div>
@@ -215,6 +225,7 @@
                 event.preventDefault(); // Prevent the form from submitting normally
 
                 AddConductorValidation();
+                
             });
 
             $('#DeleteConductor').on('click', function(event) {
@@ -294,6 +305,7 @@
         }
 
         function GetConductorData() {
+            $('.ConductorData').empty();//Clear Conductor Data View
             $.ajax({
                 type: "GET",
                 url: "http://localhost/testweb/GitHub/EzBus-Expressway-Online-Sheat-Booking-Web/process.php", // Correct URL to Conductor.php

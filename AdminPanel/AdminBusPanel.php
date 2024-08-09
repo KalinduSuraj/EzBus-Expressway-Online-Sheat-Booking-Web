@@ -98,9 +98,9 @@
         <a href="#" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#AddBusModal">
             <i class="bi bi-plus-lg"></i><span>Add New Bus</span>
         </a>
-        <a href="#" onclick="document.getElementById('Delete').style.display='block'" class="btn btn-danger" data-toggle="modal">
+        <!-- <a href="#" onclick="document.getElementById('Delete').style.display='block'" class="btn btn-danger" data-toggle="modal">
             <i class="bi bi-trash"></i><span>Delete Bus</span>
-        </a>
+        </a> -->
     </div>
 
 
@@ -137,16 +137,7 @@
                             <input type="text" class="form-control" name="NoOfSheets" id="NoOfSheets" placeholder="52">
                             <span class="errMsg" id="NoOfSheets_err"></span>
                         </div>
-                        <div class="col">
-                            <label class="form-label">Driver Name:</label>
-                            <input type="text" class="form-control" name="DriverName" id="DriverName" placeholder="Kalindu">
-                            <span class="errMsg" id="DriverName_err"></span>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Driver Contact No :</label>
-                            <input type="text" class="form-control" name="contact" id="contact" placeholder="07X XXXX XXX">
-                            <span class="errMsg" id="contact_err"></span>
-                        </div>
+                        
 
                     </div>
                     <div class="modal-footer">
