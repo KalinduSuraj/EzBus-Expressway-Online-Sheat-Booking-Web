@@ -1,27 +1,19 @@
 <?php
 
-class Admin extends User {
+class Admin extends User
+{
 
-    public function register(string $name, string $password, string $contact, string $email) {
+    public function register(string $name, string $password, string $contact, string $email)
+    {
         try {
             // Begin transaction
             mysqli_begin_transaction($this->db->getConnection());
 
             // Auto increment userID
             $userID = $this->userIDIncrement();
+            $adminId = $this->AdminIDIncrement();
 
-            // Auto increment passengerID
-            $sql1 = "SELECT MAX(AdminID) FROM admin";
-            $r = mysqli_query($this->db->getConnection(), $sql1);
-            if ($row = mysqli_fetch_array($r)) {
-                $maxId = $row["AdminID"];
-                $numericPart = intval(substr($maxId, 1));
-                $newNumericPart = $numericPart + 1;
 
-                $adminId = 'A' . str_pad($newNumericPart, 3, '0', STR_PAD_LEFT);
-            } else {
-                $adminId = 'A001';
-            }
 
             // Registration process
             $sql2 = "SELECT Email FROM user WHERE Email='$email'";
@@ -57,6 +49,33 @@ class Admin extends User {
             echo $e;
         } finally {
             $this->db->disconnect();
+        }
+    }
+    private function AdminIDIncrement()
+    {
+
+        try {
+            // Query to get the last inserted UserID
+            $query = "SELECT AdminID FROM admin ORDER BY AdminID DESC LIMIT 1";
+            $result = mysqli_query($this->db->getConnection(), $query);
+            $lastID = mysqli_fetch_assoc($result)['AdminID'];
+
+            if ($lastID) {
+                // Extract the numeric part of the last ID
+                $number = intval(substr($lastID, 1));
+                // Increment the number
+                $newNumber = $number + 1;
+            } else {
+                // If no records exist, start with 1
+                $newNumber = 1;
+            }
+
+            // Format the new ID with leading zeros
+            $newID = 'A' . str_pad($newNumber, 3, '0', STR_PAD_LEFT);
+            return $newID;
+        } catch (Exception $e) {
+            echo "Error generating new UserID: " . $e->getMessage();
+            return null;
         }
     }
 }

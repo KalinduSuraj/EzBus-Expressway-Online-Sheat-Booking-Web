@@ -8,20 +8,7 @@ class Conductor extends User{
             mysqli_begin_transaction($this->db->getConnection());
             //auto increment userID
             $userID = $this->userIDIncrement();
-
-            //auto increment passengerID
-            $sql1= "Select Max(ConductorID) from admin";
-            $r = mysqli_query($this->db->getConnection(), $sql1);
-            if ($row = mysqli_fetch_array($r)) {
-                $maxId = $row["ConductorID"];
-                $numericPart = intval(substr($maxId, 2));
-                $newNumericPart = $numericPart + 1;
-
-                $conductorid = 'CD' . str_pad($newNumericPart, 3, '0', STR_PAD_LEFT);
-            } else {
-                $conductorid = 'CD001';
-            }
-
+            $conductorid = $this->ConductorIDIncrement();
 
             //registration process
             $sql2 = "select Email from user where Email='$email'";
@@ -60,5 +47,31 @@ class Conductor extends User{
             echo $e;
         }
 
+    }
+    private function ConductorIDIncrement(){
+
+        try {
+             // Query to get the last inserted UserID
+             $query = "SELECT ConductorID FROM passenger ORDER BY ConductorID DESC LIMIT 1";
+             $result = mysqli_query($this->db->getConnection(), $query);
+             $lastID = mysqli_fetch_assoc($result)['ConductorID'];
+ 
+             if ($lastID) {
+                 // Extract the numeric part of the last ID
+                 $number = intval(substr($lastID, 1));
+                 // Increment the number
+                 $newNumber = $number + 1;
+             } else {
+                 // If no records exist, start with 1
+                 $newNumber = 1;
+             }
+ 
+             // Format the new ID with leading zeros
+             $newID = 'CD' . str_pad($newNumber, 3, '0', STR_PAD_LEFT);
+             return $newID;
+        } catch (Exception $e) {
+            echo "Error generating new UserID: " . $e->getMessage();
+            return null;
+        }
     }
 }

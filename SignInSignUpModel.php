@@ -1,4 +1,3 @@
-
 <style>
     h1 {
         font-weight: bold;
@@ -164,6 +163,12 @@
                                 <!--|Google|-->
 
                                 <button class="social-btn"><span>Google</span> <img src="src/google.png"> </button>
+                                <!--|Google|-->
+                                <!-- <a href="../EzBus/Backend/handleFiles/handleGoogleLogin.php" class="social-btn">
+                                    <span>Google</span>
+                                    <img src="src/google.png" alt="Google">
+                                </a> -->
+
 
                                 <!--|Facebook|-->
 
@@ -365,7 +370,7 @@
                 $('#username_err').text('Email or Contact No is required');
                 isValid = false;
                 return;
-            } else if (!emailRegex.test(username) && !contactNoRegex.test(username)){
+            } else if (!emailRegex.test(username) && !contactNoRegex.test(username)) {
                 $('#username_err').text('Please enter a valid email or Contact No address.');
                 isValid = false;
                 return;

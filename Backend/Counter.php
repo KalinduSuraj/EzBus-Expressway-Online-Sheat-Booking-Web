@@ -1,26 +1,15 @@
 <?php
 
-class Counter extends User{
-    public function register(string $name, string $password, string $contact, string $email){
-        try{
+class Counter extends User
+{
+    public function register(string $name, string $password, string $contact, string $email)
+    {
+        try {
 
             mysqli_begin_transaction($this->db->getConnection());
             //auto increment userID
             $userID = $this->userIDIncrement();
-
-            //auto increment passengerID
-            $sql1= "Select Max(CounterID) from counter";
-            $r = mysqli_query($this->db->getConnection(), $sql1);
-            if ($row = mysqli_fetch_array($r)) {
-                $maxId = $row["CounterID"];
-                $numericPart = intval(substr($maxId, 1));
-                $newNumericPart = $numericPart + 1;
-
-                $counterId = 'C' . str_pad($newNumericPart, 3, '0', STR_PAD_LEFT);
-            } else {
-                $counterId = 'C001';
-            }
-
+            $counterId = $this->CounterIdIncrement();
 
             //registration process
             $sql2 = "select Email from user where Email='$email'";
@@ -53,11 +42,36 @@ class Counter extends User{
                 echo "<script> alert('there is the Counter in this $email'); </script>";
                 return false;
             }
-        }
-        catch(Exception $e){
+        } catch (Exception $e) {
             mysqli_rollback($this->db->getConnection());
             echo $e;
         }
+    }
+    private function CounterIdIncrement()
+    {
 
+        try {
+            // Query to get the last inserted UserID
+            $query = "SELECT CounterID FROM counter ORDER BY CounterID DESC LIMIT 1";
+            $result = mysqli_query($this->db->getConnection(), $query);
+            $lastID = mysqli_fetch_assoc($result)['CounterID'];
+
+            if ($lastID) {
+                // Extract the numeric part of the last ID
+                $number = intval(substr($lastID, 1));
+                // Increment the number
+                $newNumber = $number + 1;
+            } else {
+                // If no records exist, start with 1
+                $newNumber = 1;
+            }
+
+            // Format the new ID with leading zeros
+            $newID = 'C' . str_pad($newNumber, 3, '0', STR_PAD_LEFT);
+            return $newID;
+        } catch (Exception $e) {
+            echo "Error generating new UserID: " . $e->getMessage();
+            return null;
+        }
     }
 }

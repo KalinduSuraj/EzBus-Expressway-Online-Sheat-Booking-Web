@@ -12,15 +12,15 @@ class DBConnection
         //$conn = new mysqli('sql305.infinityfree.com', 'if0_36817372', 'YOmTan81T2kFf', 'if0_36817372_ezbusdb');
 
         //Kalindu's db
-        $conn = mysqli_connect("localhost", "suraj", "20030115", "ezbusdb");
+        //$conn = mysqli_connect("localhost", "suraj", "20030115", "ezbusdb");
 
-        //$conn = mysqli_connect("localhost", "chanuka", "Chanuka@20021004", "ezbus");
+        $this->connection = mysqli_connect("localhost", "chanuka", "Chanuka@20021004", "ezbus", 3308);
+
 
         // Check connection
-        if ($conn->connect_error) {
+        if ($this->connection->connect_error) {
             echo "<script> console.log('Database connection failed'); </script>";
-            die("Connection failed: " . $conn->connect_error);
-
+            die("Connection failed: " . $this->connection->connect_error);
         }
         //echo "Connected successfully";
         echo "<script> console.log('Database connection successful'); </script>";
@@ -47,5 +47,3 @@ class DBConnection
 // // Perform database operations here
 
 // $db->disconnect();
-?>
-
