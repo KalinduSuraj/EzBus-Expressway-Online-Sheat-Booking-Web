@@ -44,6 +44,7 @@ abstract class User
             echo $e;
         }
     }
+
     abstract function register(String $name, String $password, String $contact, String $email);
 
     public function userIDIncrement()
@@ -63,7 +64,6 @@ abstract class User
                 // If no records exist, start with 1
                 $newNumber = 1;
             }
-
             // Format the new ID with leading zeros
             $newID = 'U' . str_pad($newNumber, 3, '0', STR_PAD_LEFT);
 
@@ -73,6 +73,7 @@ abstract class User
             return null;
         }
     }
+    
     // protected function userIDIncrement(){
 
     //     try{

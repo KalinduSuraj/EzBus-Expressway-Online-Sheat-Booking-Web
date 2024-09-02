@@ -109,6 +109,7 @@ class Counter extends User
             echo $e;
         }
     }*/
+    
     public function ViewCounter()
     {
         // echo $return = "View Counter Data";
@@ -123,7 +124,7 @@ class Counter extends User
             header('Content-type: application/json');
             echo json_encode($res_array);
         } else {
-            //echo $return = "<h4>No Record Found</h4>";
+            echo $return = "<h4>No Record Found</h4>";
             header('Content-type: application/json');
             echo json_encode($res_array);
         }
