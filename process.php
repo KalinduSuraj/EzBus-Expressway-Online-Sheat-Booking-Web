@@ -45,6 +45,31 @@ if (isset($_POST['action']) && $_POST['action'] == 'addAdmin') {
 
     exit();
 }
+
+// Check if this file is called directly via AJAX For Update Admin Data
+if (isset($_POST['action']) && $_POST['action'] == 'updateAdmin') {
+    $adminID = $_POST['AdminID'];
+    $U_email = $_POST['Email'];
+    $U_contact = $_POST['Contact'];
+    $U_Password = $_POST['Password'];
+
+    $admin = new Admin();
+    try {
+        $result = $admin->Update($adminID, $U_email, $U_contact, $U_Password);
+
+        if ($result) {
+            echo json_encode(['success' => true, 'message' => 'Admin updateed successfully']);
+        }
+    } catch (Exception $e) {
+        // Log the error for debugging
+        error_log("Error: " . $e->getMessage());
+        // Return the error as a JSON response
+        echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+    }
+
+    exit();
+}
+
 // Check if this file is called directly via AJAX For delete Admin Data
 if (isset($_POST['action']) && $_POST['action'] == 'deleteAdmin') {
     $adminID = $_POST['AdminID'];

@@ -4,11 +4,11 @@ require_once __DIR__ . "/User.php";
 class Admin extends User
 {
 
-    public function register(string $name, string $password, string $contact, string $email)
-    {
+    public function register(string $name, string $password, string $contact, string $email){
+        $conn = $this->db->getConnection();
         try {
             // Begin transaction
-            mysqli_begin_transaction($this->db->getConnection());
+            mysqli_begin_transaction($conn);
 
             // Auto increment userID
             $userID = $this->userIDIncrement();
@@ -23,10 +23,10 @@ class Admin extends User
 
             // Check if email already exists
             $sql2 = "SELECT Email FROM user_account WHERE Email='$email'";
-            $res = mysqli_query($this->db->getConnection(), $sql2);
+            $res = mysqli_query($conn, $sql2);
 
             if (!$res) {
-                throw new Exception("Database query failed: " . mysqli_error($this->db->getConnection()));
+                throw new Exception("Database query failed: " . mysqli_error($conn));
             }
 
             if (mysqli_num_rows($res) > 0) {
@@ -39,21 +39,76 @@ class Admin extends User
             $query2 = "INSERT INTO admin(AdminID, UserID, Creator) 
                    VALUES('$adminID', '$userID', 'A001')"; // Change the Creator ID
 
-            $result1 = mysqli_query($this->db->getConnection(), $query1);
+            $result1 = mysqli_query($conn, $query1);
             if (!$result1) {
-                throw new Exception("Failed to insert into user_account: " . mysqli_error($this->db->getConnection()));
+                throw new Exception("Failed to insert into user_account: " . mysqli_error($conn));
             }
 
-            $result2 = mysqli_query($this->db->getConnection(), $query2);
+            $result2 = mysqli_query($conn, $query2);
             if (!$result2) {
-                throw new Exception("Failed to insert into admin: " . mysqli_error($this->db->getConnection()));
+                throw new Exception("Failed to insert into admin: " . mysqli_error($conn));
             }
 
             // Commit the transaction if both inserts were successful
-            mysqli_commit($this->db->getConnection());
+            mysqli_commit($conn);
             return true;
         } catch (Exception $e) {
-            mysqli_rollback($this->db->getConnection());
+            mysqli_rollback($conn);
+            error_log($e->getMessage(), 3, '/Backend/error.log'); // Specify a path to log errors
+            echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+        } finally {
+            $this->db->disconnect();
+        }
+    }
+
+    public function Update(string $adminID, string $U_email, string $U_contact, string $U_Password){
+        $conn = $this->db->getConnection();
+        try {
+            // Begin transaction
+            mysqli_begin_transaction($conn);
+
+            // Prepare and execute query to check if AdminID exists
+            $stmt = $conn->prepare("SELECT UserID FROM admin WHERE AdminID = ?");
+            $stmt->bind_param("s", $adminID);
+            $stmt->execute();
+            $res = $stmt->get_result();
+
+            if (!$res) {
+                throw new Exception("Database query failed: " . mysqli_error($conn));
+            }
+
+            if ($res->num_rows == 0) {
+                throw new Exception("AdminID does not exist.");
+            }
+
+            // Get the UserID
+            $row = mysqli_fetch_assoc($res);
+            $userID = $row['UserID'];
+
+
+            // Check if email already exists
+            $sql2 = "SELECT Email FROM user_account WHERE Email='$U_email'";
+            $res = mysqli_query($conn, $sql2);
+
+            if (!$res) {
+                throw new Exception("Database query failed: " . mysqli_error($conn));
+            }
+
+            if (mysqli_num_rows($res) > 0) {
+                throw new Exception("Email already exists.");
+            }
+
+            // update queries
+            $query1 = "UPDATE  user_account SET Email='$U_email', Contact='$U_contact', Password='$U_Password' WHERE UserID='$userID';";
+
+
+            $result1 = mysqli_query($conn, $query1);
+            if (!$result1) {
+                throw new Exception("Failed to update into user_account: " . mysqli_error($conn));
+            }
+
+            return true;
+        } catch (Exception $e) {
             error_log($e->getMessage(), 3, '/Backend/error.log'); // Specify a path to log errors
             echo json_encode(['success' => false, 'message' => $e->getMessage()]);
         } finally {
@@ -113,18 +168,16 @@ class Admin extends User
         }
     }
 
-
-
-
     public function generateNewAdminID()
     {
+        $conn = $this->db->getConnection();
         try {
             // Query to get the last inserted AdminID
             $query = "SELECT AdminID FROM admin ORDER BY AdminID DESC LIMIT 1";
-            $result = mysqli_query($this->db->getConnection(), $query);
+            $result = mysqli_query($conn, $query);
 
             if (!$result) {
-                throw new Exception("Database query failed: " . mysqli_error($this->db->getConnection()));
+                throw new Exception("Database query failed: " . mysqli_error($conn));
             }
 
             $row = mysqli_fetch_assoc($result);
@@ -150,19 +203,24 @@ class Admin extends User
 
     public function ViewAdmin()
     {
-        // echo $return = "View Admin Data";
-        $queary = "SELECT * FROM adminview ORDER BY AdminID ASC";
-        $queary_run = mysqli_query($this->db->getConnection(), $queary);
-        $res_array = [];
+        $conn = $this->db->getConnection();
+        try{
+            // echo $return = "View Admin Data";
+            $queary = "SELECT * FROM adminview ORDER BY AdminID ASC";
+            $queary_run = mysqli_query($conn, $queary);
+            $res_array = [];
 
-        if (mysqli_num_rows($queary_run) > 0) {
-            foreach ($queary_run as $row) {
-                array_push($res_array, $row);
+            if (mysqli_num_rows($queary_run) > 0) {
+                foreach ($queary_run as $row) {
+                    array_push($res_array, $row);
+                }
+                header('Content-type: application/json');
+                echo json_encode($res_array);
+            } else {
+                echo $return = "<h4>No Record Found</h4>";
             }
-            header('Content-type: application/json');
-            echo json_encode($res_array);
-        } else {
-            echo $return = "<h4>No Record Found</h4>";
+        }catch(Exception $e){
+
         }
     }
 }

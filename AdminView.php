@@ -304,8 +304,8 @@
     <section id="sidebar">
         <a href="#" class="brand"><i class='bx bxs-bus icon'></i> EzBus</a>
         <ul class="list-unstyled component m-0 side-menu gap-5">
-            <!-- Dashboard -->
-            <li><a href="#" id="Dashboard" data-url="AdminPanel/AdminDashboardPanel.php" class="dashboard active"><i class="bi bi-columns-gap icon"></i>Dashboard</a></li>
+            <!-- Home -->
+            <li><a href="#" id="Home" data-url="AdminPanel/AdminHomePanel.php" class="home active"><i class="bi bi-columns-gap icon"></i>Home</a></li>
             <!-- Users -->
             <li>
                 <a href="#UsersMenu" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle ">
@@ -316,11 +316,11 @@
                     <li><a href="#" id="Admin" data-url="AdminPanel/AdminAdminPanel.php">Admin</a></li>
                     <li><a href="#" id="Counter" data-url="AdminPanel/AdminCounterPanel.php">Counter</a></li>
                     <li><a href="#" id="Conductor" data-url="AdminPanel/AdminConductorPanel.php">Conductor</a></li>
+                    <li><a href="#" id="Driver" data-url="AdminPanel/AdminDriverPanel.php">Drivers </a></li>
                 </ul>
 
             </li>
-            <!-- Driver -->
-            <li><a href="#" id="Driver" data-url="AdminPanel/AdminDriverPanel.php"><i class="bi bi-person icon"></i>Drivers </a></li>
+            
             <!-- Route -->
             <li><a href="#" id="Route" data-url="AdminPanel/AdminRoutePanel.php"><i class="bi bi-geo-alt icon"></i>Routes </a></li>
             <!-- Buss -->
@@ -478,8 +478,8 @@
                     loadContent(url);
                 });
             });
-            // Load default content (dashboard) on page load
-            const defaultLink = document.querySelector('#Dashboard');
+            // Load default content (home) on page load
+            const defaultLink = document.querySelector('#Home');
             if (defaultLink) {
                 const defaultUrl = defaultLink.getAttribute('data-url');
                 loadContent(defaultUrl);
@@ -539,7 +539,7 @@
 
         function confirmLogout() {
             if (confirm('Are you sure you want to log out?')) {
-                window.location.href = 'signIn.php';
+                window.location.href = 'index.php';
             }
         }
     </script>

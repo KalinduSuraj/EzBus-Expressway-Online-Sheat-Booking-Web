@@ -79,11 +79,11 @@
 
 <body>
     <main class="">
-        <h1 class="title mb-10">DASHBOARD</h1>
+        <h1 class="title mb-10">Home</h1>
         <ul class="list-unstyled breadcrumbs d-flex gap-2">
-            <li><a href="#">Home</a></li> <!-- ## -->
-            <li class="divider">/</li> <!-- ## -->
-            <li><a href="#" class="active">Dashboard</a></li>
+            <!--<li><a href="#">Home</a></li> 
+            <li class="divider">/</li>  -->
+            <li><a href="#" class="active">Home</a></li>
         </ul>
     </main>
 
