@@ -54,13 +54,13 @@
         }
 
         main .title {
-            font-size: 28px;
+            font-size: 22px;
             font-weight: 600;
         }
 
         main .breadcrumbs li,
         main .breadcrumbs li a {
-            font-size: 14px;
+            font-size: 12px;
         }
 
         main .breadcrumbs li a {
@@ -87,16 +87,21 @@
             <li><a href="#" class="active">Schedule</a></li>
         </ul>
     </main>
-    <div class="col-sm-6 p-0 flex justify-content-lg-end justify-content-center">
-        <a href="#" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#AddScheduleModal">
-            <i class="bi bi-plus-lg"></i><span>Add Schedule</span>
-        </a>
-        <!-- <a href="#" onclick="document.getElementById('Delete').style.display='block'" class="btn btn-danger" data-toggle="modal">
-            <i class="bi bi-trash"></i><span>Delete Schedule</span>
-        </a> -->
+    
+
+    <div class="row g-3 col-sm-6 p-0  ">
+        <div class="col-auto">
+            <a href="#" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#AddScheduleModal">
+                <i class="bi bi-plus-lg"></i><span>Add Schedule</span>
+            </a>
+        </div>
+        <div class="col-auto">
+            <input type="text" class="form-control" id="txtSearch" placeholder="Search">
+        </div>
+        <div class="col-auto">
+            <input type="button" class="btn btn-primary" id="txtSearch" value="Search">
+        </div>
     </div>
-
-
 
 
     <!-- Add Schedule Form -->
@@ -184,10 +189,10 @@
         $(document).ready(function() {
             //Set Date Limit For Schedule
             setDateLimit();
-            
-            $('#AddSchedule').click(function (e) { 
+
+            $('#AddSchedule').click(function(e) {
                 e.preventDefault();
-                
+
             });
 
             $('#DeleteSchedule').on('click', function(event) {
@@ -196,7 +201,7 @@
         })
 
         //Set Date Limit Function
-        function setDateLimit(){
+        function setDateLimit() {
             // Get today's date
             const today = new Date();
 

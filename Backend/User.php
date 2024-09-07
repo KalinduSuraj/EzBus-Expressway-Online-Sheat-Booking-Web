@@ -44,8 +44,7 @@ abstract class User
             echo $e;
         }
     }
-
-    abstract function register(String $name, String $password, String $contact, String $email);
+    //function register(String $name, String $password, String $contact, String $email){}
 
     public function userIDIncrement()
     {
@@ -73,7 +72,6 @@ abstract class User
             return null;
         }
     }
-    
     // protected function userIDIncrement(){
 
     //     try{

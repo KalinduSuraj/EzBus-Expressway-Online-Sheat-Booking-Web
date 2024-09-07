@@ -4,11 +4,12 @@ require_once __DIR__ . "/User.php";
 
 class Counter extends User
 {
-    public function register(string $name, string $password, string $contact, string $email)
+    public function register(string $name, string $password, string $contact, string $email, string $location)
     {
+        $con =$this->db->getConnection();
         try {
             // Begin transaction
-            mysqli_begin_transaction($this->db->getConnection());
+            mysqli_begin_transaction($con);
 
             // Auto increment userID
             $userID = $this->userIDIncrement();
@@ -23,10 +24,10 @@ class Counter extends User
 
             // Check if email already exists
             $sql2 = "SELECT Email FROM user_account WHERE Email='$email'";
-            $res = mysqli_query($this->db->getConnection(), $sql2);
+            $res = mysqli_query($con, $sql2);
 
             if (!$res) {
-                throw new Exception("Database query failed: " . mysqli_error($this->db->getConnection()));
+                throw new Exception("Database query failed: " . mysqli_error($con));
             }
 
             if (mysqli_num_rows($res) > 0) {
@@ -35,25 +36,25 @@ class Counter extends User
 
             // Insert queries
             $query1 = "INSERT INTO user_account(UserID, Name, Email, Contact, Password, UserType, LoginType) 
-                   VALUES('$userID', '$name', '$email', '$contact', '$password', 'Admin', 'Password')";
-            $query2 = "INSERT INTO admin(CounterID, UserID, Creator) 
-                   VALUES('$counterID', '$userID', 'A001')"; // Change the Creator ID
+                   VALUES('$userID', '$name', '$email', '$contact', '$password', 'Counter', 'Password')";
+            $query2 = "INSERT INTO counter(CounterID, UserID, AdminID,Location) 
+                   VALUES('$counterID', '$userID', 'A001','$location')"; // Change the Creator ID
 
-            $result1 = mysqli_query($this->db->getConnection(), $query1);
+            $result1 = mysqli_query($con, $query1);
             if (!$result1) {
-                throw new Exception("Failed to insert into user_account: " . mysqli_error($this->db->getConnection()));
+                throw new Exception("Failed to insert into user_account: " . mysqli_error($con));
             }
 
-            $result2 = mysqli_query($this->db->getConnection(), $query2);
+            $result2 = mysqli_query($con, $query2);
             if (!$result2) {
-                throw new Exception("Failed to insert into counter: " . mysqli_error($this->db->getConnection()));
+                throw new Exception("Failed to insert into counter: " . mysqli_error($con));
             }
 
             // Commit the transaction if both inserts were successful
-            mysqli_commit($this->db->getConnection());
+            mysqli_commit($con);
             return true;
         } catch (Exception $e) {
-            mysqli_rollback($this->db->getConnection());
+            mysqli_rollback($con);
             echo "Error: " . $e->getMessage();
             return false;
         } finally {
@@ -132,13 +133,14 @@ class Counter extends User
 
     public function generateNewCounterID()
     {
+        $conn = $this->db->getConnection();
         try {
             // Query to get the last inserted CounterID
             $query = "SELECT CounterID FROM counter ORDER BY CounterID DESC LIMIT 1";
-            $result = mysqli_query($this->db->getConnection(), $query);
+            $result = mysqli_query($conn, $query);
 
             if (!$result) {
-                throw new Exception("Database query failed: " . mysqli_error($this->db->getConnection()));
+                throw new Exception("Database query failed: " . mysqli_error($conn));
             }
 
             $row = mysqli_fetch_assoc($result);
@@ -146,7 +148,7 @@ class Counter extends User
 
             if ($lastID) {
                 // Ensure the prefix is correctly ignored
-                $number = intval(substr($lastID, 1)); // Assumes prefix 'C' is 1 characters
+                $number = intval(substr($lastID, 4)); // Assumes prefix 'COU-' is 4 characters
                 // Increment the number
                 $newNumber = $number + 1;
                 $newID = 'COU-' . str_pad($newNumber, 3, '0', STR_PAD_LEFT);
@@ -159,6 +161,58 @@ class Counter extends User
         } catch (Exception $e) {
             echo "Error generating new CounterID: " . $e->getMessage();
             return null;
+        }
+    }
+
+    public function Delete(string $counterID)
+    {
+        $conn = $this->db->getConnection();
+        try {
+            // Begin transaction
+            mysqli_begin_transaction($conn);
+
+
+            // Prepare and execute query to check if CounterID exists
+            $stmt = $conn->prepare("SELECT UserID FROM counter WHERE CounterID = ?");
+            $stmt->bind_param("s", $counterID);
+            $stmt->execute();
+            $res = $stmt->get_result();
+
+            if (!$res) {
+                throw new Exception("Database query failed: " . mysqli_error($conn));
+            }
+
+            if ($res->num_rows == 0) {
+                throw new Exception("CounterID does not exist.");
+            }
+
+            // Get the UserID
+            $row = mysqli_fetch_assoc($res);
+            $userID = $row['UserID'];
+
+            // Delete from Counter table
+            $query1 = "DELETE FROM counter WHERE CounterID='$counterID'";
+            $result1 = mysqli_query($conn, $query1);
+            if (!$result1) {
+                throw new Exception("Failed to delete from Counter: " . mysqli_error($conn));
+            }
+
+            // Delete from user_account table
+            $query2 = "DELETE FROM user_account WHERE UserID='$userID'";
+            $result2 = mysqli_query($conn, $query2);
+            if (!$result2) {
+                throw new Exception("Failed to delete from user_account: " . mysqli_error($conn));
+            }
+
+            // Commit the transaction if both deletions were successful
+            mysqli_commit($conn);
+            return true;
+        } catch (Exception $e) {
+            mysqli_rollback($conn);
+            error_log($e->getMessage(), 3, '/Backend/error.log'); // Specify a path to log errors
+            echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+        } finally {
+            $this->db->disconnect();
         }
     }
 }

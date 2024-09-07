@@ -96,13 +96,13 @@
         }
 
         main .title {
-            font-size: 28px;
+            font-size: 22px;
             font-weight: 600;
         }
 
         main .breadcrumbs li,
         main .breadcrumbs li a {
-            font-size: 14px;
+            font-size: 12px;
         }
 
         main .breadcrumbs li a {
@@ -121,27 +121,42 @@
             scrollbar-width: none;
         }
     </style>
-    <title></title>
 </head>
 
 <body class="body">
     <main class="">
-        <h1 class="title mb-10">ADMIN LOGIN DETAILS</h1>
+        <h1 class="title mb-10 mt-0">ADMIN LOGIN DETAILS</h1>
         <ul class="list-unstyled breadcrumbs d-flex gap-2">
             <li><a href="AdminView.php">Home</a></li> <!-- ## -->
             <li class="divider">/</li> <!-- ## -->
             <li><a href="#" class="active">Users / Admin</a></li>
         </ul>
     </main>
-    <div class="col-sm-6 p-0 flex justify-content-lg-end justify-content-center">
-        <a href="#" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#AddAdminModal" id="AddAdminModelButton">
-            <i class="bi bi-plus-lg"></i><span>Add New Admin</span>
-        </a>
-        <!-- <a href="#" onclick="document.getElementById('Delete').style.display='block'" class="btn btn-danger" data-toggle="modal">
-            <i class="bi bi-trash"></i><span>Delete Admin</span>
-        </a> -->
+    
+    <div class="row g-3 col-sm-6 p-0  ">
+        <div class="col-auto">
+            <a href="#" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#AddAdminModal" id="AddAdminModelButton">
+                <i class="bi bi-plus-lg"></i><span>Add New Admin</span>
+            </a>
+        </div>
+        <div class="col-auto">
+            <input type="text" class="form-control form-control-sm" id="txtSearch" placeholder="Search">
+        </div>
+        <div class="col-auto">
+            <input type="button" class="btn btn-primary btn-sm" id="txtSearch"  value="Search">
+        </div>
+        <div class="col-auto">
+            <select name="status" id="status" class="form-select form-select-sm">
+                
+                <option value="Active" default>Active</option>
+                <option value="Deactive">Deactive</option>
+                
+            </select>
+        </div>
     </div>
-    <div class="mt-5">
+
+    <!-- Data View Table -->
+    <div class="mt-3">
         <table class="table table-hover table-striped " border="1.5" id="AdminViewTable">
             <thead>
                 <tr class="table-success ">
@@ -161,6 +176,7 @@
              -->
 
             </tbody>
+        </table>
     </div>
 
     <!-- Toast container -->
@@ -261,7 +277,7 @@
                         <span class="errMsg" id="U_contact_err"></span>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Create Password:</label>
+                        <label class="form-label">Update Password:</label>
                         <input type="text" class="form-control mb-2" name="U_password" id="U_password" placeholder="Update Password">
                         <span class="errMsg" id="U_password_err"></span>
                     </div>
@@ -304,9 +320,14 @@
 
     <script>
         $(document).ready(function() {
-            //Refresh Data table 
             GetAdminData();
         })
+        $('#txtSearch').keyup(function(){
+            alert("keyup")
+        });
+
+        
+
         $('#AddAdminModelButton').on('click', function(event) {
             GetAdminID();
         });
@@ -316,6 +337,7 @@
             var adminID = $(this).data('adminid');
             DeleteAdmin(adminID);
         });
+
         // click in Update Admin button 
         $('#UpdateAdmin').on('click', function() {
             // alert("click");
@@ -337,6 +359,7 @@
         $('#AddAdmin').on('click', function(event) {
             // alert("click");
             event.preventDefault(); // Prevent the form from submitting normally
+
             var first_name = $('#first_name').val().trim();
             var last_name = $('#last_name').val().trim();
             var email = $('#email').val().trim();
@@ -395,7 +418,11 @@
                     return;
                 }
 
-                if (new_password === '') {
+                if (new_password.length < 9) {
+                    $('#password_err').text('Minimum 8 cha');
+                    isValid = false;
+                    return;
+                } else if (new_password === '') {
                     $('#password_err').text('Password is required');
                     isValid = false;
                     return;
@@ -458,7 +485,7 @@
         function AddAdmin(name, email, contact, new_password) {
             $.ajax({
                 type: "POST",
-                url: "http://localhost/testweb/GitHub/EzBus-Expressway-Online-Sheat-Booking-Web/process.php", 
+                url: "http://localhost/testweb/GitHub/EzBus-Expressway-Online-Sheat-Booking-Web/process.php",
                 data: {
                     action: 'addAdmin',
                     'Name': name,
@@ -502,12 +529,13 @@
         function showToast(title, message, type) {
             const borderClass = type === 'success' ? 'toast-success' : 'toast-error'; //asing the boder color as msg type
             const headerClass = type === 'success' ? 'toast-header-success' : 'toast-header-error';
+            const time = new Date().toLocaleTimeString(); 
             const toastHTML = `
                 <div class="toast ${borderClass}" role="alert" aria-live="assertive" aria-atomic="true">
                     <div class="toast-header ${headerClass}">
                         <img src="..." class="rounded me-2" alt="...">
                         <strong class="me-auto">${title}</strong>
-                        <small class="text-muted">Just now</small>
+                        <small class="text-muted">${time}</small>
                         <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
                     </div>
                     <div class="toast-body">
@@ -523,19 +551,21 @@
 
             // Initialize and show the toast with a 5-second display time
             new bootstrap.Toast(newToast, {
-                delay: 5000
+                delay: 10000
             }).show();
         }
 
         // Get Admin Data
-        function GetAdminData() {
+        function GetAdminData(type) {
             $('.AdminData').empty(); // Clear Admin Data View
-
+            const hiddenPassword = '*'.repeat(10);
             $.ajax({
                 type: "GET",
                 url: "http://localhost/testweb/GitHub/EzBus-Expressway-Online-Sheat-Booking-Web/process.php",
+                dataType: "json",
                 data: {
-                    action: 'getAdminData'
+                    action: 'getAdminData',
+                    'Type':type,
                 },
                 success: function(response) {
                     $.each(response, function(key, admin) {
@@ -545,7 +575,11 @@
                             '<td>' + admin['Name'] + '</td>' +
                             '<td>' + admin['Email'] + '</td>' +
                             '<td>' + admin['Contact'] + '</td>' +
-                            '<td>' + admin['Password'] + '</td>' +
+                            '<td>' +
+                            '<span class="hidden-password">' + hiddenPassword + '</span>' +
+                            '<span class="actual-password d-none">' + admin['Password'] + '</span>' +
+                            '<a href="#" class="toggle-password ms-2"><i class="bi bi-eye-slash"></i></a>' +
+                            '</td>' +
                             '<td>' + admin['Creator'] + '</td>' +
                             '<td class="ms-auto d-flex gap-2">' +
                             '<a href="#" class="edit-btn"><i class="bi bi-pencil-square btn btn-sm btn-outline-success pt-0 pb-0"></i></a>' +
@@ -565,9 +599,10 @@
                         var email = $row.data('adminemail');
                         var contact = $row.data('admincontact');
                         var password = $row.data('adminpassword');
-                        if(adminID == "A000"){
+                        var creator = $row.data('admincreator');
+                        if (adminID == "A000") {
                             showToast('Error', "Can't Edit \"A000\" Admin", 'error');
-                        }else{
+                        } else {
                             $('#EditAdminModal').modal('show');
                             // Update modal content and show the modal
                             $('#EditFormAdminID').text(adminID);
@@ -575,6 +610,7 @@
                             $('#U_email').val(email);
                             $('#U_contact').val(contact);
                             $('#U_password').val(password);
+
                         }
                     });
 
@@ -585,9 +621,9 @@
 
                         var adminID = $row.data('adminid');
                         var adminName = $row.data('adminname');
-                        if(adminID == "A000"){
+                        if (adminID == "A000") {
                             showToast('Error', "Can't Delete \"A000\" Admin", 'error');
-                        }else{
+                        } else {
                             // Update modal content and show the modal
                             $('#adminID').text('\tID    : ' + adminID);
                             $('#adminName').text('\tName  : ' + adminName);
@@ -595,7 +631,27 @@
                             $('#confirmDelete').data('adminid', adminID);
                             $('#Delete').modal('show'); // Use Bootstrap's method to show the modal
                         }
-                        
+
+                    });
+
+                    // Toggle password visibility
+                    $('.toggle-password').on('click', function(e) {
+                        e.preventDefault();
+                        var $this = $(this);
+                        var $hiddenPassword = $this.siblings('.hidden-password');
+                        var $actualPassword = $this.siblings('.actual-password');
+
+                        if ($hiddenPassword.hasClass('d-none')) {
+                            // Show hidden password and change icon
+                            $hiddenPassword.removeClass('d-none');
+                            $actualPassword.addClass('d-none');
+                            $this.find('i').removeClass('bi-eye').addClass('bi-eye-slash');
+                        } else {
+                            // Show actual password and change icon
+                            $hiddenPassword.addClass('d-none');
+                            $actualPassword.removeClass('d-none');
+                            $this.find('i').removeClass('bi-eye-slash').addClass('bi-eye');
+                        }
                     });
 
 
@@ -604,6 +660,11 @@
                     console.error("Error fetching admin data: " + status + " - " + error);
                 }
             });
+        }
+
+        //Get Search Data
+        function Search(type){
+
         }
 
         // Edit Admin Function

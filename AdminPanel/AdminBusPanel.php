@@ -61,13 +61,13 @@
         }
 
         main .title {
-            font-size: 28px;
+            font-size: 22px;
             font-weight: 600;
         }
 
         main .breadcrumbs li,
         main .breadcrumbs li a {
-            font-size: 14px;
+            font-size: 12px;
         }
 
         main .breadcrumbs li a {
@@ -94,13 +94,19 @@
             <li><a href="#" class="active">Bus</a></li>
         </ul>
     </main>
-    <div class="col-sm-6 p-0 flex justify-content-lg-end justify-content-center">
-        <a href="#" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#AddBusModal">
+    
+    <div class="row g-3 col-sm-6 p-0  ">
+        <div class="col-auto">
+        <a href="#" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#AddBusModal">
             <i class="bi bi-plus-lg"></i><span>Add New Bus</span>
         </a>
-        <!-- <a href="#" onclick="document.getElementById('Delete').style.display='block'" class="btn btn-danger" data-toggle="modal">
-            <i class="bi bi-trash"></i><span>Delete Bus</span>
-        </a> -->
+        </div>
+        <div class="col-auto">
+            <input type="text" class="form-control form-control-sm" id="txtSearch" placeholder="Search">
+        </div>
+        <div class="col-auto">
+            <input type="button" class="btn btn-primary btn-sm" id="txtSearch"  value="Search">
+        </div>
     </div>
 
 
