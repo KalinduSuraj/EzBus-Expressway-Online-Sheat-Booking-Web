@@ -358,16 +358,16 @@
 
                     <!-- Show Name -->
                     <div class="text-muted pt-2 text-capitalize d-flex">
-                        <h6>Hi, </h6>
+                        <h6>Hi,  </h6>
                         <h6 id="ShowUserName">Kalindu Suraj</h6>
                     </div>
                     <!-- Divider -->
                     <span class="divider"></span>
 
                     <!-- Bell Icon with Badge -->
-                    <a href="#" class="nav-link" data-bs-toggle="offcanvas" data-bs-target="#Notification" aria-controls="Notification">
+                    <a href="#" class="nav-link" data-bs-toggle="offcanvas" data-bs-target="#Notification" aria-controls="Notification" id="notificationView">
                         <i class='bx bxs-bell bx-tada-hover icon'></i>
-                        <span class="badge">5</span>
+                        <!-- <span class="badge"></span> -->
                     </a>
 
                     <!-- Divider -->
@@ -387,6 +387,7 @@
             </div>
         </nav>
         <!-- Navbar Close-->
+
         <!-- Main -->
         <main>
             <section id="view">
@@ -395,7 +396,7 @@
         </main>
     </section>
 
-
+    <!-- Notification Offcanvas -->
     <div class="offcanvas offcanvas-end" tabindex="-1" id="Notification" aria-labelledby="NotificationLabel">
         <div class="offcanvas-header">
             <h5 id="NotificationLabel">Notification</h5>
@@ -405,11 +406,6 @@
             
         </div>
     </div>
-
-
-
-
-
 
     <script>
         // Select all dropdown menus

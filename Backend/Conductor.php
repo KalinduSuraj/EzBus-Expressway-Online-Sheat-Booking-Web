@@ -4,51 +4,59 @@ require_once __DIR__ . "/User.php";
 class Conductor extends User{
 
     public function register(string $name, string $password, string $contact, string $email){
-        try{
+        $conn = $this->db->getConnection();
+        try {
+            // Begin transaction
+            mysqli_begin_transaction($conn);
 
-            mysqli_begin_transaction($this->db->getConnection());
-            //auto increment userID
+            // Auto increment userID
             $userID = $this->userIDIncrement();
-
-            //auto increment passengerID
-            $conductorid = $this->generateNewConductorID();
-
-
-            //registration process
-            $sql2 = "select Email from user where Email='$email'";
-            $res = mysqli_query($this->db->getConnection(), $sql2);
-
-            if (!(mysqli_num_rows($res) == 1)) {
-                //inner join
-                $queary1 = "insert into user_account(UserID,Name,Email,Contact,Password,UserType)
-                values('$userID','$name','$email','$contact','$password','Conductor');";
-                $queary2 = "insert into conductor
-                values('$conductorid','$userID');";
-
-                $result1 = mysqli_query($this->db->getConnection(), $queary1);
-                $result2 = mysqli_query($this->db->getConnection(), $queary2);
-                $this->db->disconnect();
-                if ($result1 && $result2) {
-                    mysqli_commit($this->db->getConnection());
-                    echo "<script> console.log('Added'); </script>";
-                    echo "<script>alert('Conductor Registered Successfully');</script>";
-
-                    //redirection file->
-                    //echo "<script>window.location.href = 'signIn.php';</script>";
-                } else {
-                    mysqli_rollback($this->db->getConnection());
-                    echo "<script> alert('not Added'); </>";
-                }
-                return true;
-            } else {
-                mysqli_rollback($this->db->getConnection());
-                echo "<script> alert('there is the Conductor in this $email'); </script>";
-                return false;
+            if (!$userID) {
+                throw new Exception("Failed to generate a new user ID.");
             }
-        }
-        catch(Exception $e){
-            mysqli_rollback($this->db->getConnection());
-            echo $e;
+
+            $conductorID = $this->generateNewConductorID();
+            if (!$conductorID) {
+                throw new Exception("Failed to generate a new conductor ID.");
+            }
+
+            // Check if email already exists
+            $sql2 = "SELECT Email FROM user_account WHERE Email='$email'";
+            $res = mysqli_query($conn, $sql2);
+
+            if (!$res) {
+                throw new Exception("Database query failed: " . mysqli_error($conn));
+            }
+
+            if (mysqli_num_rows($res) > 0) {
+                throw new Exception("Email already exists.");
+            }
+
+            // Insert queries
+            $query1 = "INSERT INTO user_account(UserID, Name, Email, Contact, Password, UserType, LoginType) 
+                   VALUES('$userID', '$name', '$email', '$contact', '$password', 'Conductor', 'Password')";
+            $query2 = "INSERT INTO conductor(ConductorID, UserID, Creator) 
+                   VALUES('$conductorID', '$userID', 'A001')"; // Change the Creator ID
+
+            $result1 = mysqli_query($conn, $query1);
+            if (!$result1) {
+                throw new Exception("Failed to insert into user_account: " . mysqli_error($conn));
+            }
+
+            $result2 = mysqli_query($conn, $query2);
+            if (!$result2) {
+                throw new Exception("Failed to insert into conductor: " . mysqli_error($conn));
+            }
+
+            // Commit the transaction if both inserts were successful
+            mysqli_commit($conn);
+            return true;
+        } catch (Exception $e) {
+            mysqli_rollback($conn);
+            error_log($e->getMessage(), 3, '/Backend/error.log'); // Specify a path to log errors
+            echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+        } finally {
+            $this->db->disconnect();
         }
 
     }
@@ -66,10 +74,9 @@ class Conductor extends User{
             }
             header('Content-type: application/json');
             echo json_encode($res_array);
-        }else{
-            echo $return = "<h4>No Record Found</h4>";
-        }
+        }      
     }
+    
     public function generateNewConductorID()
     {
         try {

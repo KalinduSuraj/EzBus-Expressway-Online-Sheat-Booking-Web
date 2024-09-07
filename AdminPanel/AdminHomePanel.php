@@ -53,13 +53,13 @@
         }
 
         main .title {
-            font-size: 28px;
+            font-size: 22px;
             font-weight: 600;
         }
 
         main .breadcrumbs li,
         main .breadcrumbs li a {
-            font-size: 14px;
+            font-size: 12px;
         }
 
         main .breadcrumbs li a {

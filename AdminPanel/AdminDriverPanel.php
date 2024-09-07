@@ -1,13 +1,3 @@
-<?php
-require_once '../Backend/Driver.php';
-// Create an instance of the Driver class
-$driver = new Driver();
-
-// Get the DriverID
-$NewDriverID = $driver->generateNewDriverID();
-
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -72,13 +62,13 @@ $NewDriverID = $driver->generateNewDriverID();
         }
 
         main .title {
-            font-size: 28px;
+            font-size: 22px;
             font-weight: 600;
         }
 
         main .breadcrumbs li,
         main .breadcrumbs li a {
-            font-size: 14px;
+            font-size: 12px;
         }
 
         main .breadcrumbs li a {
@@ -102,16 +92,22 @@ $NewDriverID = $driver->generateNewDriverID();
         <ul class="list-unstyled breadcrumbs d-flex gap-2">
             <li><a href="AdminView.php">Home</a></li> <!-- ## -->
             <li class="divider">/</li> <!-- ## -->
-            <li><a href="#" class="active">/ Driver</a></li>
+            <li><a href="#" class="active">Users / Driver</a></li>
         </ul>
     </main>
-    <div class="col-sm-6 p-0 flex justify-content-lg-end justify-content-center">
-        <a href="#" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#AddDriverModal">
-            <i class="bi bi-plus-lg"></i><span>Add New Driver</span>
-        </a>
-        <!-- <a href="#" onclick="document.getElementById('Delete').style.display='block'" class="btn btn-danger" data-toggle="modal">
-            <i class="bi bi-trash"></i><span>Delete Drivers</span>
-        </a> -->
+
+    <div class="row g-3 col-sm-6 p-0  ">
+        <div class="col-auto">
+            <a href="#" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#AddDriverModal">
+                <i class="bi bi-plus-lg"></i><span>Add New Driver</span>
+            </a>
+        </div>
+        <div class="col-auto">
+            <input type="text" class="form-control" id="txtSearch" placeholder="Search">
+        </div>
+        <div class="col-auto">
+            <input type="button" class="btn btn-primary" id="txtSearch" value="Search">
+        </div>
     </div>
     <div class="mt-5">
         <table class="table table-hover table-striped " border="1.5" id="AdminViewTable">
@@ -126,7 +122,7 @@ $NewDriverID = $driver->generateNewDriverID();
             <tbody class="DriverData">
 
                 <!-- 
-                View Admin Data
+                View Driver Data
              -->
 
             </tbody>
@@ -145,11 +141,7 @@ $NewDriverID = $driver->generateNewDriverID();
                             <div class="col text-center ">
                                 <b>
                                     <label class="form-label">Driver ID : </label>
-                                    <label class="form-label" id="ShowDriverID">
-                                        <?php
-                                         echo htmlspecialchars($NewDriverID); 
-                                        ?>
-                                    </label>
+                                    <label class="form-label" id="ShowDriverID"><!-- Show Next DriverID --></label>
                                 </b>
                             </div>
                         </div>

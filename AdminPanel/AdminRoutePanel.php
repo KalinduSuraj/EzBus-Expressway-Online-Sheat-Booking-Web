@@ -61,13 +61,13 @@
         }
 
         main .title {
-            font-size: 28px;
+            font-size: 22px;
             font-weight: 600;
         }
 
         main .breadcrumbs li,
         main .breadcrumbs li a {
-            font-size: 14px;
+            font-size: 12px;
         }
 
         main .breadcrumbs li a {
@@ -94,13 +94,19 @@
             <li><a href="#" class="active">Route</a></li>
         </ul>
     </main>
-    <div class="col-sm-6 p-0 flex justify-content-lg-end justify-content-center">
-        <a href="#" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#AddRouteModal">
-            <i class="bi bi-plus-lg"></i><span>Add Route</span>
-        </a>
-        <!-- <a href="#" onclick="document.getElementById('Delete').style.display='block'" class="btn btn-danger" data-toggle="modal">
-            <i class="bi bi-trash"></i><span>Delete Routes</span>
-        </a> -->
+    
+    <div class="row g-3 col-sm-6 p-0  ">
+        <div class="col-auto">
+            <a href="#" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#AddRouteModal">
+                <i class="bi bi-plus-lg"></i><span>Add Route</span>
+            </a>
+        </div>
+        <div class="col-auto">
+            <input type="text" class="form-control" id="txtSearch" placeholder="Search">
+        </div>
+        <div class="col-auto">
+            <input type="button" class="btn btn-primary" id="txtSearch" value="Search">
+        </div>
     </div>
     <div class="mt-5">
         <table class="table table-hover table-striped " border="1.5" id="RouteViewTable">
@@ -115,13 +121,13 @@
             </thead>
             <tbody class="RouteData">
 
-            <!-- 
+                <!-- 
                 View Route Data
              -->
 
             </tbody>
     </div>
-   
+
 
 
     <!-- Add Route Form -->
@@ -156,10 +162,10 @@
                             </div>
                         </div>
                         <div class="col">
-                                <label class="form-label">Ticket Price</label>
-                                <input type="text" class="form-control" name="price" id="price" placeholder="100.00">
-                                <span class="errMsg" id="price_err"></span>
-                            </div>
+                            <label class="form-label">Ticket Price</label>
+                            <input type="text" class="form-control" name="price" id="price" placeholder="100.00">
+                            <span class="errMsg" id="price_err"></span>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="reset" class="btn btn-secondary btn-outline-danger text-dark" data-bs-dismiss="modal">Cancel</button>
@@ -170,7 +176,7 @@
         </div>
     </div>
 
-    
+
 
 
     <!----delete-modal start--------->
@@ -222,7 +228,7 @@
                     isValid = false;
                     return;
                 }
-                if(price == ''){
+                if (price == '') {
                     $('#price_err').text('Enter Ticket Price');
                     isValid = false;
                     return;

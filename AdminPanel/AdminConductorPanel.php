@@ -69,13 +69,13 @@ $NewConductorID = $conductor->generateNewConductorID();
         }
 
         main .title {
-            font-size: 28px;
+            font-size: 22px;
             font-weight: 600;
         }
 
         main .breadcrumbs li,
         main .breadcrumbs li a {
-            font-size: 14px;
+            font-size: 12px;
         }
 
         main .breadcrumbs li a {
@@ -104,12 +104,23 @@ $NewConductorID = $conductor->generateNewConductorID();
     </main>
 
     <div class="col-sm-6 p-0 flex justify-content-lg-end justify-content-center">
-        <a href="#" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#AddConductorModal">
-            <i class="bi bi-plus-lg"></i><span>Add New Conductor</span>
-        </a>
+
         <!-- <a href="#" onclick="document.getElementById('Delete').style.display='block'" class="btn btn-danger" data-toggle="modal">
             <i class="bi bi-trash"></i><span>Delete Conductor</span>
         </a> -->
+    </div>
+    <div class="row g-3 col-sm-6 p-0  ">
+        <div class="col-auto">
+            <a href="#" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#AddConductorModal">
+                <i class="bi bi-plus-lg"></i><span>Add New Conductor</span>
+            </a>
+        </div>
+        <div class="col-auto">
+            <input type="text" class="form-control form-control-sm" id="txtSearch" placeholder="Search">
+        </div>
+        <div class="col-auto">
+            <input type="button" class="btn btn-primary btn-sm" id="txtSearch" value="Search">
+        </div>
     </div>
     <div class="mt-5">
         <table class="table table-hover table-striped " border="1.5" id="ConductorViewTable">
@@ -125,13 +136,18 @@ $NewConductorID = $conductor->generateNewConductorID();
                 </tr>
             </thead>
             <tbody class="ConductorData">
-                <!-- 
-                View Conductor Data
-             -->
-
+                <!-- View Conductor Data -->
             </tbody>
+        </table>
+        <div class="empty">
+
+        </div>
     </div>
 
+    <!-- Toast container -->
+    <div id="toastContainer" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+        <!-- Toasts will be appended here -->
+    </div>
 
     <!-- Add Conductor Form -->
     <div class="modal fade" id="AddConductorModal" tabindex="-1" aria-labelledby="AddConductorModalLabel" aria-hidden="true">
@@ -146,7 +162,7 @@ $NewConductorID = $conductor->generateNewConductorID();
                                 <b>
                                     <label class="form-label">Conductor ID : </label>
                                     <label class="form-label" id="ShowConductorID">
-                                    <?php echo htmlspecialchars($NewConductorID); ?>
+                                        <?php echo htmlspecialchars($NewConductorID); ?>
                                     </label>
                                 </b>
                             </div>
@@ -214,34 +230,16 @@ $NewConductorID = $conductor->generateNewConductorID();
         </div>
     </div>
 
+
     <script>
-        
         $(document).ready(function() {
 
-            GetConductorData() 
-
-            $('#AddConductor').on('click', function(event) {
-                // alert("click");
-                event.preventDefault(); // Prevent the form from submitting normally
-
-                AddConductorValidation();
-                
-            });
-
-            $('#DeleteConductor').on('click', function(event) {
-                DeleteConductor();
-            })
+            GetConductorData()
         })
-        function clearErr() {
-            $('.errMsg').text('');
-        }
 
-        //Add Counter Validation Function
-        function AddConductorValidation() {
-            // Clear previous error messages
-            clearErr();
-
-            var isValid = true;
+        $('#AddConductor').on('click', function(event) {
+            // alert("click");
+            event.preventDefault(); // Prevent the form from submitting normally
 
             var first_name = $('#first_name').val().trim();
             var last_name = $('#last_name').val().trim();
@@ -249,55 +247,124 @@ $NewConductorID = $conductor->generateNewConductorID();
             var contact = $('#contact').val().trim();
             var new_password = $('#new_password').val().trim();
             var confirm_password = $('#confirm_password').val().trim();
-
-            //Simple validation
-            if (first_name === '') {
-                $('#first_name_err').text('First Name is required');
-                isValid = false;
-                return;
-            }
-            if (last_name === '') {
-                $('#last_name_err').text('Last Name is required');
-                isValid = false;
-                return;
-            }
-
-            var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-            if (email === '') {
-                $('#email_err').text('Email is required');
-                isValid = false;
-                return;
-            } else if (!emailRegex.test(email)) {
-                $('#email_err').text('Please enter a valid email address.');
-                isValid = false;
-                return;
-            }
-
-            if (contact === '') {
-                $('#contact_err').text('Contact is required');
-                isValid = false;
-                return;
-            } else if (contact.length !== 10) {
-                $('#contact_err').text('Contact number must be exactly 10 digits');
-                isValid = false;
-                return;
-            }
-
-            if (new_password === '') {
-                $('#password_err').text('Password is required');
-                isValid = false;
-                return;
-            } else if (new_password !== confirm_password) {
-                $('#password_err').text('Passwords do not match');
-                isValid = false;
-                return;
-            }
-
+            var isValid = AddConductorValidation(first_name, last_name, email, contact, new_password, confirm_password);
             if (isValid == true) {
-                alert(isValid);
+                var name = first_name + " " + last_name;
+                var result = AddConductor(name, email, contact, new_password);
+            } else {
+                console.log("Check Your Details");
+            }
+        });
+
+        $('#DeleteConductor').on('click', function(event) {
+            DeleteConductor();
+        })
+
+        function clearErr() {
+            $('.errMsg').text('');
+        }
+
+        //Add Conductor Validation Function
+        function AddConductorValidation(first_name, last_name, email, contact, new_password, confirm_password) {
+            // Clear previous error messages
+            clearErr();
+
+            var isValid = true;
+            try {
+                //Simple validation
+                if (first_name === '') {
+                    $('#first_name_err').text('First Name is required');
+                    isValid = false;
+                    return;
+                }
+                if (last_name === '') {
+                    $('#last_name_err').text('Last Name is required');
+                    isValid = false;
+                    return;
+                }
+
+                var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+                if (email === '') {
+                    $('#email_err').text('Email is required');
+                    isValid = false;
+                    return;
+                } else if (!emailRegex.test(email)) {
+                    $('#email_err').text('Please enter a valid email address.');
+                    isValid = false;
+                    return;
+                }
+
+                if (contact === '') {
+                    $('#contact_err').text('Contact is required');
+                    isValid = false;
+                    return;
+                } else if (contact.length !== 10) {
+                    $('#contact_err').text('Contact number must be exactly 10 digits');
+                    isValid = false;
+                    return;
+                }
+
+                if (new_password === '') {
+                    $('#password_err').text('Password is required');
+                    isValid = false;
+                    return;
+                } else if (new_password !== confirm_password) {
+                    $('#password_err').text('Passwords do not match');
+                    isValid = false;
+                    return;
+                }
+            } catch (err) {
+                alert("Somthing Went Wrong........\n" + err);
+            } finally {
+                return isValid;
             }
         }
+
+        //Add Conductor Function
+        function AddConductor(name, email, contact, new_password) {
+            $.ajax({
+                type: "POST",
+                url: "http://localhost/testweb/GitHub/EzBus-Expressway-Online-Sheat-Booking-Web/process.php",
+                data: {
+                    action: 'addConductor',
+                    'Name': name,
+                    'Email': email,
+                    'Contact': contact,
+                    'Password': new_password,
+                },
+                dataType: 'json', // Expect JSON response from the server
+                success: function(response) {
+                    console.log("Data sent:\n", response);
+
+                    if (response.success) {
+                        //alert("Conductor added successfully");
+
+                        $('#AddConductorModal').modal('hide');
+                        //Clear Add Conductor Form
+                        $('#first_name').val('');
+                        $('#last_name').val('');
+                        $('#email').val('');
+                        $('#contact').val('');
+                        $('#new_password').val('');
+                        $('#confirm_password').val('');
+
+                        GetConductorData(); // Refresh the Conductor list
+                        showToast('Success', response.message, 'success');
+                    } else {
+                        showToast('Error', response.message || "Failed to add Conductor", 'error');
+                        if (response.message === "Email already exists.") {
+                            $('#email_err').text('Email already exists');
+                        }
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error adding Conductor: " + status + " - " + error);
+                    showToast('Error', "An error occurred: " + status + " - " + error, 'error');
+                }
+            });
+        }
+
 
         // Delete Conductor Function
         function DeleteConductor() {
@@ -305,7 +372,8 @@ $NewConductorID = $conductor->generateNewConductorID();
         }
 
         function GetConductorData() {
-            $('.ConductorData').empty();//Clear Conductor Data View
+            $('.ConductorData').empty(); //Clear Conductor Data View
+            const hiddenPassword = '*'.repeat(8);
             $.ajax({
                 type: "GET",
                 url: "http://localhost/testweb/GitHub/EzBus-Expressway-Online-Sheat-Booking-Web/process.php", // Correct URL to Conductor.php
@@ -313,31 +381,122 @@ $NewConductorID = $conductor->generateNewConductorID();
                     action: 'getConductorData'
                 },
                 success: function(response) {
-                    // console.log("Data received:\n", response);
+                    //console.log("Data received:\n", response);
 
                     $.each(response, function(key, conductor) {
-                        // console.log(conductor['ConductorID']);
-
+                        //console.log(conductor['ConductorID']);
                         $('.ConductorData').append(
                             '<tr class="">' +
                             '<th scope="row">' + conductor['ConductorID'] + '</th>' +
                             '<td>' + conductor['Name'] + '</td>' +
                             '<td>' + conductor['Email'] + '</td>' +
                             '<td>' + conductor['Contact'] + '</td>' +
-                            '<td>' + conductor['Password'] + '</td>' +
+                            '<td>' +
+                            '<span class="hidden-password">' + hiddenPassword + '</span>' +
+                            '<span class="actual-password d-none">' + admin['Password'] + '</span>' +
+                            '<a href="#" class="toggle-password ms-2"><i class="bi bi-eye-slash"></i></a>' +
+                            '</td>' +
                             '<td>' + conductor['AdminID'] + '</td>' +
                             '<td class="ms-auto d-flex gap-2">' +
-                            '<a href="#"><i class="bi bi-pencil-square btn btn-sm btn-outline-success  pt-0 pb-0"></i></a>' +
-                            '<a href="#"><i class="bi bi-trash btn btn-sm btn-outline-danger pt-0 pb-0"></i></a>' +
+                            '<a href="#" class="edit-btn"><i class="bi bi-pencil-square btn btn-sm btn-outline-success  pt-0 pb-0"></i></a>' +
+                            '<a href="#" class="delete-btn"><i class="bi bi-trash btn btn-sm btn-outline-danger pt-0 pb-0"></i></a>' +
                             '</td>' +
                             '</tr>'
                         )
+                    });
+
+                    // Attach click event handler to Edit buttons
+                    $('.edit-btn').on('click', function(e) {
+                        e.preventDefault();
+                        var $row = $(this).closest('tr');
+
+                        // var adminID = $row.data('adminid');
+                        // var adminName = $row.data('adminname');
+                        // var email = $row.data('adminemail');
+                        // var contact = $row.data('admincontact');
+                        // var password = $row.data('adminpassword');
+
+                        // $('#EditAdminModal').modal('show');
+                        // // Update modal content and show the modal
+                        // $('#EditFormAdminID').text(adminID);
+                        // $('#U_name').val(adminName);
+                        // $('#U_email').val(email);
+                        // $('#U_contact').val(contact);
+                        // $('#U_password').val(password);
+
+                    });
+
+                    // Attach click event handler to delete buttons
+                    $('.delete-btn').on('click', function(e) {
+                        e.preventDefault();
+                        var $row = $(this).closest('tr');
+
+                        // var adminID = $row.data('adminid');
+                        // var adminName = $row.data('adminname');
+
+                        // // Update modal content and show the modal
+                        // $('#adminID').text('\tID    : ' + adminID);
+                        // $('#adminName').text('\tName  : ' + adminName);
+
+                        // $('#confirmDelete').data('adminid', adminID);
+                        // $('#Delete').modal('show'); // Use Bootstrap's method to show the modal
+
+                    });
+
+                    // Toggle password visibility
+                    $('.toggle-password').on('click', function(e) {
+                        e.preventDefault();
+                        var $this = $(this);
+                        var $hiddenPassword = $this.siblings('.hidden-password');
+                        var $actualPassword = $this.siblings('.actual-password');
+
+                        if ($hiddenPassword.hasClass('d-none')) {
+                            // Show hidden password and change icon
+                            $hiddenPassword.removeClass('d-none');
+                            $actualPassword.addClass('d-none');
+                            $this.find('i').removeClass('bi-eye').addClass('bi-eye-slash');
+                        } else {
+                            // Show actual password and change icon
+                            $hiddenPassword.addClass('d-none');
+                            $actualPassword.removeClass('d-none');
+                            $this.find('i').removeClass('bi-eye-slash').addClass('bi-eye');
+                        }
                     });
                 },
                 error: function(xhr, status, error) {
                     console.error("Error fetching Conductor data: " + status + " - " + error);
                 }
             });
+        }
+
+
+        // Function to show Bootstrap toast
+        function showToast(title, message, type) {
+            const borderClass = type === 'success' ? 'toast-success' : 'toast-error'; //asing the boder color as msg type
+            const headerClass = type === 'success' ? 'toast-header-success' : 'toast-header-error';
+            const toastHTML = `
+                <div class="toast ${borderClass}" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-header ${headerClass}">
+                        <img src="..." class="rounded me-2" alt="...">
+                        <strong class="me-auto">${title}</strong>
+                        <small class="text-muted">Just now</small>
+                        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                    <div class="toast-body">
+                        ${message}
+                    </div>
+                </div>
+            `;
+
+            const toastContainer = $('#toastContainer');
+            toastContainer.append(toastHTML);
+            const newToast = toastContainer.find('.toast').last();
+            new bootstrap.Toast(newToast).show();
+
+            // Initialize and show the toast with a 5-second display time
+            new bootstrap.Toast(newToast, {
+                delay: 5000
+            }).show();
         }
     </script>
 </body>

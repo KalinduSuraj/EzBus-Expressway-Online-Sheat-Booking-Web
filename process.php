@@ -8,21 +8,22 @@ require_once __DIR__ . "/BackEnd/Driver.php";
 ini_set('display_errors', 0);
 ini_set('log_errors', 1);
 error_reporting(E_ALL);
-// Check if this file is called directly via AJAX For Get Admin Data
-if ($_GET['action'] == 'getNextAdminID') {
-    $admin = new Admin();
-    $newAdminID = $admin->generateNewAdminID();
-    echo json_encode(['success' => true, 'newAdminID' => $newAdminID]);
-}
+
 /*----------------------------------------------------------------------------------------------------------------*/
-// Check if this file is called directly via AJAX For Get Admin Data
- if (isset($_GET['action']) && $_GET['action'] == 'getAdminData') {
+// Get Admin Data
+if (isset($_GET['action']) && $_GET['action'] == 'getAdminData') {
     //echo $return = "getAdminData";
     $admin=new Admin(); 
     $admin-> ViewAdmin();
     exit();
 }
-// Check if this file is called directly via AJAX For Add Admin Data
+// Get Admin next ID
+if ($_GET['action'] == 'getNextAdminID') {
+    $admin = new Admin();
+    $newAdminID = $admin->generateNewAdminID();
+    echo json_encode(['success' => true, 'newAdminID' => $newAdminID]);
+}
+// Add Admin Data
 if (isset($_POST['action']) && $_POST['action'] == 'addAdmin') {
     $name = $_POST['Name'];
     $email = $_POST['Email'];
@@ -46,7 +47,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'addAdmin') {
     exit();
 }
 
-// Check if this file is called directly via AJAX For Update Admin Data
+// Update Admin Data
 if (isset($_POST['action']) && $_POST['action'] == 'updateAdmin') {
     $adminID = $_POST['AdminID'];
     $U_email = $_POST['Email'];
@@ -70,13 +71,13 @@ if (isset($_POST['action']) && $_POST['action'] == 'updateAdmin') {
     exit();
 }
 
-// Check if this file is called directly via AJAX For delete Admin Data
+// delete Admin Data
 if (isset($_POST['action']) && $_POST['action'] == 'deleteAdmin') {
     $adminID = $_POST['AdminID'];
 
     $admin = new Admin();
     try {
-        $result = $admin->delete($adminID);
+        $result = $admin->Delete($adminID);
 
         if ($result) {
             echo json_encode(['success' => true, 'message' => 'Admin Deleteed successfully']);
@@ -92,41 +93,96 @@ if (isset($_POST['action']) && $_POST['action'] == 'deleteAdmin') {
 }
 
 /*----------------------------------------------------------------------------------------------------------------*/
-// Check if this file is called directly via AJAX For Get Counter Data
+// Get Counter Data
 if (isset($_GET['action']) && $_GET['action'] == 'getCounterData') {
     //echo $return = "getCounterData";
     $counter=new Counter(); 
     $counter-> ViewCounter();
     exit();
 }
-// Check if this file is called directly via AJAX For Add Counter Data
+// Get Counter next ID
+if ($_GET['action'] == 'getNextCounterID') {
+    $counter = new Counter();
+    $newCounterID = $counter->generateNewCounterID();
+    echo json_encode(['success' => true, 'newCounterID' => $newCounterID]);
+}
+// Add Counter Data
 if (isset($_POST['action']) && $_POST['action'] == 'addCounter') {
     $name = $_POST['Name'];
     $email = $_POST['Email'];
+    $location =$_POST['Location'];
     $contact = $_POST['Contact'];
     $password = $_POST['Password'];
 
     $counter = new Counter();
-    $result = $counter->register($name, $password, $contact, $email);
+    try {
+        $result = $counter->register($name, $password, $contact, $email,$location);
 
-    if ($result) {
-        echo "Counter added successfully";
-    } else {
-        echo "Failed to add Counter";
+        if ($result) {
+            echo json_encode(['success' => true, 'message' => 'Admin Counter successfully']);
+        }
+    } catch (Exception $e) {
+        // Log the error for debugging
+        error_log("Error: " . $e->getMessage());
+        // Return the error as a JSON response
+        echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+    }
+
+    exit();
+}
+// delete Counter Data
+if (isset($_POST['action']) && $_POST['action'] == 'deleteCounter') {
+    $counterID = $_POST['CounterID'];
+
+    $Counter = new Counter();
+    try {
+        $result = $Counter->Delete($counterID);
+
+        if ($result) {
+            echo json_encode(['success' => true, 'message' => 'Counter Deleteed successfully']);
+        }
+    } catch (Exception $e) {
+        // Log the error for debugging
+        error_log("Error: " . $e->getMessage());
+        // Return the error as a JSON response
+        echo json_encode(['success' => false, 'message' => $e->getMessage()]);
     }
 
     exit();
 }
 /*----------------------------------------------------------------------------------------------------------------*/
-// Check if this file is called directly via AJAX For Get Conductor Data
+// Get Conductor Data
 if (isset($_GET['action']) && $_GET['action'] == 'getConductorData') {
     //echo $return = "getConductorData";
     $conductor=new Conductor(); 
     $conductor-> ViewConductor();
     exit();
 }
+// Add Conductor Data
+if (isset($_POST['action']) && $_POST['action'] == 'addConductor') {
+    $name = $_POST['Name'];
+    $email = $_POST['Email'];
+    $contact = $_POST['Contact'];
+    $password = $_POST['Password'];
+
+    $condutor = new Conductor();
+    try {
+        $result = $conductor->register($name, $password, $contact, $email);
+
+        if ($result) {
+            echo json_encode(['success' => true, 'message' => 'Conductor added successfully']);
+        }
+    } catch (Exception $e) {
+        // Log the error for debugging
+        error_log("Error: " . $e->getMessage());
+        // Return the error as a JSON response
+        echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+    }
+
+    exit();
+}
 /*----------------------------------------------------------------------------------------------------------------*/
-// Check if this file is called directly via AJAX For Add Driver Data
+// Add Driver Data
 if (isset($_POST['action']) && $_POST['action'] == 'addDriver') {
     $name = $_POST['Name'];
     $contact = $_POST['Contact'];

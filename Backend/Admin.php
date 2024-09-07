@@ -3,7 +3,7 @@ require_once __DIR__ . "/DBConnection.php";
 require_once __DIR__ . "/User.php";
 class Admin extends User
 {
-
+    
     public function register(string $name, string $password, string $contact, string $email){
         $conn = $this->db->getConnection();
         try {
@@ -116,7 +116,7 @@ class Admin extends User
         }
     }
 
-    public function delete(string $adminID)
+    public function Delete(string $adminID)
     {
         $conn = $this->db->getConnection();
         try {
@@ -216,7 +216,7 @@ class Admin extends User
                 }
                 header('Content-type: application/json');
                 echo json_encode($res_array);
-            } else {
+            } else { 
                 echo $return = "<h4>No Record Found</h4>";
             }
         }catch(Exception $e){
