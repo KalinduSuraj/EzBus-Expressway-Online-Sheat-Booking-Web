@@ -309,18 +309,19 @@
             <!-- Users -->
             <li>
                 <a href="#UsersMenu" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle ">
-                    <i class="bi bi-person icon"></i>Users
+                    <i class="bi bi-people icon"></i>Users
                 </a>
 
                 <ul class=" collapse list-unstyled menu" id="UsersMenu">
                     <li><a href="#" id="Admin" data-url="AdminPanel/AdminAdminPanel.php">Admin</a></li>
                     <li><a href="#" id="Counter" data-url="AdminPanel/AdminCounterPanel.php">Counter</a></li>
                     <li><a href="#" id="Conductor" data-url="AdminPanel/AdminConductorPanel.php">Conductor</a></li>
-                    <li><a href="#" id="Driver" data-url="AdminPanel/AdminDriverPanel.php">Drivers </a></li>
+                   
                 </ul>
 
             </li>
-            
+            <!-- Driver -->
+             <li><a href="#" id="Driver" data-url="AdminPanel/AdminDriverPanel.php"><i class="bi bi-person icon"></i>Drivers </a></li>
             <!-- Route -->
             <li><a href="#" id="Route" data-url="AdminPanel/AdminRoutePanel.php"><i class="bi bi-geo-alt icon"></i>Routes </a></li>
             <!-- Buss -->
@@ -329,7 +330,8 @@
             <li><a href="#" id="Schedule" data-url="AdminPanel/AdminSchedulePanel.php"><i class="bi bi-calendar-range icon"></i>Schedules </a></li>
             
             <!-- Reports -->
-            <li>
+            <li><a href="#" id="Report" data-url=""><i class="bi bi-file-earmark-text icon"></i>Reports</a></li>
+            <!-- <li>
                 <a href="#ReportsMenu" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                     <i class="bi bi-file-earmark-text icon"></i>Reports
                 </a>
@@ -338,7 +340,7 @@
                     <li><a href="#">Counter</a></li>
                     <li><a href="#">Counductor</a></li>
                 </ul>
-            </li>
+            </li> -->
 
         </ul>
     </section>

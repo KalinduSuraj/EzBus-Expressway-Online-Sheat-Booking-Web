@@ -13,10 +13,14 @@ error_reporting(E_ALL);
 // Get Admin Data
 if (isset($_GET['action']) && $_GET['action'] == 'getAdminData') {
     //echo $return = "getAdminData";
+    $type = $_GET['Type'];
     $admin=new Admin(); 
-    $admin-> ViewAdmin();
+    $admin-> ViewAdmin($type);
     exit();
 }
+
+
+
 // Get Admin next ID
 if ($_GET['action'] == 'getNextAdminID') {
     $admin = new Admin();
@@ -50,13 +54,14 @@ if (isset($_POST['action']) && $_POST['action'] == 'addAdmin') {
 // Update Admin Data
 if (isset($_POST['action']) && $_POST['action'] == 'updateAdmin') {
     $adminID = $_POST['AdminID'];
+    $U_name = $_POST['Name'];
     $U_email = $_POST['Email'];
     $U_contact = $_POST['Contact'];
     $U_Password = $_POST['Password'];
 
     $admin = new Admin();
     try {
-        $result = $admin->Update($adminID, $U_email, $U_contact, $U_Password);
+        $result = $admin->Update($adminID,$U_name, $U_email, $U_contact, $U_Password);
 
         if ($result) {
             echo json_encode(['success' => true, 'message' => 'Admin updateed successfully']);
@@ -71,33 +76,44 @@ if (isset($_POST['action']) && $_POST['action'] == 'updateAdmin') {
     exit();
 }
 
-// delete Admin Data
-if (isset($_POST['action']) && $_POST['action'] == 'deleteAdmin') {
+// Deactive Admin Data
+if (isset($_POST['action']) && $_POST['action'] == 'ChangeStatusAdmin') {
     $adminID = $_POST['AdminID'];
-
+    $status = $_POST['Status'];
     $admin = new Admin();
     try {
-        $result = $admin->Delete($adminID);
-
+        $result = $admin->ChangeStatusAdmin($adminID,$status);
         if ($result) {
-            echo json_encode(['success' => true, 'message' => 'Admin Deleteed successfully']);
+            if($status == 0){
+                echo json_encode(['success' => true, 'message' => 'Admin Deactivate successfully']);
+            }else{
+                echo json_encode(['success' => true, 'message' => 'Admin Activate successfully']);
+            }
         }
     } catch (Exception $e) {
-        // Log the error for debugging
         error_log("Error: " . $e->getMessage());
-        // Return the error as a JSON response
         echo json_encode(['success' => false, 'message' => $e->getMessage()]);
     }
-
     exit();
 }
+
 
 /*----------------------------------------------------------------------------------------------------------------*/
 // Get Counter Data
 if (isset($_GET['action']) && $_GET['action'] == 'getCounterData') {
     //echo $return = "getCounterData";
+    $type = $_GET['Type'];
     $counter=new Counter(); 
-    $counter-> ViewCounter();
+    $counter-> ViewCounter($type);
+    exit();
+}
+// Search Counter Data
+if (isset($_GET['action']) && $_GET['action'] == 'SearchCounter') {
+    $type = $_GET['Type'];
+    $txtSearch = $_GET['txtSearch'];
+
+    $counter=new Counter(); 
+    $counter-> Search($type,$txtSearch);
     exit();
 }
 // Get Counter next ID
@@ -130,24 +146,25 @@ if (isset($_POST['action']) && $_POST['action'] == 'addCounter') {
 
     exit();
 }
-// delete Counter Data
-if (isset($_POST['action']) && $_POST['action'] == 'deleteCounter') {
+
+// Deactive Counter Data
+if (isset($_POST['action']) && $_POST['action'] == 'ChangeStatusCounter') {
     $counterID = $_POST['CounterID'];
-
-    $Counter = new Counter();
+    $status = $_POST['Status'];
+    $counter = new Counter();
     try {
-        $result = $Counter->Delete($counterID);
-
+        $result = $counter->ChangeStatusCounter($counterID,$status);
         if ($result) {
-            echo json_encode(['success' => true, 'message' => 'Counter Deleteed successfully']);
+            if($status == 0){
+                echo json_encode(['success' => true, 'message' => 'Counter Deactivate successfully']);
+            }else{
+                echo json_encode(['success' => true, 'message' => 'Counter Activate successfully']);
+            }
         }
     } catch (Exception $e) {
-        // Log the error for debugging
         error_log("Error: " . $e->getMessage());
-        // Return the error as a JSON response
         echo json_encode(['success' => false, 'message' => $e->getMessage()]);
     }
-
     exit();
 }
 /*----------------------------------------------------------------------------------------------------------------*/

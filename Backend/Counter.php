@@ -6,7 +6,7 @@ class Counter extends User
 {
     public function register(string $name, string $password, string $contact, string $email, string $location)
     {
-        $con =$this->db->getConnection();
+        $con = $this->db->getConnection();
         try {
             // Begin transaction
             mysqli_begin_transaction($con);
@@ -19,7 +19,7 @@ class Counter extends User
 
             $counterID = $this->generateNewCounterID();
             if (!$counterID) {
-                throw new Exception("Failed to generate a new admin ID.");
+                throw new Exception("Failed to generate a new Counter ID.");
             }
 
             // Check if email already exists
@@ -110,24 +110,28 @@ class Counter extends User
             echo $e;
         }
     }*/
-    
-    public function ViewCounter()
-    {
-        // echo $return = "View Counter Data";
-        $queary = "SELECT * FROM counterview ";
-        $queary_run = mysqli_query($this->db->getConnection(), $queary);
-        $res_array = [];
 
-        if (mysqli_num_rows($queary_run) > 0) {
-            foreach ($queary_run as $row) {
-                array_push($res_array, $row);
+    public function ViewCounter(string $type)
+    {
+        try {
+            // echo $return = "View Counter Data";
+            $queary = "SELECT * FROM counterview WHERE status='$type' ORDER BY CounterID ASC; ";
+            $queary_run = mysqli_query($this->db->getConnection(), $queary);
+            $res_array = [];
+
+            if (mysqli_num_rows($queary_run) > 0) {
+                foreach ($queary_run as $row) {
+                    array_push($res_array, $row);
+                }
+                header('Content-type: application/json');
+                echo json_encode($res_array);
+            } else {
+                header('Content-type: application/json');
+                echo json_encode(['success' => false, 'message' => 'No Record Found']);
             }
-            header('Content-type: application/json');
-            echo json_encode($res_array);
-        } else {
-            echo $return = "<h4>No Record Found</h4>";
-            header('Content-type: application/json');
-            echo json_encode($res_array);
+        } catch (Exception $e) {
+            error_log($e->getMessage(), 3, '/Backend/error.log');
+            echo json_encode(['success' => false, 'message' => $e->getMessage()]);
         }
     }
 
@@ -164,15 +168,14 @@ class Counter extends User
         }
     }
 
-    public function Delete(string $counterID)
+    public function ChangeStatusCounter(string $counterID, string $status)
     {
         $conn = $this->db->getConnection();
         try {
             // Begin transaction
             mysqli_begin_transaction($conn);
 
-
-            // Prepare and execute query to check if CounterID exists
+            // Prepare and execute query to check if counterID exists
             $stmt = $conn->prepare("SELECT UserID FROM counter WHERE CounterID = ?");
             $stmt->bind_param("s", $counterID);
             $stmt->execute();
@@ -183,36 +186,53 @@ class Counter extends User
             }
 
             if ($res->num_rows == 0) {
-                throw new Exception("CounterID does not exist.");
+                throw new Exception("counterID does not exist.");
             }
 
-            // Get the UserID
-            $row = mysqli_fetch_assoc($res);
-            $userID = $row['UserID'];
+            // Deactive from counter table
+            $stmt2 = $conn->prepare("UPDATE  counter SET status='$status' WHERE CounterID= ? ");
+            $stmt2->bind_param("s", $counterID);
+            $res2 =$stmt2->execute();
 
-            // Delete from Counter table
-            $query1 = "DELETE FROM counter WHERE CounterID='$counterID'";
-            $result1 = mysqli_query($conn, $query1);
-            if (!$result1) {
-                throw new Exception("Failed to delete from Counter: " . mysqli_error($conn));
+            if (!$res2) {
+                if ($status == 0) {
+                    throw new Exception("Failed to Deactivate counter: " . mysqli_error($conn));
+                } else {
+                    throw new Exception("Failed to Activate counter: " . mysqli_error($conn));
+                }
             }
 
-            // Delete from user_account table
-            $query2 = "DELETE FROM user_account WHERE UserID='$userID'";
-            $result2 = mysqli_query($conn, $query2);
-            if (!$result2) {
-                throw new Exception("Failed to delete from user_account: " . mysqli_error($conn));
-            }
-
-            // Commit the transaction if both deletions were successful
-            mysqli_commit($conn);
             return true;
         } catch (Exception $e) {
-            mysqli_rollback($conn);
             error_log($e->getMessage(), 3, '/Backend/error.log'); // Specify a path to log errors
             echo json_encode(['success' => false, 'message' => $e->getMessage()]);
         } finally {
             $this->db->disconnect();
+        }
+    }
+
+    public function Search(string $type, string $txtSearch)
+    {
+        $conn = $this->db->getConnection();
+        try {
+            // echo $return = "View Counter Data";
+            $queary = "SELECT * FROM counterview WHERE status='$type' AND (Location like '%$txtSearch%' OR CounterID like '%$txtSearch%' OR Name like '%$txtSearch%' OR Email like '%$txtSearch%' OR Contact like '%$txtSearch%') ORDER BY CounterID ASC; ";
+            $queary_run = mysqli_query($conn, $queary);
+            $res_array = [];
+
+            if (mysqli_num_rows($queary_run) > 0) {
+                foreach ($queary_run as $row) {
+                    array_push($res_array, $row);
+                }
+                header('Content-type: application/json');
+                echo json_encode($res_array);
+            } else {
+                header('Content-type: application/json');
+                echo json_encode(['success' => false, 'message' => 'No Record Found']);
+            }
+        } catch (Exception $e) {
+            error_log($e->getMessage(), 3, '/Backend/error.log'); 
+            echo json_encode(['success' => false, 'message' => $e->getMessage()]);
         }
     }
 }

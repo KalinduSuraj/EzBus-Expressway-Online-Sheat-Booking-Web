@@ -47,16 +47,12 @@
 
         .toast-header-success {
             background-color: #d4edda;
-            /* Light green background */
             color: #155724;
-            /* Dark green text */
         }
 
         .toast-header-error {
             background-color: #f8d7da;
-            /* Light red background */
             color: #721c24;
-            /* Dark red text */
         }
 
         .has-error .form-control {
@@ -64,9 +60,16 @@
         }
 
         .custom-modal-header {
-            background-color: red;
+            background-color: #fc3b56;
 
             color: #f8d7da;
+
+        }
+
+        .custom-modal-header-active {
+            background-color: #155724;
+
+            color: #d4edda;
 
         }
 
@@ -129,18 +132,26 @@
             <li><a href="#" class="active">Users / Counter</a></li>
         </ul>
     </main>
-    
+
     <div class="row g-3 col-sm-6 p-0  ">
         <div class="col-auto">
-            <a href="#" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#AddCounterModal" id="AddCounterModelButton">
+            <a href="#" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#AddCounterModal" id="AddCounterModelButton">
                 <i class="bi bi-plus-lg"></i><span>Add New Counter</span>
             </a>
         </div>
         <div class="col-auto">
-            <input type="text" class="form-control" id="txtSearch" placeholder="Search">
+            <input type="text" class="form-control form-control-sm" id="txtSearch" placeholder="Search">
         </div>
-        <div class="col-auto">
+        <!-- <div class="col-auto">
             <input type="button" class="btn btn-primary" id="txtSearch" value="Search">
+        </div> -->
+        <div class="col-auto">
+            <select name="activeStatus" id="activeStatus" class="form-select form-select-sm ">
+
+                <option value="1" default>Active</option>
+                <option value="0">Deactive</option>
+
+            </select>
         </div>
     </div>
 
@@ -155,7 +166,7 @@
                     <th scope="col">Contact</th>
                     <th scope="col">Password</th>
                     <th scope="col">Creator</th>
-                    <th width="" class=""></th>
+                    <th scope="col"></th>
                 </tr>
             </thead>
             <tbody class="CounterData">
@@ -191,37 +202,36 @@
                         <button type="button" class="btn-close position-absolute end-0 top-0 m-2" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <div class="row mb-3">
+                        <div class="row mb-1">
                             <div class="col">
                                 <label class="form-label">First Name:</label>
-                                <input type="text" class="form-control" name="first_name" id="first_name" placeholder="Kalindu">
+                                <input type="text" class="form-control form-control-sm" name="first_name" id="first_name" placeholder="Kalindu">
                                 <span class="errMsg" id="first_name_err"></span>
                             </div>
                             <div class="col">
                                 <label class="form-label">Last Name:</label>
-                                <input type="text" class="form-control" name="last_name" id="last_name" placeholder="Suraj">
+                                <input type="text" class="form-control form-control-sm" name="last_name" id="last_name" placeholder="Suraj">
                                 <span class="errMsg" id="last_name_err"></span>
                             </div>
                         </div>
-                        <div class="mb-3">
+                        <div class="mb-1">
                             <label class="form-label">Email:</label>
-                            <input type="email" class="form-control" name="email" id="email" placeholder="name@example.com">
+                            <input type="email" class="form-control form-control-sm" name="email" id="email" placeholder="name@example.com">
                             <span class="errMsg" id="email_err"></span>
                         </div>
-                        <div class="mb-3">
+                        <div class="mb-1">
                             <label class="form-label">Contact No:</label>
-                            <input type="text" class="form-control" name="contact" id="contact" placeholder="07X XXXX XXX">
+                            <input type="text" class="form-control form-control-sm" name="contact" id="contact" placeholder="07X XXXX XXX">
                             <span class="errMsg" id="contact_err"></span>
                         </div>
-                        <div class="mb-3">
+                        <div class="mb-1">
                             <label class="form-label">Location:</label>
-                            <input type="text" class="form-control" name="location" id="location" placeholder="Galle">
+                            <input type="text" class="form-control form-control-sm" name="location" id="location" placeholder="Galle">
                             <span class="errMsg" id="location_err"></span>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label">Create Password:</label>
-                            <input type="password" class="form-control mb-2" name="new_password" id="new_password" placeholder="Create Password">
-                            <input type="password" class="form-control" name="confirm_password" id="confirm_password" placeholder="Confirm Password">
+                        <div class="mb-1">
+                            <label class="form-label">Password:</label>
+                            <input type="text" class="form-control form-control-sm" name="password" id="password" placeholder="Create Password">
                             <span class="errMsg" id="password_err"></span>
                         </div>
                     </div>
@@ -253,28 +263,28 @@
                 </div>
                 <div class="modal-body">
                     <div class="col">
-                        <label class="form-label">Name:</label>
-                        <input type="text" class="form-control" name="U_name" id="U_name" placeholder="Kalindu" disabled>
+                        <label class="form-label form-label">Name:</label>
+                        <input type="text" class="form-control form-control-sm" name="U_name" id="U_name" placeholder="Kalindu Suraj">
                         <span class="errMsg" id="U_name_err"></span>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Email:</label>
-                        <input type="email" class="form-control" name="U_email" id="U_email" placeholder="name@example.com">
+                        <input type="email" class="form-control form-control-sm" name="U_email" id="U_email" placeholder="name@example.com">
                         <span class="errMsg" id="U_email_err"></span>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Contact No:</label>
-                        <input type="text" class="form-control" name="U_contact" id="U_contact" placeholder="07X XXXX XXX">
+                        <input type="text" class="form-control form-control-sm" name="U_contact" id="U_contact" placeholder="07X XXXX XXX">
                         <span class="errMsg" id="U_contact_err"></span>
                     </div>
                     <div class="col">
                         <label class="form-label">Location:</label>
-                        <input type="text" class="form-control" name="U_location" id="U_location" placeholder="Galle">
+                        <input type="text" class="form-control form-control-sm" name="U_location" id="U_location" placeholder="Galle">
                         <span class="errMsg" id="U_location_err"></span>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Create Password:</label>
-                        <input type="text" class="form-control mb-2" name="U_password" id="U_password" placeholder="Update Password">
+                        <input type="text" class="form-control form-control-sm mb-2" name="U_password" id="U_password" placeholder="Update Password">
                         <span class="errMsg" id="U_password_err"></span>
                     </div>
                 </div>
@@ -291,34 +301,76 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header custom-modal-header">
-                    <h5 class="modal-title" id="DeleteLabel">Delete Counter</h5>
+                    <h5 class="modal-title" id="DeleteLabel">Deactive Counter</h5>
                     <button type="button" class="btn-close position-absolute end-0 top-0 m-2" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body mb-0">
-                    <p>Are you sure you want to delete this Counter?</p>
+                    <p>Are you sure you want to deactive this Counter?</p>
                     <div class="ml-5">
                         <b>
 
                             <label id="counterID"></label><br>
                             <label id="counterName"></label>
                         </b>
-                    </div><br>
-                    <p class="text-danger p-0 mb-0"><b><small>This action cannot be undone.</small></b></p>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-danger" id="confirmDelete">Delete</button>
+                    <button type="button" class="btn btn-danger" id="confirmDelete">Deactive</button>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Active Modal -->
+    <div class="modal fade" id="ActiveModel" tabindex="-1" data-bs-backdrop="static" role="dialog" aria-labelledby="ActiveLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header custom-modal-header-active">
+                    <h5 class="modal-title" id="ActiveLabel">Active Counter</h5>
+                    <button type="button" class="btn-close position-absolute end-0 top-0 m-2" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body mb-0">
+                    <p>Are you sure you want to Active this Counter ?</p>
+                    <div class="ml-5">
+                        <b>
+
+                            <label id="ActivecounterID"></label><br>
+                            <label id="ActivecounterName"></label>
+                        </b>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-success" id="confirmActive">Active</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <script>
         $(document).ready(function() {
-            GetCounterData();
+            var type = $('#activeStatus').val().trim();
+            GetCounterData(type);
         })
+
+        $('#activeStatus').change(function() {
+            var type = $('#activeStatus').val().trim();
+            GetCounterData(type);
+        });
+
+        $('#txtSearch').keyup(function() {
+            var type = $('#activeStatus').val().trim();
+            var txtSearch = $('#txtSearch').val().trim();
+            //alert(type + txtSearch)
+            Search(type, txtSearch);
+        });
+
         $('#AddCounterModelButton').on('click', function(event) {
             GetCounterID();
+            var text = generatePassword();
+            $('#password').val(text);
         });
 
         $('#AddCounter').on('click', function(event) {
@@ -328,15 +380,14 @@
             var last_name = $('#last_name').val().trim();
             var email = $('#email').val().trim();
             var contact = $('#contact').val().trim();
-            var new_password = $('#new_password').val().trim();
-            var confirm_password = $('#confirm_password').val().trim();
+            var password = $('#password').val().trim();
             var location = $('#location').val().trim();
 
-            var isValid = AddCounterValidation(first_name, last_name, email, contact, location, new_password, confirm_password)
+            var isValid = AddCounterValidation(first_name, last_name, email, contact, location, password)
             if (isValid == true) {
 
                 var name = first_name + " " + last_name;
-                var result = AddCounter(name, email, contact, location, new_password);
+                var result = AddCounter(name, email, contact, location, password);
             } else {
                 console.log("Check Your Details");
             }
@@ -345,8 +396,29 @@
 
         $('#confirmDelete').on('click', function(event) {
             var counterID = $(this).data('counterid');
-            DeleteCounter(counterID); //Delete Counter
+            var status = 0;
+            ChangeStatus(counterID, status);
+            $('#Delete').modal('hide');
         })
+
+        // click in confirm Active button
+        $('#confirmActive').on('click', function() {
+            var counterID = $(this).data('counterid');
+            var status = 1;
+            ChangeStatus(counterID, status);
+            $('#ActiveModel').modal('hide');
+        });
+
+        //Generate First Password
+        function generatePassword() {
+            var charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%&_+";
+            var password = "";
+            for (var i = 0; i < 10; i++) {
+                var randomIndex = Math.floor(Math.random() * charset.length);
+                password += charset[randomIndex];
+            }
+            return password;
+        }
 
         // clear errMsg Function
         function clearErr() {
@@ -354,7 +426,7 @@
         }
 
         //Add Counter Validation Function
-        function AddCounterValidation(first_name, last_name, email, contact, location, new_password, confirm_password) {
+        function AddCounterValidation(first_name, last_name, email, contact, location, password) {
             // Clear previous error messages
             clearErr();
             var isValid = true;
@@ -397,12 +469,8 @@
                     isValid = false;
                     return;
                 }
-                if (new_password === '') {
+                if (password === '') {
                     $('#password_err').text('Password is required');
-                    isValid = false;
-                    return;
-                } else if (new_password !== confirm_password) {
-                    $('#password_err').text('Passwords do not match');
                     isValid = false;
                     return;
                 }
@@ -460,139 +528,312 @@
             });
         }
 
-        // Delete Counter Function
-        function DeleteCounter(CounterID) {
-            // alert("Delete " + counterID);
+        function ChangeStatus(counterID, status) {
+            //alert("Delete " + counterID);
             $.ajax({
                 type: "POST",
-                url: "http://localhost/testweb/GitHub/EzBus-Expressway-Online-Sheat-Booking-Web/process.php", // Correct URL to Admin.php
+                url: "http://localhost/testweb/GitHub/EzBus-Expressway-Online-Sheat-Booking-Web/process.php",
                 data: {
-                    action: 'deleteCounter',
-                    'CounterID': CounterID,
+                    action: 'ChangeStatusCounter',
+                    'CounterID': counterID,
+                    'Status': status,
                 },
-                dataType: 'json', // Expect JSON response from the server
+                dataType: 'json',
                 success: function(response) {
-                    console.log("ID sent:\n", response);
-
+                    console.log("ID sent:\n Response : ", response);
                     if (response.success) {
                         //alert("Counter delete successfully");
-                        GetCounterData(); // Refresh the Counter list
+                        GetCounterData($('#activeStatus').val().trim()); // Refresh the Counter list
                         showToast('Success', response.message, 'success');
                     } else {
-                        showToast('Error', response.message || "Failed to Delete Counter", 'error');
+                        if ($status == 0) {
+                            showToast('Error', response.message || "Failed to Deactivate Counter", 'error');
+                        } else {
+                            showToast('Error', response.message || "Failed to Activate Counter", 'error');
+                        }
+
                     }
                 },
                 error: function(xhr, status, error) {
-                    console.error("Error Delete Counter: " + status + " - " + error);
+                    console.error("Error Deactivate Counter: " + status + " - " + error);
                     showToast('Error', "An error occurred: " + status + " - " + error, 'error');
                 }
             });
-            $('#Delete').modal('hide');
+
         }
 
         //Get Counter Data
-        function GetCounterData() {
+        function GetCounterData(type) {
             $('.CounterData').empty(); //Clear Conductor Data View
-            const hiddenPassword = '*'.repeat(8);
+            const hiddenPassword = '*'.repeat(10);
             $.ajax({
                 type: "GET",
                 url: "http://localhost/testweb/GitHub/EzBus-Expressway-Online-Sheat-Booking-Web/process.php", // Correct URL to Counter.php
                 data: {
-                    action: 'getCounterData'
+                    action: 'getCounterData',
+                    'Type': type,
                 },
                 dataType: 'json',
                 success: function(response) {
-                    // console.log("Data received:\n", response);
+                    console.log("Data received:\n", response);
+                    if (response.message) {
+                        $('.CounterData').append('<tr><td colspan="6" class="text-center fw-bold ">' + response.message + '</td></tr>');
+                    } else {
 
-                    $.each(response, function(key, counter) {
-                        // console.log(counter['CounterID']);
+                        $.each(response, function(key, counter) {
 
-                        $('.CounterData').append(
-                            '<tr data-counterid="' + counter['CounterID'] + '" data-counterlocation="' + counter['Location'] + '" data-countername="' + counter['Name'] + '" data-counteremail="' + counter['Email'] + '" data-countercontact="' + counter['Contact'] + '" data-counterpassword="' + counter['Password'] + '">' +
-                            '<th scope="row">' + counter['CounterID'] + '</th>' +
-                            '<td>' + counter['Location'] + '</td>' +
-                            '<td>' + counter['Name'] + '</td>' +
-                            '<td>' + counter['Email'] + '</td>' +
-                            '<td>' + counter['Contact'] + '</td>' +
-                            '<td>' +
-                            '<span class="hidden-password">' + hiddenPassword + '</span>' +
-                            '<span class="actual-password d-none">' + counter['Password'] + '</span>' +
-                            '<a href="#" class="toggle-password ms-2"><i class="bi bi-eye-slash"></i></a>' +
-                            '</td>' +
-                            '<td>' + counter['AdminID'] + '</td>' +
-                            '<td class="ms-auto d-flex gap-2">' +
-                            '<a href="#" class="edit-btn"><i class="bi bi-pencil-square btn btn-sm btn-outline-success pt-0 pb-0"></i></a>' +
-                            '<a href="#" class="delete-btn"><i class="bi bi-trash btn btn-sm btn-outline-danger pt-0 pb-0"></i></a>' +
-                            '</td>' +
-                            '</tr>'
-                        )
-                    });
+                            let row = '<tr data-counterid="' + counter['CounterID'] + '" data-counterlocation="' + counter['Location'] + '" data-countername="' + counter['Name'] + '" data-counteremail="' + counter['Email'] + '" data-countercontact="' + counter['Contact'] + '" data-counterpassword="' + counter['Password'] + '">' +
+                                '<th scope="row">' + counter['CounterID'] + '</th>' +
+                                '<td>' + counter['Location'] + '</td>' +
+                                '<td>' + counter['Name'] + '</td>' +
+                                '<td>' + counter['Email'] + '</td>' +
+                                '<td>' + counter['Contact'] + '</td>' +
+                                '<td>' +
+                                '<span class="hidden-password">' + hiddenPassword + '</span>' +
+                                '<span class="actual-password d-none">' + counter['Password'] + '</span>' +
+                                '<a href="#" class="toggle-password ms-2"><i class="bi bi-eye-slash"></i></a>' +
+                                '</td>' +
+                                '<td>' + counter['AdminID'] + '</td>';
 
-                    // Attach click event handler to Edit buttons
-                    $('.edit-btn').on('click', function(e) {
-                        e.preventDefault();
-                        var $row = $(this).closest('tr');
+                            if (counter['status'] == 1) {
+                                row += '<td class="ms-auto d-flex gap-2">' +
+                                    '<a href="#" class="edit-btn"  ><i class="bi bi-pencil-square btn btn-sm btn-outline-success pt-0 pb-0" data-bs-toggle="tooltip" data-bs-placement="top" title="View & Edit"></i></a>' +
+                                    '<a href="#" class="delete-btn"><i class="bi bi-trash btn btn-sm btn-outline-danger pt-0 pb-0" data-bs-toggle="tooltip" data-bs-placement="top" title="Deactive this User"></i></a>' +
+                                    '</td>';
+                            }
+                            if (counter['status'] == 0) {
+                                row += '<td class="ms-auto d-flex gap-2">' +
+                                    '<a href="#" class="active-btn btn btn-sm btn-outline-success pt-0 pb-0 g-2"><i class="bi bi-check2-square" data-bs-toggle="tooltip" data-bs-placement="top" title="Active this User">Active</i></a>' +
+                                    '</td>';
+                            }
+                            // Close the table row
+                            row += '</tr>';
 
-                        var counterID = $row.data('counterid');
-                        var CLocation = $row.data('counterlocation');
-                        var CName = $row.data('countername');
-                        var CEmail = $row.data('counteremail');
-                        var CContact = $row.data('countercontact');
-                        var CPassword = $row.data('counterpassword');
+                            // Append the built row to the table
+                            $('.CounterData').append(row);
 
-                        // console.log(counterID, CLocation, CName, CEmail, CContact, CPassword);
+                        });
 
-                        $('#EditCounterModal').modal('show');
-                        // Update modal content and show the modal
-                        $('#EditFormCounterID').text(counterID);
-                        $('#U_name').val(CName);
-                        $('#U_location').val(CLocation);
-                        $('#U_email').val(CEmail);
-                        $('#U_contact').val(CContact);
-                        $('#U_password').val(CPassword);
+                        // Attach click event handler to Edit buttons
+                        $('.edit-btn').on('click', function(e) {
+                            e.preventDefault();
+                            var $row = $(this).closest('tr');
 
-                    });
+                            var counterID = $row.data('counterid');
+                            var CLocation = $row.data('counterlocation');
+                            var CName = $row.data('countername');
+                            var CEmail = $row.data('counteremail');
+                            var CContact = $row.data('countercontact');
+                            var CPassword = $row.data('counterpassword');
 
-                    // Attach click event handler to delete buttons
-                    $('.delete-btn').on('click', function(e) {
-                        e.preventDefault();
-                        var $row = $(this).closest('tr');
+                            // console.log(counterID, CLocation, CName, CEmail, CContact, CPassword);
 
-                        var counterID = $row.data('counterid');
-                        var counterName = $row.data('countername');
+                            $('#EditCounterModal').modal('show');
+                            // Update modal content and show the modal
+                            $('#EditFormCounterID').text(counterID);
+                            $('#U_name').val(CName);
+                            $('#U_location').val(CLocation);
+                            $('#U_email').val(CEmail);
+                            $('#U_contact').val(CContact);
+                            $('#U_password').val(CPassword);
 
-                        // Delete modal content and show the modal
-                        $('#counterID').text('\tID    : ' + counterID);
-                        $('#counterName').text('\tName  : ' + counterName);
+                        });
 
-                        $('#confirmDelete').data('counterid', counterID);
-                        $('#Delete').modal('show'); // Use Bootstrap's method to show the modal
+                        // Attach click event handler to delete buttons
+                        $('.delete-btn').on('click', function(e) {
+                            e.preventDefault();
+                            var $row = $(this).closest('tr');
+
+                            var counterID = $row.data('counterid');
+                            var counterName = $row.data('countername');
+
+                            // Delete modal content and show the modal
+                            $('#counterID').text('\tID    : ' + counterID);
+                            $('#counterName').text('\tName  : ' + counterName);
+
+                            $('#confirmDelete').data('counterid', counterID);
+                            $('#Delete').modal('show'); // Use Bootstrap's method to show the modal
 
 
-                    });
+                        });
 
-                    // Toggle password visibility
-                    $('.toggle-password').on('click', function(e) {
-                        e.preventDefault();
-                        var $this = $(this);
-                        var $hiddenPassword = $this.siblings('.hidden-password');
-                        var $actualPassword = $this.siblings('.actual-password');
+                        // Toggle password visibility
+                        $('.toggle-password').on('click', function(e) {
+                            e.preventDefault();
+                            var $this = $(this);
+                            var $hiddenPassword = $this.siblings('.hidden-password');
+                            var $actualPassword = $this.siblings('.actual-password');
 
-                        if ($hiddenPassword.hasClass('d-none')) {
-                            // Show hidden password and change icon
-                            $hiddenPassword.removeClass('d-none');
-                            $actualPassword.addClass('d-none');
-                            $this.find('i').removeClass('bi-eye').addClass('bi-eye-slash');
-                        } else {
-                            // Show actual password and change icon
-                            $hiddenPassword.addClass('d-none');
-                            $actualPassword.removeClass('d-none');
-                            $this.find('i').removeClass('bi-eye-slash').addClass('bi-eye');
-                        }
-                    });
+                            if ($hiddenPassword.hasClass('d-none')) {
+                                // Show hidden password and change icon
+                                $hiddenPassword.removeClass('d-none');
+                                $actualPassword.addClass('d-none');
+                                $this.find('i').removeClass('bi-eye').addClass('bi-eye-slash');
+                            } else {
+                                // Show actual password and change icon
+                                $hiddenPassword.addClass('d-none');
+                                $actualPassword.removeClass('d-none');
+                                $this.find('i').removeClass('bi-eye-slash').addClass('bi-eye');
+                            }
+                        });
+
+                        $('.active-btn').on('click', function(e) {
+                            e.preventDefault();
+                            var $row = $(this).closest('tr');
+
+                            var counterID = $row.data('counterid');
+                            var counterName = $row.data('countername');
+
+                            // Update modal content and show the modal
+                            $('#ActivecounterID').text('\tID    : ' + counterID);
+                            $('#ActivecounterName').text('\tName  : ' + counterName);
+
+                            $('#confirmActive').data('counterid', counterID);
+                            $('#ActiveModel').modal('show');
+                        });
+                    }
                 },
                 error: function(xhr, status, error) {
-                    console.error("Error fetching admin data: " + status + " - " + error);
+                    console.error("Error fetching counter data: " + status + " - " + error);
+                }
+            });
+        }
+
+         //Get Search Data
+         function Search(type, txtSearch) {
+            $('.CounterData').empty(); // Clear Admin Data View
+            const hiddenPassword = '*'.repeat(10);
+            $.ajax({
+                type: "GET",
+                url: "http://localhost/testweb/GitHub/EzBus-Expressway-Online-Sheat-Booking-Web/process.php",
+                dataType: "json",
+                data: {
+                    action: 'SearchCounter',
+                    'Type': type,
+                    'txtSearch': txtSearch,
+                },
+                success: function(response) {
+                    console.log("Data received:\n", response);
+                    if (response.message) {
+                        $('.CounterData').append('<tr><td colspan="6" class="text-center fw-bold ">' + response.message + '</td></tr>');
+                    } else {
+
+                        $.each(response, function(key, counter) {
+
+                            let row = '<tr data-counterid="' + counter['CounterID'] + '" data-counterlocation="' + counter['Location'] + '" data-countername="' + counter['Name'] + '" data-counteremail="' + counter['Email'] + '" data-countercontact="' + counter['Contact'] + '" data-counterpassword="' + counter['Password'] + '">' +
+                                '<th scope="row">' + counter['CounterID'] + '</th>' +
+                                '<td>' + counter['Location'] + '</td>' +
+                                '<td>' + counter['Name'] + '</td>' +
+                                '<td>' + counter['Email'] + '</td>' +
+                                '<td>' + counter['Contact'] + '</td>' +
+                                '<td>' +
+                                '<span class="hidden-password">' + hiddenPassword + '</span>' +
+                                '<span class="actual-password d-none">' + counter['Password'] + '</span>' +
+                                '<a href="#" class="toggle-password ms-2"><i class="bi bi-eye-slash"></i></a>' +
+                                '</td>' +
+                                '<td>' + counter['AdminID'] + '</td>';
+
+                            if (counter['status'] == 1) {
+                                row += '<td class="ms-auto d-flex gap-2">' +
+                                    '<a href="#" class="edit-btn"  ><i class="bi bi-pencil-square btn btn-sm btn-outline-success pt-0 pb-0" data-bs-toggle="tooltip" data-bs-placement="top" title="View & Edit"></i></a>' +
+                                    '<a href="#" class="delete-btn"><i class="bi bi-trash btn btn-sm btn-outline-danger pt-0 pb-0" data-bs-toggle="tooltip" data-bs-placement="top" title="Deactive this User"></i></a>' +
+                                    '</td>';
+                            }
+                            if (counter['status'] == 0) {
+                                row += '<td class="ms-auto d-flex gap-2">' +
+                                    '<a href="#" class="active-btn btn btn-sm btn-outline-success pt-0 pb-0 g-2"><i class="bi bi-check2-square" data-bs-toggle="tooltip" data-bs-placement="top" title="Active this User">Active</i></a>' +
+                                    '</td>';
+                            }
+                            // Close the table row
+                            row += '</tr>';
+
+                            // Append the built row to the table
+                            $('.CounterData').append(row);
+
+                        });
+
+                        // Attach click event handler to Edit buttons
+                        $('.edit-btn').on('click', function(e) {
+                            e.preventDefault();
+                            var $row = $(this).closest('tr');
+
+                            var counterID = $row.data('counterid');
+                            var CLocation = $row.data('counterlocation');
+                            var CName = $row.data('countername');
+                            var CEmail = $row.data('counteremail');
+                            var CContact = $row.data('countercontact');
+                            var CPassword = $row.data('counterpassword');
+
+                            // console.log(counterID, CLocation, CName, CEmail, CContact, CPassword);
+
+                            $('#EditCounterModal').modal('show');
+                            // Update modal content and show the modal
+                            $('#EditFormCounterID').text(counterID);
+                            $('#U_name').val(CName);
+                            $('#U_location').val(CLocation);
+                            $('#U_email').val(CEmail);
+                            $('#U_contact').val(CContact);
+                            $('#U_password').val(CPassword);
+
+                        });
+
+                        // Attach click event handler to delete buttons
+                        $('.delete-btn').on('click', function(e) {
+                            e.preventDefault();
+                            var $row = $(this).closest('tr');
+
+                            var counterID = $row.data('counterid');
+                            var counterName = $row.data('countername');
+
+                            // Delete modal content and show the modal
+                            $('#counterID').text('\tID    : ' + counterID);
+                            $('#counterName').text('\tName  : ' + counterName);
+
+                            $('#confirmDelete').data('counterid', counterID);
+                            $('#Delete').modal('show'); // Use Bootstrap's method to show the modal
+
+
+                        });
+
+                        // Toggle password visibility
+                        $('.toggle-password').on('click', function(e) {
+                            e.preventDefault();
+                            var $this = $(this);
+                            var $hiddenPassword = $this.siblings('.hidden-password');
+                            var $actualPassword = $this.siblings('.actual-password');
+
+                            if ($hiddenPassword.hasClass('d-none')) {
+                                // Show hidden password and change icon
+                                $hiddenPassword.removeClass('d-none');
+                                $actualPassword.addClass('d-none');
+                                $this.find('i').removeClass('bi-eye').addClass('bi-eye-slash');
+                            } else {
+                                // Show actual password and change icon
+                                $hiddenPassword.addClass('d-none');
+                                $actualPassword.removeClass('d-none');
+                                $this.find('i').removeClass('bi-eye-slash').addClass('bi-eye');
+                            }
+                        });
+
+                        $('.active-btn').on('click', function(e) {
+                            e.preventDefault();
+                            var $row = $(this).closest('tr');
+
+                            var counterID = $row.data('counterid');
+                            var counterName = $row.data('countername');
+
+                            // Update modal content and show the modal
+                            $('#ActivecounterID').text('\tID    : ' + counterID);
+                            $('#ActivecounterName').text('\tName  : ' + counterName);
+
+                            $('#confirmActive').data('counterid', counterID);
+                            $('#ActiveModel').modal('show');
+                        });
+                    }
+
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error fetching counter data: " + status + " - " + error);
                 }
             });
         }
@@ -601,7 +842,7 @@
         function showToast(title, message, type) {
             const borderClass = type === 'success' ? 'toast-success' : 'toast-error'; //asing the boder color as msg type
             const headerClass = type === 'success' ? 'toast-header-success' : 'toast-header-error';
-            const time = new Date().toLocaleTimeString(); 
+            const time = new Date().toLocaleTimeString();
             const toastHTML = `
                 <div class="toast ${borderClass}" role="alert" aria-live="assertive" aria-atomic="true">
                     <div class="toast-header ${headerClass}">
