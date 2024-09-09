@@ -47,16 +47,12 @@
 
         .toast-header-success {
             background-color: #d4edda;
-            /* Light green background */
             color: #155724;
-            /* Dark green text */
         }
 
         .toast-header-error {
             background-color: #f8d7da;
-            /* Light red background */
             color: #721c24;
-            /* Dark red text */
         }
 
         .has-error .form-control {
@@ -64,9 +60,16 @@
         }
 
         .custom-modal-header {
-            background-color: red;
+            background-color: #fc3b56;
 
             color: #f8d7da;
+
+        }
+
+        .custom-modal-header-active {
+            background-color: #155724;
+
+            color: #d4edda;
 
         }
 
@@ -132,7 +135,7 @@
             <li><a href="#" class="active">Users / Admin</a></li>
         </ul>
     </main>
-    
+
     <div class="row g-3 col-sm-6 p-0  ">
         <div class="col-auto">
             <a href="#" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#AddAdminModal" id="AddAdminModelButton">
@@ -142,15 +145,15 @@
         <div class="col-auto">
             <input type="text" class="form-control form-control-sm" id="txtSearch" placeholder="Search">
         </div>
+        <!-- <div class="col-auto">
+             <input type="button" class="btn btn-primary btn-sm" id="txtSearch" value="Search"> 
+        </div> -->
         <div class="col-auto">
-            <input type="button" class="btn btn-primary btn-sm" id="txtSearch"  value="Search">
-        </div>
-        <div class="col-auto">
-            <select name="status" id="status" class="form-select form-select-sm">
-                
-                <option value="Active" default>Active</option>
-                <option value="Deactive">Deactive</option>
-                
+            <select name="activeStatus" id="activeStatus" class="form-select form-select-sm ">
+
+                <option value="1" default>Active</option>
+                <option value="0">Deactive</option>
+
             </select>
         </div>
     </div>
@@ -205,32 +208,31 @@
                         <button type="button" class="btn-close position-absolute end-0 top-0 m-2" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <div class="row mb-3">
+                        <div class="row mb-1">
                             <div class="col">
                                 <label class="form-label">First Name:</label>
-                                <input type="text" class="form-control" name="first_name" id="first_name" placeholder="Kalindu">
+                                <input type="text" class="form-control form-control-sm" name="first_name" id="first_name" placeholder="Kalindu">
                                 <span class="errMsg" id="first_name_err"></span>
                             </div>
                             <div class="col">
                                 <label class="form-label">Last Name:</label>
-                                <input type="text" class="form-control" name="last_name" id="last_name" placeholder="Suraj">
+                                <input type="text" class="form-control form-control-sm" name="last_name" id="last_name" placeholder="Suraj">
                                 <span class="errMsg" id="last_name_err"></span>
                             </div>
                         </div>
-                        <div class="mb-3">
+                        <div class="mb-1">
                             <label class="form-label">Email:</label>
-                            <input type="email" class="form-control" name="email" id="email" placeholder="name@example.com">
+                            <input type="email" class="form-control form-control-sm" name="email" id="email" placeholder="name@example.com">
                             <span class="errMsg" id="email_err"></span>
                         </div>
-                        <div class="mb-3">
+                        <div class="mb-1">
                             <label class="form-label">Contact No:</label>
-                            <input type="text" class="form-control" name="contact" id="contact" placeholder="07X XXXX XXX">
+                            <input type="text" class="form-control form-control-sm" name="contact" id="contact" placeholder="07X XXXX XXX">
                             <span class="errMsg" id="contact_err"></span>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label">Create Password:</label>
-                            <input type="password" class="form-control mb-2" name="new_password" id="new_password" placeholder="Create Password">
-                            <input type="password" class="form-control" name="confirm_password" id="confirm_password" placeholder="Confirm Password">
+                        <div class="mb-1">
+                            <label class="form-label"> Password:</label>
+                            <input type="text" class="form-control form-control-sm mb-2" name="password" id="password" placeholder="Password" disabled>
                             <span class="errMsg" id="password_err"></span>
                         </div>
                     </div>
@@ -263,22 +265,22 @@
                 <div class="modal-body">
                     <div class="col">
                         <label class="form-label">Name:</label>
-                        <input type="text" class="form-control" name="U_name" id="U_name" placeholder="Kalindu" disabled>
+                        <input type="text" class="form-control form-control-sm" name="U_name" id="U_name" placeholder="Kalindu Suraj" >
                         <span class="errMsg" id="U_name_err"></span>
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-1">
                         <label class="form-label">Email:</label>
-                        <input type="email" class="form-control" name="U_email" id="U_email" placeholder="name@example.com">
+                        <input type="email" class="form-control form-control-sm" name="U_email" id="U_email" placeholder="name@example.com">
                         <span class="errMsg" id="U_email_err"></span>
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-1">
                         <label class="form-label">Contact No:</label>
-                        <input type="text" class="form-control" name="U_contact" id="U_contact" placeholder="07X XXXX XXX">
+                        <input type="text" class="form-control form-control-sm" name="U_contact" id="U_contact" placeholder="07X XXXX XXX">
                         <span class="errMsg" id="U_contact_err"></span>
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-1">
                         <label class="form-label">Update Password:</label>
-                        <input type="text" class="form-control mb-2" name="U_password" id="U_password" placeholder="Update Password">
+                        <input type="text" class="form-control form-control-sm " name="U_password" id="U_password" placeholder="Update Password">
                         <span class="errMsg" id="U_password_err"></span>
                     </div>
                 </div>
@@ -291,27 +293,52 @@
     </div>
 
     <!-- Delete Modal -->
-    <div class="modal fade" id="Delete" tabindex="-1" role="dialog" aria-labelledby="DeleteLabel" aria-hidden="true">
+    <div class="modal fade" id="Delete" tabindex="-1" data-bs-backdrop="static" role="dialog" aria-labelledby="DeleteLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header custom-modal-header">
-                    <h5 class="modal-title" id="DeleteLabel">Delete Admin</h5>
+                    <h5 class="modal-title" id="DeleteLabel">Deactive Admin</h5>
                     <button type="button" class="btn-close position-absolute end-0 top-0 m-2" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body mb-0">
-                    <p>Are you sure you want to delete this Admin?</p>
+                    <p>Are you sure you want to deactive this Admin?</p>
                     <div class="ml-5">
                         <b>
 
                             <label id="adminID"></label><br>
                             <label id="adminName"></label>
                         </b>
-                    </div><br>
-                    <p class="text-danger p-0 mb-0"><b><small>This action cannot be undone.</small></b></p>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-danger" id="confirmDelete">Delete</button>
+                    <button type="button" class="btn btn-danger" id="confirmDelete">Deactive</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Active Modal -->
+    <div class="modal fade" id="ActiveModel" tabindex="-1" data-bs-backdrop="static" role="dialog" aria-labelledby="ActiveLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header custom-modal-header-active">
+                    <h5 class="modal-title" id="ActiveLabel">Active Admin</h5>
+                    <button type="button" class="btn-close position-absolute end-0 top-0 m-2" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body mb-0">
+                    <p>Are you sure you want to Active this Admin?</p>
+                    <div class="ml-5">
+                        <b>
+
+                            <label id="ActiveadminID"></label><br>
+                            <label id="ActiveadminName"></label>
+                        </b>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-success" id="confirmActive">Active</button>
                 </div>
             </div>
         </div>
@@ -320,39 +347,28 @@
 
     <script>
         $(document).ready(function() {
-            GetAdminData();
+            //var type = $('#activeStatus').val().trim();
+            GetAdminData($('#activeStatus').val().trim());
         })
-        $('#txtSearch').keyup(function(){
-            alert("keyup")
+
+        $('#activeStatus').change(function() {
+            var type = $('#activeStatus').val().trim();
+            GetAdminData(type);
         });
 
-        
+        $('#txtSearch').keyup(function() {
+
+            var type = $('#activeStatus').val().trim();
+            var txtSearch = $('#txtSearch').val().trim();
+            // alert(type + txtSearch)
+            Search(type, txtSearch);
+        });
 
         $('#AddAdminModelButton').on('click', function(event) {
             GetAdminID();
-        });
+            var text = generatePassword();
+            $('#password').val(text);
 
-        // click in confirm delete button 
-        $('#confirmDelete').on('click', function() {
-            var adminID = $(this).data('adminid');
-            DeleteAdmin(adminID);
-        });
-
-        // click in Update Admin button 
-        $('#UpdateAdmin').on('click', function() {
-            // alert("click");
-            event.preventDefault();
-            var adminID = $('#EditFormAdminID').text();
-            var U_email = $('#U_email').val().trim();
-            var U_contact = $('#U_contact').val().trim();
-            var U_password = $('#U_password').val().trim();
-
-            var isValid = UpdateAdminValidation(U_email, U_contact, U_password);
-            if (isValid == true) {
-                EditAdmin(adminID, U_email, U_contact, U_password);
-            } else {
-                console.log("Check Your Details");
-            }
         });
 
         // click in Add Admin Model
@@ -364,21 +380,66 @@
             var last_name = $('#last_name').val().trim();
             var email = $('#email').val().trim();
             var contact = $('#contact').val().trim();
-            var new_password = $('#new_password').val().trim();
-            var confirm_password = $('#confirm_password').val().trim();
+            var password = $('#password').val().trim();
 
-            var isValid = AddAdminValidation(first_name, last_name, email, contact, new_password, confirm_password); // validte Add Admin Form
+            var isValid = AddAdminValidation(first_name, last_name, email, contact, password); // validte Add Admin Form
             if (isValid == true) {
                 var name = first_name + " " + last_name;
-                var result = AddAdmin(name, email, contact, new_password);
+                var result = AddAdmin(name, email, contact, password);
             } else {
                 console.log("Check Your Details");
             }
 
         });
 
+        // click in Update Admin button 
+        $('#UpdateAdmin').on('click', function() {
+            // alert("click");
+            event.preventDefault();
+            var adminID = $('#EditFormAdminID').text();
+            var U_name = $('#U_name').val().trim();
+            var U_email = $('#U_email').val().trim();
+            var U_contact = $('#U_contact').val().trim();
+            var U_password = $('#U_password').val().trim();
+
+            var isValid = UpdateAdminValidation(U_name, U_email, U_contact, U_password);
+            if (isValid == true) {
+                EditAdmin(adminID,U_name, U_email, U_contact, U_password);
+            } else {
+                console.log("Check Your Details");
+            }
+        });
+
+        // click in confirm delete button 
+        $('#confirmDelete').on('click', function() {
+            var adminID = $(this).data('adminid');
+            var status = 0;
+            ChangeStatus(adminID, status);
+            $('#Delete').modal('hide');
+            //GetAdminData($('#activeStatus').val().trim());
+        });
+
+        // click in confirm Active button
+        $('#confirmActive').on('click', function() {
+            var adminID = $(this).data('adminid');
+            var status = 1;
+            ChangeStatus(adminID, status);
+            $('#ActiveModel').modal('hide');
+        });
+
+        //Generate First Password
+        function generatePassword() {
+            var charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%&_+";
+            var password = "";
+            for (var i = 0; i < 10; i++) {
+                var randomIndex = Math.floor(Math.random() * charset.length);
+                password += charset[randomIndex];
+            }
+            return password;
+        }
+
         //Add Admin Validation Function
-        function AddAdminValidation(first_name, last_name, email, contact, new_password, confirm_password) {
+        function AddAdminValidation(first_name, last_name, email, contact, password) {
             // Clear previous error messages
             $('.errMsg').text('');
 
@@ -418,19 +479,12 @@
                     return;
                 }
 
-                if (new_password.length < 9) {
-                    $('#password_err').text('Minimum 8 cha');
-                    isValid = false;
-                    return;
-                } else if (new_password === '') {
+                if (password === '') {
                     $('#password_err').text('Password is required');
                     isValid = false;
                     return;
-                } else if (new_password !== confirm_password) {
-                    $('#password_err').text('Passwords do not match');
-                    isValid = false;
-                    return;
                 }
+
             } catch (err) {
                 alert("Somthing Went Wrong........\n" + err);
             } finally {
@@ -439,13 +493,18 @@
         }
 
         //Add Admin Validation Function
-        function UpdateAdminValidation(U_email, U_contact, U_password) {
+        function UpdateAdminValidation(U_name, U_email, U_contact, U_password) {
             // Clear previous error messages
             $('.errMsg').text('');
 
             var isValid = true;
             try {
-                //Simple validation
+                if(U_name === ''){
+                    $('#U_name_err').text('Full Name is required');
+                    isValid = false;
+                    return;
+                }
+
                 var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
                 if (U_email === '') {
@@ -482,7 +541,7 @@
         }
 
         //Add Admin Data
-        function AddAdmin(name, email, contact, new_password) {
+        function AddAdmin(name, email, contact, password) {
             $.ajax({
                 type: "POST",
                 url: "http://localhost/testweb/GitHub/EzBus-Expressway-Online-Sheat-Booking-Web/process.php",
@@ -491,11 +550,11 @@
                     'Name': name,
                     'Email': email,
                     'Contact': contact,
-                    'Password': new_password,
+                    'Password': password,
                 },
                 dataType: 'json', // Expect JSON response from the server
                 success: function(response) {
-                    console.log("Data sent:\n", response);
+                    // console.log("Data sent:\n", response);
 
                     if (response.success) {
                         //alert("Admin added successfully");
@@ -509,7 +568,7 @@
                         $('#new_password').val('');
                         $('#confirm_password').val('');
 
-                        GetAdminData(); // Refresh the admin list
+                        GetAdminData($('#activeStatus').val().trim()); // Refresh the admin list
                         showToast('Success', response.message, 'success');
                     } else {
                         showToast('Error', response.message || "Failed to add admin", 'error');
@@ -529,7 +588,7 @@
         function showToast(title, message, type) {
             const borderClass = type === 'success' ? 'toast-success' : 'toast-error'; //asing the boder color as msg type
             const headerClass = type === 'success' ? 'toast-header-success' : 'toast-header-error';
-            const time = new Date().toLocaleTimeString(); 
+            const time = new Date().toLocaleTimeString();
             const toastHTML = `
                 <div class="toast ${borderClass}" role="alert" aria-live="assertive" aria-atomic="true">
                     <div class="toast-header ${headerClass}">
@@ -557,6 +616,7 @@
 
         // Get Admin Data
         function GetAdminData(type) {
+            //alert(type);
             $('.AdminData').empty(); // Clear Admin Data View
             const hiddenPassword = '*'.repeat(10);
             $.ajax({
@@ -565,95 +625,130 @@
                 dataType: "json",
                 data: {
                     action: 'getAdminData',
-                    'Type':type,
+                    'Type': type,
                 },
                 success: function(response) {
-                    $.each(response, function(key, admin) {
-                        $('.AdminData').append(
-                            '<tr data-adminid="' + admin['AdminID'] + '" data-adminname="' + admin['Name'] + '" data-adminemail="' + admin['Email'] + '" data-admincontact="' + admin['Contact'] + '"data-adminpassword="' + admin['Password'] + '">' +
-                            '<th scope="row">' + admin['AdminID'] + '</th>' +
-                            '<td>' + admin['Name'] + '</td>' +
-                            '<td>' + admin['Email'] + '</td>' +
-                            '<td>' + admin['Contact'] + '</td>' +
-                            '<td>' +
-                            '<span class="hidden-password">' + hiddenPassword + '</span>' +
-                            '<span class="actual-password d-none">' + admin['Password'] + '</span>' +
-                            '<a href="#" class="toggle-password ms-2"><i class="bi bi-eye-slash"></i></a>' +
-                            '</td>' +
-                            '<td>' + admin['Creator'] + '</td>' +
-                            '<td class="ms-auto d-flex gap-2">' +
-                            '<a href="#" class="edit-btn"><i class="bi bi-pencil-square btn btn-sm btn-outline-success pt-0 pb-0"></i></a>' +
-                            '<a href="#" class="delete-btn"><i class="bi bi-trash btn btn-sm btn-outline-danger pt-0 pb-0"></i></a>' +
-                            '</td>' +
-                            '</tr>'
-                        );
-                    });
+                    console.log("Data sent:\n", response);
+                    if (response.message) {
+                        
+                        $('.AdminData').append('<tr><td colspan="6" class="text-center fw-bold ">' + response.message + '</td></tr>');
+                    } else {
+                        $.each(response, function(key, admin) {
+                            // Start building the table row
+                            let row = '<tr data-adminid="' + admin['AdminID'] + '" data-adminname="' + admin['Name'] + '" data-adminemail="' + admin['Email'] + '" data-admincontact="' + admin['Contact'] + '" data-adminpassword="' + admin['Password'] + '">' +
+                                '<th scope="row">' + admin['AdminID'] + '</th>' +
+                                '<td>' + admin['Name'] + '</td>' +
+                                '<td>' + admin['Email'] + '</td>' +
+                                '<td>' + admin['Contact'] + '</td>' +
+                                '<td>' +
+                                '<span class="hidden-password">' + hiddenPassword + '</span>' +
+                                '<span class="actual-password d-none">' + admin['Password'] + '</span>' +
+                                '<a href="#" class="toggle-password ms-2"><i class="bi bi-eye-slash"></i></a>' +
+                                '</td>' +
+                                '<td>' + admin['Creator'] + '</td>';
 
-                    // Attach click event handler to Edit buttons
-                    $('.edit-btn').on('click', function(e) {
-                        e.preventDefault();
-                        var $row = $(this).closest('tr');
+                            // Conditionally add buttons based on AdminID and status
+                            if (admin['AdminID'] !== "A000" && admin['status'] == 1) {
+                                row += '<td class="ms-auto d-flex gap-2">' +
+                                    '<a href="#" class="edit-btn"  ><i class="bi bi-pencil-square btn btn-sm btn-outline-success pt-0 pb-0" data-bs-toggle="tooltip" data-bs-placement="top" title="View & Edit"></i></a>' +
+                                    '<a href="#" class="delete-btn"><i class="bi bi-trash btn btn-sm btn-outline-danger pt-0 pb-0" data-bs-toggle="tooltip" data-bs-placement="top" title="Deactive this User"></i></a>' +
+                                    '</td>';
+                            }
 
-                        var adminID = $row.data('adminid');
-                        var adminName = $row.data('adminname');
-                        var email = $row.data('adminemail');
-                        var contact = $row.data('admincontact');
-                        var password = $row.data('adminpassword');
-                        var creator = $row.data('admincreator');
-                        if (adminID == "A000") {
-                            showToast('Error', "Can't Edit \"A000\" Admin", 'error');
-                        } else {
-                            $('#EditAdminModal').modal('show');
+                            // Another condition for status
+                            if (admin['status'] == 0) {
+                                row += '<td class="ms-auto d-flex gap-2">' +
+                                    '<a href="#" class="active-btn btn btn-sm btn-outline-success pt-0 pb-0 g-2"><i class="bi bi-check2-square" data-bs-toggle="tooltip" data-bs-placement="top" title="Active this User">Active</i></a>' +
+                                    '</td>';
+                            }
+                            // Close the table row
+                            row += '</tr>';
+
+                            // Append the built row to the table
+                            $('.AdminData').append(row);
+                        });
+
+                        // Attach click event handler to Edit buttons
+                        $('.edit-btn').on('click', function(e) {
+                            e.preventDefault();
+                            var $row = $(this).closest('tr');
+
+                            var adminID = $row.data('adminid');
+                            var adminName = $row.data('adminname');
+                            var email = $row.data('adminemail');
+                            var contact = $row.data('admincontact');
+                            var password = $row.data('adminpassword');
+                            var creator = $row.data('admincreator');
+                            if (adminID == "A000") {
+                                showToast('Error', "Can't Edit \"A000\" Admin", 'error');
+                            } else {
+                                $('#EditAdminModal').modal('show');
+                                // Update modal content and show the modal
+                                $('#EditFormAdminID').text(adminID);
+                                $('#U_name').val(adminName);
+                                $('#U_email').val(email);
+                                $('#U_contact').val(contact);
+                                $('#U_password').val(password);
+
+                            }
+                        });
+
+                        // Attach click event handler to delete buttons
+                        $('.delete-btn').on('click', function(e) {
+                            e.preventDefault();
+                            var $row = $(this).closest('tr');
+
+                            var adminID = $row.data('adminid');
+                            var adminName = $row.data('adminname');
+                            if (adminID == "A000") {
+                                showToast('Error', "Can't Delete \"A000\" Admin", 'error');
+                            } else {
+                                // Update modal content and show the modal
+                                $('#adminID').text('\tID    : ' + adminID);
+                                $('#adminName').text('\tName  : ' + adminName);
+
+                                $('#confirmDelete').data('adminid', adminID);
+                                $('#Delete').modal('show'); // Use Bootstrap's method to show the modal
+                            }
+
+                        });
+
+                        // Toggle password visibility
+                        $('.toggle-password').on('click', function(e) {
+                            e.preventDefault();
+                            var $this = $(this);
+                            var $hiddenPassword = $this.siblings('.hidden-password');
+                            var $actualPassword = $this.siblings('.actual-password');
+
+                            if ($hiddenPassword.hasClass('d-none')) {
+                                // Show hidden password and change icon
+                                $hiddenPassword.removeClass('d-none');
+                                $actualPassword.addClass('d-none');
+                                $this.find('i').removeClass('bi-eye').addClass('bi-eye-slash');
+                            } else {
+                                // Show actual password and change icon
+                                $hiddenPassword.addClass('d-none');
+                                $actualPassword.removeClass('d-none');
+                                $this.find('i').removeClass('bi-eye-slash').addClass('bi-eye');
+                            }
+                        });
+
+                        $('.active-btn').on('click', function(e) {
+                            e.preventDefault();
+                            var $row = $(this).closest('tr');
+
+                            var adminID = $row.data('adminid');
+                            var adminName = $row.data('adminname');
+
                             // Update modal content and show the modal
-                            $('#EditFormAdminID').text(adminID);
-                            $('#U_name').val(adminName);
-                            $('#U_email').val(email);
-                            $('#U_contact').val(contact);
-                            $('#U_password').val(password);
+                            $('#ActiveadminID').text('\tID    : ' + adminID);
+                            $('#ActiveadminName').text('\tName  : ' + adminName);
 
-                        }
-                    });
+                            $('#confirmActive').data('adminid', adminID);
+                            $('#ActiveModel').modal('show');
 
-                    // Attach click event handler to delete buttons
-                    $('.delete-btn').on('click', function(e) {
-                        e.preventDefault();
-                        var $row = $(this).closest('tr');
-
-                        var adminID = $row.data('adminid');
-                        var adminName = $row.data('adminname');
-                        if (adminID == "A000") {
-                            showToast('Error', "Can't Delete \"A000\" Admin", 'error');
-                        } else {
-                            // Update modal content and show the modal
-                            $('#adminID').text('\tID    : ' + adminID);
-                            $('#adminName').text('\tName  : ' + adminName);
-
-                            $('#confirmDelete').data('adminid', adminID);
-                            $('#Delete').modal('show'); // Use Bootstrap's method to show the modal
-                        }
-
-                    });
-
-                    // Toggle password visibility
-                    $('.toggle-password').on('click', function(e) {
-                        e.preventDefault();
-                        var $this = $(this);
-                        var $hiddenPassword = $this.siblings('.hidden-password');
-                        var $actualPassword = $this.siblings('.actual-password');
-
-                        if ($hiddenPassword.hasClass('d-none')) {
-                            // Show hidden password and change icon
-                            $hiddenPassword.removeClass('d-none');
-                            $actualPassword.addClass('d-none');
-                            $this.find('i').removeClass('bi-eye').addClass('bi-eye-slash');
-                        } else {
-                            // Show actual password and change icon
-                            $hiddenPassword.addClass('d-none');
-                            $actualPassword.removeClass('d-none');
-                            $this.find('i').removeClass('bi-eye-slash').addClass('bi-eye');
-                        }
-                    });
-
+                        });
+                    }
 
                 },
                 error: function(xhr, status, error) {
@@ -663,12 +758,139 @@
         }
 
         //Get Search Data
-        function Search(type){
+        function Search(type, txtSearch) {
+            $('.AdminData').empty(); // Clear Admin Data View
+            const hiddenPassword = '*'.repeat(10);
+            $.ajax({
+                type: "GET",
+                url: "http://localhost/testweb/GitHub/EzBus-Expressway-Online-Sheat-Booking-Web/process.php",
+                dataType: "json",
+                data: {
+                    action: 'SearchAdmin',
+                    'Type': type,
+                    'txtSearch': txtSearch,
+                },
+                success: function(response) {
+                    // console.log("Data sent:\n", response);
 
+                    if (response.message) {
+                        // Handle "No Record Found"
+                        $('.AdminData').append('<tr><td colspan="6" class="text-center fw-bold ">' + response.message + '</td></tr>');
+                    } else {
+                        $.each(response, function(key, admin) {
+                            // Start building the table row
+                            let row = '<tr data-adminid="' + admin['AdminID'] + '" data-adminname="' + admin['Name'] + '" data-adminemail="' + admin['Email'] + '" data-admincontact="' + admin['Contact'] + '" data-adminpassword="' + admin['Password'] + '">' +
+                                '<th scope="row">' + admin['AdminID'] + '</th>' +
+                                '<td>' + admin['Name'] + '</td>' +
+                                '<td>' + admin['Email'] + '</td>' +
+                                '<td>' + admin['Contact'] + '</td>' +
+                                '<td>' +
+                                '<span class="hidden-password">' + hiddenPassword + '</span>' +
+                                '<span class="actual-password d-none">' + admin['Password'] + '</span>' +
+                                '<a href="#" class="toggle-password ms-2"><i class="bi bi-eye-slash"></i></a>' +
+                                '</td>' +
+                                '<td>' + admin['Creator'] + '</td>';
+
+                            // Conditionally add buttons based on AdminID and status
+                            if (admin['AdminID'] !== "A000" && admin['status'] == 1) {
+                                row += '<td class="ms-auto d-flex gap-2">' +
+                                    '<a href="#" class="edit-btn"  ><i class="bi bi-pencil-square btn btn-sm btn-outline-success pt-0 pb-0" data-bs-toggle="tooltip" data-bs-placement="top" title="View & Edit"></i></a>' +
+                                    '<a href="#" class="delete-btn"><i class="bi bi-trash btn btn-sm btn-outline-danger pt-0 pb-0" data-bs-toggle="tooltip" data-bs-placement="top" title="Deactive this User"></i></a>' +
+                                    '</td>';
+                            }
+
+                            // Another condition for status
+                            if (admin['status'] == 0) {
+                                row += '<td class="ms-auto d-flex gap-2">' +
+                                    '<a href="#" class="active-btn btn btn-sm btn-outline-success pt-0 pb-0 g-2"><i class="bi bi-check2-square" data-bs-toggle="tooltip" data-bs-placement="top" title="Active this User">Active</i></a>' +
+                                    '</td>';
+                            }
+                            // Close the table row
+                            row += '</tr>';
+
+                            // Append the built row to the table
+                            $('.AdminData').append(row);
+                        });
+
+                        // Attach click event handler to Edit buttons
+                        $('.edit-btn').on('click', function(e) {
+                            e.preventDefault();
+                            var $row = $(this).closest('tr');
+
+                            var adminID = $row.data('adminid');
+                            var adminName = $row.data('adminname');
+                            var email = $row.data('adminemail');
+                            var contact = $row.data('admincontact');
+                            var password = $row.data('adminpassword');
+                            var creator = $row.data('admincreator');
+                            if (adminID == "A000") {
+                                showToast('Error', "Can't Edit \"A000\" Admin", 'error');
+                            } else {
+                                $('#EditAdminModal').modal('show');
+                                // Update modal content and show the modal
+                                $('#EditFormAdminID').text(adminID);
+                                $('#U_name').val(adminName);
+                                $('#U_email').val(email);
+                                $('#U_contact').val(contact);
+                                $('#U_password').val(password);
+
+                            }
+                        });
+
+                        // Attach click event handler to delete buttons
+                        $('.delete-btn').on('click', function(e) {
+                            e.preventDefault();
+                            var $row = $(this).closest('tr');
+
+                            var adminID = $row.data('adminid');
+                            var adminName = $row.data('adminname');
+                            if (adminID == "A000") {
+                                showToast('Error', "Can't Delete \"A000\" Admin", 'error');
+                            } else {
+                                // Update modal content and show the modal
+                                $('#adminID').text('\tID    : ' + adminID);
+                                $('#adminName').text('\tName  : ' + adminName);
+
+                                $('#confirmDelete').data('adminid', adminID);
+                                $('#Delete').modal('show'); // Use Bootstrap's method to show the modal
+                            }
+
+                        });
+
+                        // Toggle password visibility
+                        $('.toggle-password').on('click', function(e) {
+                            e.preventDefault();
+                            var $this = $(this);
+                            var $hiddenPassword = $this.siblings('.hidden-password');
+                            var $actualPassword = $this.siblings('.actual-password');
+
+                            if ($hiddenPassword.hasClass('d-none')) {
+                                // Show hidden password and change icon
+                                $hiddenPassword.removeClass('d-none');
+                                $actualPassword.addClass('d-none');
+                                $this.find('i').removeClass('bi-eye').addClass('bi-eye-slash');
+                            } else {
+                                // Show actual password and change icon
+                                $hiddenPassword.addClass('d-none');
+                                $actualPassword.removeClass('d-none');
+                                $this.find('i').removeClass('bi-eye-slash').addClass('bi-eye');
+                            }
+                        });
+
+                        $('.active-btn').on('click', function(e) {
+
+                        });
+                    }
+
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error fetching admin data: " + status + " - " + error);
+                }
+            });
         }
 
         // Edit Admin Function
-        function EditAdmin(adminID, U_email, U_contact, U_password) {
+        function EditAdmin(adminID, U_name, U_email, U_contact, U_password) {
             // alert("Edit " + AdminID);
             $.ajax({
                 type: "POST",
@@ -676,6 +898,7 @@
                 data: {
                     action: 'updateAdmin',
                     'AdminID': adminID,
+                    'Name':U_name,
                     'Email': U_email,
                     'Contact': U_contact,
                     'Password': U_password,
@@ -688,7 +911,7 @@
                         //alert("Admin Update successfully");
 
                         $('#EditAdminModal').modal('hide');
-                        GetAdminData(); // Refresh the admin list
+                        GetAdminData($('#activeStatus').val().trim()); // Refresh the admin list
                         showToast('Success', response.message, 'success');
                     } else {
                         showToast('Error', response.message || "Failed to Update admin", 'error');
@@ -704,34 +927,40 @@
             });
         }
 
-        // Delete Admin Function
-        function DeleteAdmin(AdminID) {
+        // Deactive Admin Function
+        function ChangeStatus(AdminID, status) {
             //alert("Delete " + AdminID);
             $.ajax({
                 type: "POST",
-                url: "http://localhost/testweb/GitHub/EzBus-Expressway-Online-Sheat-Booking-Web/process.php", // Correct URL to Admin.php
+                url: "http://localhost/testweb/GitHub/EzBus-Expressway-Online-Sheat-Booking-Web/process.php",
                 data: {
-                    action: 'deleteAdmin',
+                    action: 'ChangeStatusAdmin',
                     'AdminID': AdminID,
+                    'Status': status,
                 },
                 dataType: 'json', // Expect JSON response from the server
                 success: function(response) {
-                    console.log("ID sent:\n", response);
+                    console.log("ID sent:\n Response : ", response);
 
                     if (response.success) {
                         //alert("Admin delete successfully");
-                        GetAdminData(); // Refresh the admin list
+                        GetAdminData($('#activeStatus').val().trim()); // Refresh the admin list
                         showToast('Success', response.message, 'success');
                     } else {
-                        showToast('Error', response.message || "Failed to Delete admin", 'error');
+                        if ($status == 0) {
+                            showToast('Error', response.message || "Failed to Deactivate admin", 'error');
+                        } else {
+                            showToast('Error', response.message || "Failed to Activate admin", 'error');
+                        }
+
                     }
                 },
                 error: function(xhr, status, error) {
-                    console.error("Error Delete admin: " + status + " - " + error);
+                    console.error("Error Deactivate admin: " + status + " - " + error);
                     showToast('Error', "An error occurred: " + status + " - " + error, 'error');
                 }
             });
-            $('#Delete').modal('hide');
+            
         }
 
         // Fetch the new Admin ID

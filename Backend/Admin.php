@@ -3,8 +3,9 @@ require_once __DIR__ . "/DBConnection.php";
 require_once __DIR__ . "/User.php";
 class Admin extends User
 {
-    
-    public function register(string $name, string $password, string $contact, string $email){
+
+    public function register(string $name, string $password, string $contact, string $email)
+    {
         $conn = $this->db->getConnection();
         try {
             // Begin transaction
@@ -54,20 +55,20 @@ class Admin extends User
             return true;
         } catch (Exception $e) {
             mysqli_rollback($conn);
-            error_log($e->getMessage(), 3, '/Backend/error.log'); // Specify a path to log errors
+            error_log($e->getMessage(), 3, '/Backend/error.log'); 
             echo json_encode(['success' => false, 'message' => $e->getMessage()]);
         } finally {
             $this->db->disconnect();
         }
     }
 
-    public function Update(string $adminID, string $U_email, string $U_contact, string $U_Password){
+    public function Update(string $adminID,string $U_name, string $U_email, string $U_contact, string $U_Password)
+    {
         $conn = $this->db->getConnection();
         try {
-            // Begin transaction
             mysqli_begin_transaction($conn);
 
-            // Prepare and execute query to check if AdminID exists
+            // check AdminID exists
             $stmt = $conn->prepare("SELECT UserID FROM admin WHERE AdminID = ?");
             $stmt->bind_param("s", $adminID);
             $stmt->execute();
@@ -85,45 +86,83 @@ class Admin extends User
             $row = mysqli_fetch_assoc($res);
             $userID = $row['UserID'];
 
+            // get user data
+            $stmt1 = $conn->prepare("SELECT * FROM user_account WHERE UserID= ?");
+            $stmt1->bind_param("s", $userID);
+            $stmt1->execute();
+            $res1 = $stmt1->get_result();
+            $row1 = mysqli_fetch_assoc($res1);
 
-            // Check if email already exists
-            $sql2 = "SELECT Email FROM user_account WHERE Email='$U_email'";
-            $res = mysqli_query($conn, $sql2);
+            $oldName = $row1['Name'];
+            $oldEmail = $row1['Email'];
+            $oldContact = $row1['Contact'];
+            $oldPassword = $row1['Password'];
 
-            if (!$res) {
-                throw new Exception("Database query failed: " . mysqli_error($conn));
+            // Update Name if it's changed
+            if ($oldName !== $U_name) {
+                $stmt4 = $conn->prepare("UPDATE user_account SET Name = ? WHERE UserID = ?");
+                $stmt4->bind_param("ss", $U_name, $userID);
+                if (!$stmt4->execute()) {
+                    throw new Exception("Failed to update Name for user: $userID");
+                }
             }
 
-            if (mysqli_num_rows($res) > 0) {
-                throw new Exception("Email already exists.");
+            // Update Email if it's changed
+            if ($oldEmail !== $U_email) {
+                $stmt2 = $conn->prepare("SELECT Email FROM user_account WHERE Email = ?");
+                $stmt2->bind_param("s", $U_email);
+                $stmt2->execute();
+                $res2 = $stmt2->get_result();
+
+                if ($res2->num_rows > 0) {
+                    throw new Exception("Email already exists.");
+                }
+
+                $stmt3 = $conn->prepare("UPDATE user_account SET Email = ? WHERE UserID = ?");
+                $stmt3->bind_param("ss", $U_email, $userID);
+                if (!$stmt3->execute()) {
+                    throw new Exception("Failed to update email for user: $userID");
+                }
             }
 
-            // update queries
-            $query1 = "UPDATE  user_account SET Email='$U_email', Contact='$U_contact', Password='$U_Password' WHERE UserID='$userID';";
-
-
-            $result1 = mysqli_query($conn, $query1);
-            if (!$result1) {
-                throw new Exception("Failed to update into user_account: " . mysqli_error($conn));
+            // Update Contact if it's changed
+            if ($oldContact !== $U_contact) {
+                $stmt4 = $conn->prepare("UPDATE user_account SET Contact = ? WHERE UserID = ?");
+                $stmt4->bind_param("ss", $U_contact, $userID);
+                if (!$stmt4->execute()) {
+                    throw new Exception("Failed to update contact for user: $userID");
+                }
             }
+
+            // Update Password if it's changed
+            if ($oldPassword !== $U_Password) {
+                $stmt5 = $conn->prepare("UPDATE user_account SET Password = ? WHERE UserID = ?");
+                $stmt5->bind_param("ss", $U_Password, $userID);
+                if (!$stmt5->execute()) {
+                    throw new Exception("Failed to update password for user: $userID");
+                }
+            }
+
+            mysqli_commit($conn);
 
             return true;
         } catch (Exception $e) {
-            error_log($e->getMessage(), 3, '/Backend/error.log'); // Specify a path to log errors
+            mysqli_rollback($conn);
+            error_log($e->getMessage(), 3, '/Backend/error.log');
             echo json_encode(['success' => false, 'message' => $e->getMessage()]);
         } finally {
             $this->db->disconnect();
         }
     }
 
-    public function Delete(string $adminID)
+
+    public function ChangeStatusAdmin(string $adminID, string $status)
     {
         $conn = $this->db->getConnection();
         try {
             // Begin transaction
             mysqli_begin_transaction($conn);
 
-
             // Prepare and execute query to check if AdminID exists
             $stmt = $conn->prepare("SELECT UserID FROM admin WHERE AdminID = ?");
             $stmt->bind_param("s", $adminID);
@@ -138,29 +177,21 @@ class Admin extends User
                 throw new Exception("AdminID does not exist.");
             }
 
-            // Get the UserID
-            $row = mysqli_fetch_assoc($res);
-            $userID = $row['UserID'];
+            // Deactive from admin table
+            $stmt2 = $conn->prepare("UPDATE  admin SET status='$status' WHERE AdminID= ? ");
+            $stmt2->bind_param("s", $adminID);
+            $res2 = $stmt2->execute();
 
-            // Delete from admin table
-            $query1 = "DELETE FROM admin WHERE AdminID='$adminID'";
-            $result1 = mysqli_query($conn, $query1);
-            if (!$result1) {
-                throw new Exception("Failed to delete from admin: " . mysqli_error($conn));
+            if (!$res2) {
+                if ($status == 0) {
+                    throw new Exception("Failed to Deactivate Admin: " . mysqli_error($conn));
+                } else {
+                    throw new Exception("Failed to Activate Admin: " . mysqli_error($conn));
+                }
             }
 
-            // Delete from user_account table
-            $query2 = "DELETE FROM user_account WHERE UserID='$userID'";
-            $result2 = mysqli_query($conn, $query2);
-            if (!$result2) {
-                throw new Exception("Failed to delete from user_account: " . mysqli_error($conn));
-            }
-
-            // Commit the transaction if both deletions were successful
-            mysqli_commit($conn);
             return true;
         } catch (Exception $e) {
-            mysqli_rollback($conn);
             error_log($e->getMessage(), 3, '/Backend/error.log'); // Specify a path to log errors
             echo json_encode(['success' => false, 'message' => $e->getMessage()]);
         } finally {
@@ -201,12 +232,12 @@ class Admin extends User
         }
     }
 
-    public function ViewAdmin()
+    public function ViewAdmin(string $type)
     {
         $conn = $this->db->getConnection();
-        try{
+        try {
             // echo $return = "View Admin Data";
-            $queary = "SELECT * FROM adminview ORDER BY AdminID ASC";
+            $queary = "SELECT * FROM adminview WHERE status='$type' ORDER BY AdminID ASC; ";
             $queary_run = mysqli_query($conn, $queary);
             $res_array = [];
 
@@ -216,11 +247,38 @@ class Admin extends User
                 }
                 header('Content-type: application/json');
                 echo json_encode($res_array);
-            } else { 
-                echo $return = "<h4>No Record Found</h4>";
+            } else {
+                header('Content-type: application/json');
+                echo json_encode(['message' => 'No Record Found']);
             }
-        }catch(Exception $e){
+        } catch (Exception $e) {
+            error_log($e->getMessage(), 3, '/Backend/error.log'); 
+            echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+        }
+    }
 
+    public function Search(string $type, string $txtSearch)
+    {
+        $conn = $this->db->getConnection();
+        try {
+            // echo $return = "View Admin Data";
+            $queary = "SELECT * FROM adminview WHERE status='$type' AND (AdminID like '%$txtSearch%' OR Name like '%$txtSearch%' OR Email like '%$txtSearch%' OR Contact like '%$txtSearch%') ORDER BY AdminID ASC; ";
+            $queary_run = mysqli_query($conn, $queary);
+            $res_array = [];
+
+            if (mysqli_num_rows($queary_run) > 0) {
+                foreach ($queary_run as $row) {
+                    array_push($res_array, $row);
+                }
+                header('Content-type: application/json');
+                echo json_encode($res_array);
+            } else {
+                header('Content-type: application/json');
+                echo json_encode(['success' => false, 'message' => 'No Record Found']);
+            }
+        } catch (Exception $e) {
+            error_log($e->getMessage(), 3, '/Backend/error.log'); 
+            echo json_encode(['success' => false, 'message' => $e->getMessage()]);
         }
     }
 }
