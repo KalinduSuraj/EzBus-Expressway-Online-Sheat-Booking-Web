@@ -23,31 +23,36 @@ class Counter extends User
             }
 
             // Check if email already exists
-            $sql2 = "SELECT Email FROM user_account WHERE Email='$email'";
-            $res = mysqli_query($con, $sql2);
+            $checkEmailQuery = "SELECT Email FROM user_account WHERE Email = ?";
+            $stmt = $con->prepare($checkEmailQuery);
+            $stmt->bind_param("s", $email);
+            $stmt->execute();
+            $result = $stmt->get_result();
 
-            if (!$res) {
+            if (!$result) {
                 throw new Exception("Database query failed: " . mysqli_error($con));
             }
 
-            if (mysqli_num_rows($res) > 0) {
+            if ($result->num_rows > 0) {
                 throw new Exception("Email already exists.");
             }
 
-            // Insert queries
-            $query1 = "INSERT INTO user_account(UserID, Name, Email, Contact, Password, UserType, LoginType) 
-                   VALUES('$userID', '$name', '$email', '$contact', '$password', 'Counter', 'Password')";
-            $query2 = "INSERT INTO counter(CounterID, UserID, AdminID,Location) 
-                   VALUES('$counterID', '$userID', 'A001','$location')"; // Change the Creator ID
-
-            $result1 = mysqli_query($con, $query1);
-            if (!$result1) {
-                throw new Exception("Failed to insert into user_account: " . mysqli_error($con));
+            // Insert into user_account
+            $insertUserQuery = "INSERT INTO user_account(UserID, Name, Email, Contact, Password, UserType, LoginType) 
+                            VALUES (?, ?, ?, ?, ?, 'Counter', 'Password')";
+            $stmtUser = $con->prepare($insertUserQuery);
+            $stmtUser->bind_param("sssss", $userID, $name, $email, $contact, $password);
+            if (!$stmtUser->execute()) {
+                throw new Exception("Failed to insert into user_account: " . $stmtUser->error);
             }
 
-            $result2 = mysqli_query($con, $query2);
-            if (!$result2) {
-                throw new Exception("Failed to insert into counter: " . mysqli_error($con));
+            // Insert into counter
+            $insertCounterQuery = "INSERT INTO counter(CounterID, UserID, AdminID, Location) VALUES (?, ?, ?, ?)";
+            $stmtCounter = $con->prepare($insertCounterQuery);
+            $LogedUserID = "A001";
+            $stmtCounter->bind_param("ssss", $counterID, $userID,$LogedUserID, $location);
+            if (!$stmtCounter->execute()) {
+                throw new Exception("Failed to insert into counter: " . $stmtCounter->error);
             }
 
             // Commit the transaction if both inserts were successful
@@ -55,8 +60,101 @@ class Counter extends User
             return true;
         } catch (Exception $e) {
             mysqli_rollback($con);
-            echo "Error: " . $e->getMessage();
-            return false;
+            echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+            
+        } finally {
+            $this->db->disconnect();
+        }
+    }
+
+    public function Update(string $counterID,string $U_name, string $U_email, string $U_contact, string $U_Password)
+    {
+        $conn = $this->db->getConnection();
+        try {
+            mysqli_begin_transaction($conn);
+
+            // check CounterID exists
+            $stmt = $conn->prepare("SELECT UserID FROM Counter WHERE CounterID = ?");
+            $stmt->bind_param("s", $counterID);
+            $stmt->execute();
+            $res = $stmt->get_result();
+
+            if (!$res) {
+                throw new Exception("Database query failed: " . mysqli_error($conn));
+            }
+
+            if ($res->num_rows == 0) {
+                throw new Exception("CounterID does not exist.");
+            }
+
+            // Get the UserID
+            $row = mysqli_fetch_assoc($res);
+            $userID = $row['UserID'];
+
+            // get user data
+            $stmt1 = $conn->prepare("SELECT * FROM user_account WHERE UserID= ?");
+            $stmt1->bind_param("s", $userID);
+            $stmt1->execute();
+            $res1 = $stmt1->get_result();
+            $row1 = mysqli_fetch_assoc($res1);
+
+            $oldName = $row1['Name'];
+            $oldEmail = $row1['Email'];
+            $oldContact = $row1['Contact'];
+            $oldPassword = $row1['Password'];
+
+            // Update Name if it's changed
+            if ($oldName !== $U_name) {
+                $stmt4 = $conn->prepare("UPDATE user_account SET Name = ? WHERE UserID = ?");
+                $stmt4->bind_param("ss", $U_name, $userID);
+                if (!$stmt4->execute()) {
+                    throw new Exception("Failed to update Name for user: $userID");
+                }
+            }
+
+            // Update Email if it's changed
+            if ($oldEmail !== $U_email) {
+                $stmt2 = $conn->prepare("SELECT Email FROM user_account WHERE Email = ?");
+                $stmt2->bind_param("s", $U_email);
+                $stmt2->execute();
+                $res2 = $stmt2->get_result();
+
+                if ($res2->num_rows > 0) {
+                    throw new Exception("Email already exists.");
+                }
+
+                $stmt3 = $conn->prepare("UPDATE user_account SET Email = ? WHERE UserID = ?");
+                $stmt3->bind_param("ss", $U_email, $userID);
+                if (!$stmt3->execute()) {
+                    throw new Exception("Failed to update email for user: $userID");
+                }
+            }
+
+            // Update Contact if it's changed
+            if ($oldContact !== $U_contact) {
+                $stmt4 = $conn->prepare("UPDATE user_account SET Contact = ? WHERE UserID = ?");
+                $stmt4->bind_param("ss", $U_contact, $userID);
+                if (!$stmt4->execute()) {
+                    throw new Exception("Failed to update contact for user: $userID");
+                }
+            }
+
+            // Update Password if it's changed
+            if ($oldPassword !== $U_Password) {
+                $stmt5 = $conn->prepare("UPDATE user_account SET Password = ? WHERE UserID = ?");
+                $stmt5->bind_param("ss", $U_Password, $userID);
+                if (!$stmt5->execute()) {
+                    throw new Exception("Failed to update password for user: $userID");
+                }
+            }
+
+            mysqli_commit($conn);
+
+            return true;
+        } catch (Exception $e) {
+            mysqli_rollback($conn);
+            error_log($e->getMessage(), 3, '/Backend/error.log');
+            echo json_encode(['success' => false, 'message' => $e->getMessage()]);
         } finally {
             $this->db->disconnect();
         }
@@ -114,13 +212,15 @@ class Counter extends User
     public function ViewCounter(string $type)
     {
         try {
-            // echo $return = "View Counter Data";
-            $queary = "SELECT * FROM counterview WHERE status='$type' ORDER BY CounterID ASC; ";
-            $queary_run = mysqli_query($this->db->getConnection(), $queary);
+            $query = "SELECT * FROM counterview WHERE status = ? ORDER BY CounterID ASC";
+            $stmt = $this->db->getConnection()->prepare($query);
+            $stmt->bind_param("s", $type);
+            $stmt->execute();
+            $result = $stmt->get_result();
             $res_array = [];
 
-            if (mysqli_num_rows($queary_run) > 0) {
-                foreach ($queary_run as $row) {
+            if ($result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
                     array_push($res_array, $row);
                 }
                 header('Content-type: application/json');
@@ -129,17 +229,20 @@ class Counter extends User
                 header('Content-type: application/json');
                 echo json_encode(['success' => false, 'message' => 'No Record Found']);
             }
+
+            $stmt->close();
         } catch (Exception $e) {
             error_log($e->getMessage(), 3, '/Backend/error.log');
             echo json_encode(['success' => false, 'message' => $e->getMessage()]);
         }
     }
 
+
     public function generateNewCounterID()
     {
         $conn = $this->db->getConnection();
         try {
-            // Query to get the last inserted CounterID
+            // get the last  CounterID
             $query = "SELECT CounterID FROM counter ORDER BY CounterID DESC LIMIT 1";
             $result = mysqli_query($conn, $query);
 
@@ -172,7 +275,6 @@ class Counter extends User
     {
         $conn = $this->db->getConnection();
         try {
-            // Begin transaction
             mysqli_begin_transaction($conn);
 
             // Prepare and execute query to check if counterID exists
@@ -192,7 +294,7 @@ class Counter extends User
             // Deactive from counter table
             $stmt2 = $conn->prepare("UPDATE  counter SET status='$status' WHERE CounterID= ? ");
             $stmt2->bind_param("s", $counterID);
-            $res2 =$stmt2->execute();
+            $res2 = $stmt2->execute();
 
             if (!$res2) {
                 if ($status == 0) {
@@ -201,10 +303,9 @@ class Counter extends User
                     throw new Exception("Failed to Activate counter: " . mysqli_error($conn));
                 }
             }
-
             return true;
         } catch (Exception $e) {
-            error_log($e->getMessage(), 3, '/Backend/error.log'); // Specify a path to log errors
+            error_log($e->getMessage(), 3, '/Backend/error.log');
             echo json_encode(['success' => false, 'message' => $e->getMessage()]);
         } finally {
             $this->db->disconnect();
@@ -215,13 +316,20 @@ class Counter extends User
     {
         $conn = $this->db->getConnection();
         try {
-            // echo $return = "View Counter Data";
-            $queary = "SELECT * FROM counterview WHERE status='$type' AND (Location like '%$txtSearch%' OR CounterID like '%$txtSearch%' OR Name like '%$txtSearch%' OR Email like '%$txtSearch%' OR Contact like '%$txtSearch%') ORDER BY CounterID ASC; ";
-            $queary_run = mysqli_query($conn, $queary);
+            $query = "SELECT * FROM counterview WHERE status = ? 
+                  AND (Location LIKE ? OR CounterID LIKE ? OR Name LIKE ? OR Email LIKE ? OR Contact LIKE ?) 
+                  ORDER BY CounterID ASC";
+
+            $stmt = $conn->prepare($query);
+            $searchTerm = '%' . $txtSearch . '%';
+            $stmt->bind_param("ssssss", $type, $searchTerm, $searchTerm, $searchTerm, $searchTerm, $searchTerm);
+            $stmt->execute();
+
+            $result = $stmt->get_result();
             $res_array = [];
 
-            if (mysqli_num_rows($queary_run) > 0) {
-                foreach ($queary_run as $row) {
+            if ($result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
                     array_push($res_array, $row);
                 }
                 header('Content-type: application/json');
@@ -230,8 +338,10 @@ class Counter extends User
                 header('Content-type: application/json');
                 echo json_encode(['success' => false, 'message' => 'No Record Found']);
             }
+
+            $stmt->close();
         } catch (Exception $e) {
-            error_log($e->getMessage(), 3, '/Backend/error.log'); 
+            error_log($e->getMessage(), 3, '/Backend/error.log');
             echo json_encode(['success' => false, 'message' => $e->getMessage()]);
         }
     }
