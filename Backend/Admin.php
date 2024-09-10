@@ -23,31 +23,33 @@ class Admin extends User
             }
 
             // Check if email already exists
-            $sql2 = "SELECT Email FROM user_account WHERE Email='$email'";
-            $res = mysqli_query($conn, $sql2);
+            $checkEmailQuery = "SELECT Email FROM user_account WHERE Email = ?";
+            $stmtEmail = $conn->prepare($checkEmailQuery);
+            $stmtEmail->bind_param("s", $email);
+            $stmtEmail->execute();
+            $resultEmail = $stmtEmail->get_result();
 
-            if (!$res) {
-                throw new Exception("Database query failed: " . mysqli_error($conn));
-            }
-
-            if (mysqli_num_rows($res) > 0) {
+            if ($resultEmail->num_rows > 0) {
                 throw new Exception("Email already exists.");
             }
 
-            // Insert queries
-            $query1 = "INSERT INTO user_account(UserID, Name, Email, Contact, Password, UserType, LoginType) 
-                   VALUES('$userID', '$name', '$email', '$contact', '$password', 'Admin', 'Password')";
-            $query2 = "INSERT INTO admin(AdminID, UserID, Creator) 
-                   VALUES('$adminID', '$userID', 'A001')"; // Change the Creator ID
+            // Insert into user_account
+            $insertUserQuery = "INSERT INTO user_account(UserID, Name, Email, Contact, Password, UserType, LoginType) 
+                            VALUES (?, ?, ?, ?, ?, 'Admin', 'Password')";
+            $stmtUser = $conn->prepare($insertUserQuery);
+            $stmtUser->bind_param("sssss", $userID, $name, $email, $contact, $password);
 
-            $result1 = mysqli_query($conn, $query1);
-            if (!$result1) {
-                throw new Exception("Failed to insert into user_account: " . mysqli_error($conn));
+            if (!$stmtUser->execute()) {
+                throw new Exception("Failed to insert into user_account: " . $stmtUser->error);
             }
 
-            $result2 = mysqli_query($conn, $query2);
-            if (!$result2) {
-                throw new Exception("Failed to insert into admin: " . mysqli_error($conn));
+            // Insert into admin
+            $insertAdminQuery = "INSERT INTO admin(AdminID, UserID, Creator) VALUES (?, ?, ?)"; 
+            $stmtAdmin = $conn->prepare($insertAdminQuery);
+            $LogedUserID = "A001";
+            $stmtAdmin->bind_param("sss", $adminID, $userID,$LogedUserID);
+            if (!$stmtAdmin->execute()) {
+                throw new Exception("Failed to insert into admin: " . $stmtAdmin->error);
             }
 
             // Commit the transaction if both inserts were successful
@@ -55,14 +57,13 @@ class Admin extends User
             return true;
         } catch (Exception $e) {
             mysqli_rollback($conn);
-            error_log($e->getMessage(), 3, '/Backend/error.log'); 
             echo json_encode(['success' => false, 'message' => $e->getMessage()]);
         } finally {
             $this->db->disconnect();
         }
     }
 
-    public function Update(string $adminID,string $U_name, string $U_email, string $U_contact, string $U_Password)
+    public function Update(string $adminID, string $U_name, string $U_email, string $U_contact, string $U_Password)
     {
         $conn = $this->db->getConnection();
         try {
@@ -154,7 +155,6 @@ class Admin extends User
             $this->db->disconnect();
         }
     }
-
 
     public function ChangeStatusAdmin(string $adminID, string $status)
     {
@@ -252,7 +252,7 @@ class Admin extends User
                 echo json_encode(['message' => 'No Record Found']);
             }
         } catch (Exception $e) {
-            error_log($e->getMessage(), 3, '/Backend/error.log'); 
+            error_log($e->getMessage(), 3, '/Backend/error.log');
             echo json_encode(['success' => false, 'message' => $e->getMessage()]);
         }
     }
@@ -277,7 +277,7 @@ class Admin extends User
                 echo json_encode(['success' => false, 'message' => 'No Record Found']);
             }
         } catch (Exception $e) {
-            error_log($e->getMessage(), 3, '/Backend/error.log'); 
+            error_log($e->getMessage(), 3, '/Backend/error.log');
             echo json_encode(['success' => false, 'message' => $e->getMessage()]);
         }
     }

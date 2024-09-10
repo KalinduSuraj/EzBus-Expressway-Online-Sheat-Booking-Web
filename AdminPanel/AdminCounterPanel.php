@@ -142,15 +142,10 @@
         <div class="col-auto">
             <input type="text" class="form-control form-control-sm" id="txtSearch" placeholder="Search">
         </div>
-        <!-- <div class="col-auto">
-            <input type="button" class="btn btn-primary" id="txtSearch" value="Search">
-        </div> -->
         <div class="col-auto">
             <select name="activeStatus" id="activeStatus" class="form-select form-select-sm ">
-
                 <option value="1" default>Active</option>
                 <option value="0">Deactive</option>
-
             </select>
         </div>
     </div>
@@ -231,12 +226,12 @@
                         </div>
                         <div class="mb-1">
                             <label class="form-label">Password:</label>
-                            <input type="text" class="form-control form-control-sm" name="password" id="password" placeholder="Create Password">
+                            <input type="text" class="form-control form-control-sm" name="password" id="password" placeholder=" Password" disabled>
                             <span class="errMsg" id="password_err"></span>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="reset" class="btn btn-secondary btn-outline-danger text-dark" data-bs-dismiss="modal" onclick="clearErr()">Cancel</button>
+                        <button type="reset" class="btn btn-secondary btn-outline-danger text-dark" data-bs-dismiss="modal" id="AddFormCancel">Cancel</button>
                         <button type="button" class="btn btn-success" id="AddCounter">Add Counter</button>
                     </div>
                 </form>
@@ -283,13 +278,13 @@
                         <span class="errMsg" id="U_location_err"></span>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Create Password:</label>
+                        <label class="form-label">Update Password:</label>
                         <input type="text" class="form-control form-control-sm mb-2" name="U_password" id="U_password" placeholder="Update Password">
                         <span class="errMsg" id="U_password_err"></span>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="EditFormCancel">Cancel</button>
                     <button type="button" class="btn btn-primary" id="UpdateCounter">Update</button>
                 </div>
             </div>
@@ -373,6 +368,20 @@
             $('#password').val(text);
         });
 
+        $('#AddFormCancel' ).on('click', function(event) {
+            event.preventDefault(); 
+            $('.errMsg').text('');
+            $('.form-control').val('');
+
+        });
+        
+        $('#EditFormCancel').on('click', function(event) {
+            event.preventDefault(); 
+            $('.errMsg').text('');
+            $('.form-control').val('');
+
+        });
+
         $('#AddCounter').on('click', function(event) {
             //alert("click");
             event.preventDefault(); // Prevent the form from submitting normally
@@ -387,11 +396,30 @@
             if (isValid == true) {
 
                 var name = first_name + " " + last_name;
-                var result = AddCounter(name, email, contact, location, password);
+                AddCounter(name, email, contact, location, password);
+            } else {
+                console.log("Check Your Inputs");
+            }
+
+        });
+
+        // click in Update Counter button 
+        $('#UpdateCounter').on('click', function() {
+            // alert("click");
+            event.preventDefault();
+            var counterID = $('#EditFormCounterID').text();
+            var U_name = $('#U_name').val().trim();
+            var U_email = $('#U_email').val().trim();
+            var U_contact = $('#U_contact').val().trim();
+            var U_location = $('#U_location').val().trim();
+            var U_password = $('#U_password').val().trim();
+
+            var isValid = UpdateCounterValidation(U_name, U_email, U_contact, U_location, U_password);
+            if (isValid == true) {
+                EditCounter(counterID, U_name, U_email, U_contact, U_location, U_password);
             } else {
                 console.log("Check Your Details");
             }
-
         });
 
         $('#confirmDelete').on('click', function(event) {
@@ -420,15 +448,10 @@
             return password;
         }
 
-        // clear errMsg Function
-        function clearErr() {
-            $('.errMsg').text('');
-        }
-
         //Add Counter Validation Function
         function AddCounterValidation(first_name, last_name, email, contact, location, password) {
             // Clear previous error messages
-            clearErr();
+            $('.errMsg').text('');
             var isValid = true;
             try {
                 //Simple validation
@@ -482,6 +505,60 @@
             }
         }
 
+        //Add Counter Validation Function
+        function UpdateCounterValidation(U_name, U_email, U_contact, U_location, U_password) {
+            // Clear previous error messages
+            $('.errMsg').text('');
+
+            var isValid = true;
+            try {
+                if (U_name === '') {
+                    $('#U_name_err').text('Full Name is required');
+                    isValid = false;
+                    return;
+                }
+
+                var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+                if (U_email === '') {
+                    $('#U_email_err').text('Email is required');
+                    isValid = false;
+                    return;
+                } else if (!emailRegex.test(U_email)) {
+                    $('#U_email_err').text('Please enter a valid email address.');
+                    isValid = false;
+                    return;
+                }
+
+                if (U_contact === '') {
+                    $('#U_contact_err').text('Contact is required');
+                    isValid = false;
+                    return;
+                } else if (U_contact.length !== 10) {
+                    $('#U_contact_err').text('Contact number must be exactly 10 digits');
+                    isValid = false;
+                    return;
+                }
+
+                if (U_location === '') {
+                    $('#U_location_err').text('Full Location is required');
+                    isValid = false;
+                    return;
+                }
+
+                if (U_password === '') {
+                    $('#U_password_err').text('Password is required');
+                    isValid = false;
+                    return;
+                }
+                return isValid;
+            } catch (err) {
+                alert("Somthing Went Wrong........\n" + err);
+            } finally {
+                return isValid;
+            }
+        }
+
         //Add Counter Data
         function AddCounter(name, email, contact, location, new_password) {
             $.ajax({
@@ -500,19 +577,18 @@
                     console.log("Data sent:\n", response);
                     // console.log("status:", response.success);
                     if (response.success) {
-                        //alert("Admin added successfully");
+                        //alert(" added successfully");
                         // console.log("Data sent 1");
                         $('#AddCounterModal').modal('hide');
-                        //Clear Add Counter Form
+                        //Clear Form
                         $('#first_name').val('');
                         $('#last_name').val('');
                         $('#email').val('');
                         $('#contact').val('');
-                        $('#location').val('');
-                        $('#new_password').val('');
-                        $('#confirm_password').val('');
+                        $('#password').val('');
+
                         // console.log("Data sent 2");
-                        GetCounterData(); // Refresh the admin list
+                        GetCounterData($('#activeStatus').val().trim());
                         showToast('Success', response.message, 'success');
                     } else {
                         showToast('Error', response.message, 'error');
@@ -522,7 +598,7 @@
                     }
                 },
                 error: function(xhr, status, error) {
-                    console.error("Error adding admin: " + status + " - " + error);
+                    console.error("Error adding Counter: " + status + " - " + error);
                     showToast('Error', "An error occurred: " + status + " - " + error, 'error');
                 }
             });
@@ -699,8 +775,8 @@
             });
         }
 
-         //Get Search Data
-         function Search(type, txtSearch) {
+        //Get Search Data
+        function Search(type, txtSearch) {
             $('.CounterData').empty(); // Clear Admin Data View
             const hiddenPassword = '*'.repeat(10);
             $.ajax({
@@ -834,6 +910,45 @@
                 },
                 error: function(xhr, status, error) {
                     console.error("Error fetching counter data: " + status + " - " + error);
+                }
+            });
+        }
+
+        // Edit Admin Function
+        function EditCounter(counterID, U_name, U_email, U_contact, U_location, U_password) {
+            // alert("Edit " + CounterID);
+            $.ajax({
+                type: "POST",
+                url: "http://localhost/testweb/GitHub/EzBus-Expressway-Online-Sheat-Booking-Web/process.php",
+                data: {
+                    action: 'updateCounter',
+                    'CounterID': counterID,
+                    'Name': U_name,
+                    'Email': U_email,
+                    'Contact': U_contact,
+                    'Location': U_location,
+                    'Password': U_password,
+                },
+                dataType: 'json', // Expect JSON response from the server
+                success: function(response) {
+                    console.log("Data sent:\n", response);
+
+                    if (response.success) {
+                        //alert("Counter Update successfully");
+
+                        $('#EditCounterModal').modal('hide');
+                        GetCounterData($('#activeStatus').val().trim()); // Refresh the Counter list
+                        showToast('Success', response.message, 'success');
+                    } else {
+                        showToast('Error', response.message || "Failed to Update Counter", 'error');
+                        if (response.message === "Email already exists.") {
+                            $('#U_email_err').text('Email already exists');
+                        }
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error Updateing Counter: " + status + " - " + error);
+                    showToast('Error', "An error occurred: " + status + " - " + error, 'error');
                 }
             });
         }

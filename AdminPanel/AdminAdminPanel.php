@@ -237,7 +237,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="reset" class="btn btn-secondary btn-outline-danger text-dark" data-bs-dismiss="modal" onclick="clearErr()">Cancel</button>
+                        <button type="reset" class="btn btn-secondary btn-outline-danger text-dark" data-bs-dismiss="modal" id="AddFormCancel">Cancel</button>
                         <button type="button" class="btn btn-success" id="AddAdmin">Add Admin</button>
                     </div>
                 </form>
@@ -285,7 +285,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="EditFormCancel">Cancel</button>
                     <button type="button" class="btn btn-primary" id="UpdateAdmin">Update</button>
                 </div>
             </div>
@@ -368,6 +368,20 @@
             GetAdminID();
             var text = generatePassword();
             $('#password').val(text);
+
+        });
+
+        $('#AddFormCancel' ).on('click', function(event) {
+            event.preventDefault(); 
+            $('.errMsg').text('');
+            $('.form-control').val('');
+
+        });
+        
+        $('#EditFormCancel').on('click', function(event) {
+            event.preventDefault(); 
+            $('.errMsg').text('');
+            $('.form-control').val('');
 
         });
 
@@ -554,7 +568,7 @@
                 },
                 dataType: 'json', // Expect JSON response from the server
                 success: function(response) {
-                    // console.log("Data sent:\n", response);
+                    console.log("Data sent:\n", response);
 
                     if (response.success) {
                         //alert("Admin added successfully");
@@ -565,8 +579,7 @@
                         $('#last_name').val('');
                         $('#email').val('');
                         $('#contact').val('');
-                        $('#new_password').val('');
-                        $('#confirm_password').val('');
+                        $('#password').val('');
 
                         GetAdminData($('#activeStatus').val().trim()); // Refresh the admin list
                         showToast('Success', response.message, 'success');

@@ -36,6 +36,42 @@
             --red: #fc3b56;
         }
 
+        .toast-success {
+            border-left: 5px solid green;
+        }
+
+        .toast-error {
+            border-left: 5px solid red;
+        }
+
+        .toast-header-success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .toast-header-error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .has-error .form-control {
+            border-color: red;
+        }
+
+        .custom-modal-header {
+            background-color: #fc3b56;
+
+            color: #f8d7da;
+
+        }
+
+        .custom-modal-header-active {
+            background-color: #155724;
+
+            color: #d4edda;
+
+        }
+
         .errMsg {
             color: red;
             font-size: 13px;
@@ -102,10 +138,13 @@
             </a>
         </div>
         <div class="col-auto">
-            <input type="text" class="form-control" id="txtSearch" placeholder="Search">
+            <input type="text" class="form-control form-control-sm" id="txtSearch" placeholder="Search">
         </div>
         <div class="col-auto">
-            <input type="button" class="btn btn-primary" id="txtSearch" value="Search">
+            <select name="activeStatus" id="activeStatus" class="form-select form-select-sm ">
+                <option value="1" default>Active</option>
+                <option value="0">Deactive</option>
+            </select>
         </div>
     </div>
     <div class="mt-5">
@@ -116,7 +155,7 @@
                     <th scope="col" width='20%'>From</th>
                     <th scope="col" width='20%'>To</th>
                     <th scope="col" width='20%'>Ticket Price</th>
-                    <th width='20%' class="">opt</th>
+                    <th width='20%' class=""></th>
                 </tr>
             </thead>
             <tbody class="RouteData">
