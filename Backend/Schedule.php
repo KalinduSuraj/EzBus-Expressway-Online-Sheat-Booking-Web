@@ -73,7 +73,7 @@ class Schedule
         }
     }
 
-    public function AddSchedule( string $RouteID,  string $BusID,  string $Date, string $Time)
+    public function AddSchedule(string $RouteID,  string $BusID,  string $Date, string $Time)
     {
         $con = $this->db->getConnection();
         try {
@@ -86,7 +86,7 @@ class Schedule
 
             $checkScheduleQuery = "SELECT * FROM bus_schedule WHERE Date = ? AND Time = ? AND RouteID = ? AND BusID = ?  ";
             $stmt = $con->prepare($checkScheduleQuery);
-            $stmt->bind_param("ssss", $Date,$Time,$RouteID,$BusID);
+            $stmt->bind_param("ssss", $Date, $Time, $RouteID, $BusID);
             $stmt->execute();
             $resultBusNo = $stmt->get_result();
             if ($resultBusNo->num_rows > 0) {
@@ -103,7 +103,7 @@ class Schedule
             }
             $stmt->close();
 
-           
+
 
             return true;
         } catch (Exception $e) {
@@ -137,7 +137,6 @@ class Schedule
             }
             $stmt->close();
             return true;
-
         } catch (Exception $e) {
             error_log($e->getMessage(), 3, '/Backend/error.log');
             echo json_encode(['success' => false, 'message' => $e->getMessage()]);
@@ -146,7 +145,7 @@ class Schedule
         }
     }
 
-    public function Search(string $type, string $txtSearch)
+    public function SearchSchedule(string $type, string $txtSearch)
     {
 
         $conn = $this->db->getConnection();
@@ -155,27 +154,117 @@ class Schedule
 
             $stmt = $conn->prepare($query);
             $searchTerm = '%' . $txtSearch . '%';
-            $stmt->bind_param("sssssss", $type, $searchTerm,$searchTerm,$searchTerm,$searchTerm,$searchTerm,$searchTerm,$searchTerm);
+            $stmt->bind_param("sssssss", $type, $searchTerm, $searchTerm, $searchTerm, $searchTerm, $searchTerm, $searchTerm);
             $stmt->execute();
 
             $result = $stmt->get_result();
             $res_array = [];
 
+
+            header('Content-type: application/json');
             if ($result->num_rows > 0) {
                 while ($row = $result->fetch_assoc()) {
                     array_push($res_array, $row);
                 }
-                header('Content-type: application/json');
                 echo json_encode($res_array);
             } else {
-                header('Content-type: application/json');
                 echo json_encode(['success' => false, 'message' => 'No Record Found']);
             }
-
             $stmt->close();
         } catch (Exception $e) {
             error_log($e->getMessage(), 3, '/Backend/error.log');
             echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+        }
+    }
+
+    public function UpdateSchedule(string $ScheduleID, string $U_RouteID,  string $U_BusID,  string $U_Date, string $U_Time)
+    {
+
+        $con = $this->db->getConnection();
+        try {
+            // throw new Exception("$ScheduleID + $U_RouteID + $U_BusID + $U_Date + $U_Time  ");
+
+            mysqli_begin_transaction($con);
+
+            $checkScheduleQuery = "SELECT * FROM bus_schedule WHERE Date = ? AND Time = ? AND RouteID = ? AND BusID = ?  ";
+            $stmt = $con->prepare($checkScheduleQuery);
+            $stmt->bind_param("ssss", $U_Date, $U_Time, $U_RouteID, $U_BusID);
+            $stmt->execute();
+            $resultBusNo = $stmt->get_result();
+            if ($resultBusNo->num_rows > 0) {
+                throw new Exception("Schedule is already exists.");
+            }
+            $stmt->close();
+
+            $getScheduleData = "SELECT * FROM bus_schedule WHERE ScheduleID = ?";
+            $stmt = $con->prepare($getScheduleData);
+
+            if ($stmt === false) {
+                throw new Exception("Failed to prepare the SQL statement: " . $con->error);
+            }
+            $stmt->bind_param("s", $ScheduleID);
+            $stmt->execute();
+            $res = $stmt->get_result();
+            if ($res->num_rows > 0) {
+                $row1 = $res->fetch_assoc();
+
+                $oldRouteID = $row1['RouteID'];
+                $oldBusID = $row1['BusID'];
+                $oldDate = $row1['Date'];
+                $oldTime = $row1['Time'];
+            } else {
+                throw new Exception("No Schedule found with Schedule ID: $ScheduleID");
+            }
+
+            // throw new Exception("$oldRouteID + $oldBusID + $oldDate + $oldTime");
+
+            if ($oldRouteID !== $U_RouteID) {
+                // throw new Exception("Not qule RouteID");
+                $stmt = $con->prepare("UPDATE bus_schedule SET RouteID = ? WHERE ScheduleID = ?");
+                $stmt->bind_param("ss", $U_RouteID, $ScheduleID);
+                if (!$stmt->execute()) {
+                    throw new Exception("Failed to update No Of Seat : $ScheduleID");
+                }
+                $stmt->close();
+            }
+
+            if ($oldBusID !== $U_BusID) {
+                // throw new Exception("Not qule BusID");
+                $stmt = $con->prepare("UPDATE bus_schedule SET BusID = ? WHERE ScheduleID = ?");
+                $stmt->bind_param("ss", $U_BusID, $ScheduleID);
+                if (!$stmt->execute()) {
+                    throw new Exception("Failed to update No Of Seat : $ScheduleID");
+                }
+                $stmt->close();
+            }
+
+            if ($oldDate !== $U_Date) {
+                // throw new Exception("Not qule Date");
+                $stmt = $con->prepare("UPDATE bus_schedule SET Date = ? WHERE ScheduleID = ?");
+                $stmt->bind_param("ss", $U_Date, $ScheduleID);
+                if (!$stmt->execute()) {
+                    throw new Exception("Failed to update No Of Seat : $ScheduleID");
+                }
+                $stmt->close();
+            }
+
+            if ($oldTime !== $U_Time) {
+                // throw new Exception("Not qule Time");
+                $stmt = $con->prepare("UPDATE bus_schedule SET Time = ? WHERE ScheduleID = ?");
+                $stmt->bind_param("ss", $U_Time, $ScheduleID);
+                if (!$stmt->execute()) {
+                    throw new Exception("Failed to update No Of Seat : $ScheduleID");
+                }
+                $stmt->close();
+            }
+
+
+            return true;
+        } catch (Exception $e) {
+            error_log($e->getMessage(), 3, '/Backend/error.log');
+            echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+        } finally {
+            $this->db->disconnect();
         }
     }
 }

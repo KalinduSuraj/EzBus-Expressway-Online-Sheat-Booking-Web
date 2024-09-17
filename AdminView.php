@@ -312,25 +312,27 @@
                     <i class="bi bi-people icon"></i>Users
                 </a>
 
-                <ul class=" collapse list-unstyled menu" id="UsersMenu">
+                <ul class=" collapse list-unstyled menu  " id="UsersMenu">
                     <li><a href="#" id="Admin" data-url="AdminPanel/AdminAdminPanel.php">Admin</a></li>
                     <li><a href="#" id="Counter" data-url="AdminPanel/AdminCounterPanel.php">Counter</a></li>
                     <li><a href="#" id="Conductor" data-url="AdminPanel/AdminConductorPanel.php">Conductor</a></li>
-                   
+                    <li><a href="#" id="Passenger" data-url="AdminPanel/AdminPassengerPanel.php">Passenger</a></li>
+
                 </ul>
 
             </li>
             <!-- Driver -->
-             <li><a href="#" id="Driver" data-url="AdminPanel/AdminDriverPanel.php"><i class="bi bi-person icon"></i>Drivers </a></li>
+            <li><a href="#" id="Driver" data-url="AdminPanel/AdminDriverPanel.php"><i class="bi bi-person icon"></i>Drivers </a></li>
             <!-- Route -->
             <li><a href="#" id="Route" data-url="AdminPanel/AdminRoutePanel.php"><i class="bi bi-geo-alt icon"></i>Routes </a></li>
             <!-- Buss -->
             <li><a href="#" id="Bus" data-url="AdminPanel/AdminBusPanel.php"><i class="bi bi-bus-front-fill icon"></i></i>Buses </a></li>
             <!-- Schedule -->
             <li><a href="#" id="Schedule" data-url="AdminPanel/AdminSchedulePanel.php"><i class="bi bi-calendar-range icon"></i>Schedules </a></li>
-            
+            <!-- Bookings -->
+            <li><a href="#" id="Booking" data-url="AdminPanel/AdminBookingPanel.php"><i class="bi bi-file-earmark-text icon"></i>Bookings</a></li>
             <!-- Reports -->
-            <li><a href="#" id="Report" data-url=""><i class="bi bi-file-earmark-text icon"></i>Reports</a></li>
+            <li><a href="#" id="Report" data-url="AdminPanel/AdminReportPanel.php"><i class="bi bi-file-earmark-text icon"></i>Reports</a></li>
             <!-- <li>
                 <a href="#ReportsMenu" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                     <i class="bi bi-file-earmark-text icon"></i>Reports
@@ -360,7 +362,7 @@
 
                     <!-- Show Name -->
                     <div class="text-muted pt-2 text-capitalize d-flex">
-                        <h6>Hi,  </h6>
+                        <h6>Hi, </h6>
                         <h6 id="ShowUserName">Kalindu Suraj</h6>
                     </div>
                     <!-- Divider -->
@@ -405,7 +407,7 @@
             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
-            
+
         </div>
     </div>
 

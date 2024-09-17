@@ -1,7 +1,9 @@
 <?php
-class Passenger extends User {
+class Passenger extends User
+{
 
-    public function register(string $name, string $password, string $contact, string $email) {
+    public function register(string $name, string $password, string $contact, string $email)
+    {
         try {
             // Begin transaction
             mysqli_begin_transaction($this->db->getConnection());
@@ -10,8 +12,8 @@ class Passenger extends User {
             $userID = $this->userIDIncrement();
             //PassengerID
             $passengerId = $this->generateNewPassengerID();
-            
-            
+
+
 
             // Registration process
             $sql2 = "SELECT Email FROM user WHERE Email='$email'";
@@ -78,5 +80,68 @@ class Passenger extends User {
             return null;
         }
     }
+
+    public function ViewPassenger(string $type)
+    {
+        $conn = $this->db->getConnection();
+        try {
+            // echo $return = "View Admin Data";
+            $query = "SELECT * FROM passengerview WHERE status= ? ORDER BY PassengerID ASC; ";
+            $stmt = $conn->prepare($query);
+            $stmt->bind_param("s", $type);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $res_array = [];
+
+            if ($result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                    array_push($res_array, $row);
+                }
+                header('Content-type: application/json');
+                echo json_encode($res_array);
+            } else {
+                header('Content-type: application/json');
+                echo json_encode(['success' => false, 'message' => 'No Record Found']);
+            }
+
+            $stmt->close();
+        } catch (Exception $e) {
+            error_log($e->getMessage(), 3, '/Backend/error.log');
+            echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+        }
+    }
+
+    public function SearchPassenger(string $type, string $txtSearch)
+    {
+        $conn = $this->db->getConnection();
+        try {
+            $query = "SELECT * FROM passengerview WHERE status = ? 
+                  AND (PassengerID LIKE ? OR Name LIKE ? OR Email LIKE ? OR Contact LIKE ?) 
+                  ORDER BY PassengerID ASC";
+
+            $stmt = $conn->prepare($query);
+            $searchTerm = '%' . $txtSearch . '%';
+            $stmt->bind_param("sssss", $type, $searchTerm, $searchTerm, $searchTerm, $searchTerm);
+            $stmt->execute();
+
+            $result = $stmt->get_result();
+            $res_array = [];
+
+            if ($result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                    array_push($res_array, $row);
+                }
+                header('Content-type: application/json');
+                echo json_encode($res_array);
+            } else {
+                header('Content-type: application/json');
+                echo json_encode(['success' => false, 'message' => 'No Record Found']);
+            }
+
+            $stmt->close();
+        } catch (Exception $e) {
+            error_log($e->getMessage(), 3, '/Backend/error.log');
+            echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+        }
+    }
 }
-?>
