@@ -94,7 +94,7 @@
 
         /* Main */
         main {
-            padding: 24px 20px 20px 20px;
+            padding: 5px 20px 20px 20px;
             width: 100%;
         }
 
@@ -150,7 +150,7 @@
         </div>
     </div>
 
-    <div class="mt-5">
+    <div class="mt-3">
         <table class="table table-hover table-striped " border="1.5" id="CounterViewTable">
             <thead>
                 <tr class="table-success ">

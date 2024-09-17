@@ -4,6 +4,9 @@ require_once __DIR__ . "/BackEnd/Admin.php";
 require_once __DIR__ . "/BackEnd/Counter.php";
 require_once __DIR__ . "/BackEnd/Conductor.php";
 require_once __DIR__ . "/BackEnd/Driver.php";
+require_once __DIR__ . "/BackEnd/Route.php";
+require_once __DIR__ . "/BackEnd/Schedule.php";
+require_once __DIR__ . "/BackEnd/Bus.php";
 
 ini_set('display_errors', 0);
 ini_set('log_errors', 1);
@@ -419,3 +422,320 @@ if (isset($_POST['action']) && $_POST['action'] == 'ChangeStatusDriver') {
     }
     exit();
 }
+
+/*------------------------------------------------------------------------------------------------------------------*/
+// Search Route Data
+if (isset($_GET['action']) && $_GET['action'] == 'SearchRoute') {
+    
+    $type = $_GET['Type'];
+    $txtSearch = $_GET['txtSearch'];
+
+    $route=new Route(); 
+    $route-> Search($type,$txtSearch);
+    exit();
+}
+
+// Get Route next ID
+if (isset($_GET['action']) && $_GET['action'] == 'getNextRouteID') {
+    
+    $route = new Route();
+    $newRouteID = $route->generateNewRouteID();
+    echo json_encode(['success' => true, 'newRouteID' => $newRouteID]);
+}
+
+// Add Route Data
+if (isset($_POST['action']) && $_POST['action'] == 'addRoute') {
+    
+    $From = $_POST['From'];
+    $To = $_POST['To'];
+    $Price = $_POST['Price'];
+
+    $Route = new Route();
+    try {
+        $result = $Route->AddRoute($From, $To, $Price);
+
+        if ($result) {
+            echo json_encode(['success' => true, 'message' => 'Route added successfully']);
+        }
+    } catch (Exception $e) {
+        error_log("Error: " . $e->getMessage());
+        echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+    }
+
+    exit();
+}
+
+// Update Route Data
+if (isset($_POST['action']) && $_POST['action'] == 'updateRoute') {
+    
+    $RouteID = $_POST['RouteID'];
+    $U_Price = $_POST['Price'];
+
+    $Route = new Route();
+    try {
+        $result = $Route->Update($RouteID, $U_Price);
+
+        if ($result) {
+            echo json_encode(['success' => true, 'message' => 'Route updateed successfully']);
+        }
+    } catch (Exception $e) {
+        // Log the error for debugging
+        error_log("Error: " . $e->getMessage());
+        // Return the error as a JSON response
+        echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+    }
+
+    exit();
+}
+
+// Get Route Data
+if (isset($_GET['action']) && $_GET['action'] == 'getRouteData') {
+    
+    //echo $return = "getRouteData";
+    $type = $_GET['Type'];
+    $route=new Route(); 
+    $route-> ViewRoute($type);
+    exit();
+}
+
+// Deactive Route Data
+if (isset($_POST['action']) && $_POST['action'] == 'ChangeStatusRoute') {
+    
+    $RouteID = $_POST['RouteID'];
+    $status = $_POST['Status'];
+    $Route = new Route();
+    try {
+        $result = $Route->ChangeStatusRoute($RouteID,$status);
+        if ($result) {
+            if($status == 0){
+                echo json_encode(['success' => true, 'message' => 'Route Deactivate successfully']);
+            }else{
+                echo json_encode(['success' => true, 'message' => 'Route Activate successfully']);
+            }
+        }
+    } catch (Exception $e) {
+        error_log("Error: " . $e->getMessage());
+        echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+    }
+    exit();
+}
+
+/*------------------------------------------------------------------------------------------------------------------*/
+// Search Bus Data
+if (isset($_GET['action']) && $_GET['action'] == 'SearchBus') {
+    
+    $type = $_GET['Type'];
+    $txtSearch = $_GET['txtSearch'];
+    
+    $bus=new Bus(); 
+    $bus-> Search($type,$txtSearch);
+    exit();
+}
+
+// Get Bus next ID
+if (isset($_GET['action']) && $_GET['action'] == 'getNextBusID') {
+    
+    $bus = new Bus();
+    $newBusID = $bus->generateNewBusID();
+    echo json_encode(['success' => true, 'newBusID' => $newBusID]);
+}
+
+// Add Bus Data
+if (isset($_POST['action']) && $_POST['action'] == 'addBus') {
+    
+    $BusNumber = $_POST['BusNumber'];
+    $NoOfSeat = $_POST['NoOfSeat'];
+    $DriverID = $_POST['DriverID'];
+    $ConductorID = $_POST['ConductorID'];
+
+    $Bus = new Bus();
+    try {
+        $result = $Bus->AddBus( $BusNumber,  $NoOfSeat,  $DriverID, $ConductorID);
+
+        if ($result) {
+            echo json_encode(['success' => true, 'message' => 'Bus added successfully']);
+        }
+    } catch (Exception $e) {
+        error_log("Error: " . $e->getMessage());
+        echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+    }
+
+    exit();
+}
+
+// Update Bus Data
+if (isset($_POST['action']) && $_POST['action'] == 'updateBus') {
+    
+    $BusID = $_POST['BusID'];
+    $U_NoOfSeat= $_POST['U_NoOfSeat'];
+    $U_DriverID = $_POST['U_DriverID'];
+    $U_ConductorID = $_POST['U_ConductorID'];
+
+    $Bus = new Bus();
+    try {
+        $result = $Bus->Update( $BusID, $U_NoOfSeat, $U_DriverID , $U_ConductorID);
+
+        if ($result) {
+            echo json_encode(['success' => true, 'message' => 'Bus updateed successfully']);
+        }
+    } catch (Exception $e) {
+        // Log the error for debugging
+        error_log("Error: " . $e->getMessage());
+        // Return the error as a JSON response
+        echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+    }
+
+    exit();
+}
+
+// Get Bus Data
+if (isset($_GET['action']) && $_GET['action'] == 'getBusData') {
+    //echo $return = "getBusData";
+    $type = $_GET['Type'];
+    $Bus=new Bus(); 
+    $Bus-> ViewBus($type);
+    exit();
+}
+
+// Deactive/Active Bus 
+if (isset($_POST['action']) && $_POST['action'] == 'ChangeStatusBus') {
+    
+    $BusID = $_POST['BusID'];
+    $status = $_POST['Status'];
+    // echo json_encode(['success' => false, 'message' => $BusID,$status]);
+
+    $Bus = new Bus();
+    try {
+        $result = $Bus->ChangeStatusBus($BusID,$status);
+        if ($result) {
+            if($status == 0){
+                echo json_encode(['success' => true, 'message' => 'Bus Deactivate successfully']);
+            }else{
+                echo json_encode(['success' => true, 'message' => 'Bus Activate successfully']);
+            }
+        }
+    } catch (Exception $e) {
+        error_log("Error: " . $e->getMessage());
+        echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+    }
+    exit();
+}
+
+if (isset($_GET['action']) && $_GET['action'] == 'GetFreeDriver') {
+    
+    $type = $_GET['Type'];
+    $txtSearch = $_GET['txtSearch'];
+
+    $BUS=new BUS(); 
+    $BUS-> GetFreeDriver($txtSearch);
+    exit();
+}
+
+if (isset($_GET['action']) && $_GET['action'] == 'GetFreeConductor') {
+    
+    $type = $_GET['Type'];
+    $txtSearch = $_GET['txtSearch'];
+    
+    $BUS=new BUS(); 
+    $BUS-> GetFreeConductor($txtSearch);
+    exit();
+}
+
+/*------------------------------------------------------------------------------------------------------------------*/
+if (isset($_GET['action']) && $_GET['action'] == 'getScheduleData') {
+    //echo $return = "getScheduleData";
+    $type = $_GET['Type'];
+    $Schedule=new Schedule(); 
+    $Schedule-> ViewSchedule($type);
+    exit();
+}
+
+if (isset($_GET['action']) && $_GET['action'] == 'getNextScheduleID') {
+    $Schedule = new Schedule();
+    $newScheduleID = $Schedule->generateNewScheduleID();
+    echo json_encode(['success' => true, 'newScheduleID' => $newScheduleID]);
+}
+
+if (isset($_POST['action']) && $_POST['action'] == 'addSchedule') {
+    
+    $RouteID = $_POST['RouteID'];
+    $BusID = $_POST['BusID'];
+    $Date = $_POST['Date'];
+    $Time = $_POST['Time'];
+
+    $Schedule = new Schedule();
+    try {
+        $result = $Schedule->AddSchedule( $RouteID,  $BusID,  $Date, $Time);
+
+        if ($result) {
+            echo json_encode(['success' => true, 'message' => 'Bus added successfully']);
+        }
+    } catch (Exception $e) {
+        error_log("Error: " . $e->getMessage());
+        echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+    }
+
+    exit();
+}
+
+if (isset($_POST['action']) && $_POST['action'] == 'ChangeStatusSchedule') {
+    
+    $ScheduleID = $_POST['ScheduleID'];
+    $status = $_POST['Status'];
+    // echo json_encode(['success' => false, 'message' => $ScheduleID,$status]);
+
+    $Schedule = new Schedule();
+    try {
+        $result = $Schedule->ChangeStatusSchedule($ScheduleID,$status);
+        if ($result) {
+            if($status == 0){
+                echo json_encode(['success' => true, 'message' => 'Schedule Deactivate successfully']);
+            }else{
+                echo json_encode(['success' => true, 'message' => 'Schedule Activate successfully']);
+            }
+        }
+    } catch (Exception $e) {
+        error_log("Error: " . $e->getMessage());
+        echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+    }
+    exit();
+}
+
+if (isset($_GET['action']) && $_GET['action'] == 'SearchSchedule') {
+    
+    $type = $_GET['Type'];
+    $txtSearch = $_GET['txtSearch'];
+    
+    $Schedule=new Schedule(); 
+    $Schedule-> Search($type,$txtSearch);
+    exit();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

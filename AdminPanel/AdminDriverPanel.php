@@ -93,7 +93,7 @@
 
         /* Main */
         main {
-            padding: 24px 20px 20px 20px;
+            padding: 5px 20px 20px 20px;
             width: 100%;
         }
 
@@ -148,7 +148,7 @@
             </select>
         </div>
     </div>
-    <div class="mt-5">
+    <div class="mt-3">
         <table class="table table-hover table-striped " border="1.5" id="AdminViewTable">
             <thead>
                 <tr class="table-success ">
@@ -217,13 +217,13 @@
     </div>
 
      <!-- Edit Driver Form -->
-     <div class="modal fade" id="EditDriverModal" tabindex="-1" aria-labelledby="EditDriverModalLabel" aria-hidden="true">
+     <div class="modal fade" id="EditDriverModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="EditDriverModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <form action="" method="post" style="width: 100%; min-width: 300px;">
                     <div class="modal-header flex-column align-items-center mb-0">
                         <h5 class="modal-title" id="EditDriverModalLabel">Update New Driver</h5>
-                        <p class="text-muted text-center mb-3">Complete the form below to Update a new Driver</p>
+                        <p class="text-muted text-center mb-3">Complete the form below to Update a Driver</p>
                         <div class="row mb-0 w-100 pb-0">
                             <div class="col text-center ">
                                 <b>
@@ -492,7 +492,6 @@
                 dataType: 'json',
                 success: function(response) {
                     console.log("Data sent:\n", response);
-                    console.log("response.success:\n", response.success);
 
                     if (response.success) {
                         $('#AddDriverModal').modal('hide');
@@ -502,6 +501,9 @@
                         showToast('Success', response.message, 'success');
                     } else {
                         showToast('Error', response.message, 'error');
+                        if (response.message === "NIC already exists.") {
+                            $('#U_nic_err').text('NIC already exists');
+                        }
                     }
                 },
                 error: function(xhr, status, error) {
@@ -835,8 +837,8 @@
                         showToast('Success', response.message, 'success');
                     } else {
                         showToast('Error', response.message || "Failed to Update Driver", 'error');
-                        if (response.message === "Email already exists.") {
-                            $('#U_email_err').text('Email already exists');
+                        if (response.message === "NIC already exists") {
+                            $('#U_nic_err').text('NIC already exists');
                         }
                     }
                 },

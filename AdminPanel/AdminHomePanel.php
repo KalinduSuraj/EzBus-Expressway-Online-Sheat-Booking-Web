@@ -48,7 +48,7 @@
         }
         /* Main */
         main {
-            padding: 24px 20px 20px 20px;
+            padding: 5px 20px 20px 20px;
             width: 100%;
         }
 
