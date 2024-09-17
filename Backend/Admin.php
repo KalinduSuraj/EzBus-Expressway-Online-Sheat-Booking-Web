@@ -237,12 +237,15 @@ class Admin extends User
         $conn = $this->db->getConnection();
         try {
             // echo $return = "View Admin Data";
-            $queary = "SELECT * FROM adminview WHERE status='$type' ORDER BY AdminID ASC; ";
-            $queary_run = mysqli_query($conn, $queary);
+            $queary = "SELECT * FROM adminview WHERE status= ? ORDER BY AdminID ASC; ";
+            $stmt = $conn->prepare($queary);
+            $stmt->bind_param("s", $type);
+            $stmt->execute();
+            $result = $stmt->get_result();
             $res_array = [];
 
-            if (mysqli_num_rows($queary_run) > 0) {
-                foreach ($queary_run as $row) {
+            if (mysqli_num_rows($result) > 0) {
+                foreach ($result as $row) {
                     array_push($res_array, $row);
                 }
                 header('Content-type: application/json');

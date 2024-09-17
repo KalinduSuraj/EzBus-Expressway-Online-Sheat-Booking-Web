@@ -462,12 +462,12 @@
 
         });
 
-        // $('#EditFormCancel').on('click', function(event) {
-        //     event.preventDefault();
-        //     $('.errMsg').text('');
-        //     $('.form-control').val('');
+        $('#EditFormCancel').on('click', function(event) {
+            event.preventDefault();
+            $('.errMsg').text('');
+            $('.form-control').val('');
 
-        // });
+        });
 
         $('#AddSchedule').on('click', function(event) {
             //alert("click")
@@ -480,7 +480,7 @@
             var Date = $('#date').val().trim();
             var Time = $('#time').val().trim();
 
-            var IsValid = AddScheduleValidation(RouteID, BusID, Date, Time);
+            var IsValid = ScheduleValidation(RouteID, BusID, Date, Time);
             if (IsValid == true) {
                 //alert(isValid);
                 AddSchedule(RouteID, BusID, Date, Time);
@@ -489,25 +489,29 @@
             }
         });
 
-        // $('#UpdateBus').on('click', function(event) {
-        //     //alert("click")
-        //     event.preventDefault();
+        $('#UpdateSchedule').on('click', function(event) {
+            //alert("click")
+            event.preventDefault();
 
-        //     var isValid = true;
+            var isValid = true;
 
-        //     var BusID = $('#EditFormBusID').text();
-        //     var U_NoOfSeat = $('#U_NoOfSeat').val().trim();
-        //     var U_DriverID = $('#U_driverInput').val().trim();
-        //     var U_ConsuctorID = $('#U_conductorInput').val().trim();
+            var ScheduleID = $('#EditFormScheduleID').text();
+            var U_RouteInput = $('#U_RouteInput').val().trim();
+            var U_BusInput = $('#U_BusInput').val().trim();
+            var U_date = $('#U_date').val().trim();
+            var U_time = $('#U_time').val().trim();
 
-        //     var IsValid = UpdateBusValidation(U_NoOfSeat, U_DriverID, U_ConsuctorID);
-        //     if (IsValid == true) {
-        //         //alert(isValid);
-        //         UpdateBus(BusID, U_NoOfSeat, U_DriverID, U_ConsuctorID);
-        //     } else {
-        //         console.log("Check Your Inputs");
-        //     }
-        // });
+            console.log(ScheduleID, U_RouteInput, U_BusInput, U_date, U_time);
+
+
+            var IsValid = ScheduleValidation(U_RouteInput, U_BusInput, U_date, U_time);
+            if (IsValid == true) {
+                //alert(isValid);
+                UpdateSchedule(ScheduleID, U_RouteInput, U_BusInput, U_date, U_time);
+            } else {
+                console.log("Check Your Inputs");
+            }
+        });
 
         $('#confirmDelete').on('click', function(event) {
             var ScheduleID = $(this).data('scheduleid');
@@ -518,19 +522,14 @@
         })
 
         $('#confirmActive').on('click', function(event) {
-            var ScheduleID  = $(this).data('scheduleid');
+            var ScheduleID = $(this).data('scheduleid');
             var status = 1;
-            ChangeStatus(ScheduleID , status);
+            ChangeStatus(ScheduleID, status);
             $('#ActiveModel').modal('hide');
 
         });
 
-        $('#txtSearch').keyup(function() {
-            var type = $('#activeStatus').val().trim();
-            var txtSearch = $('#txtSearch').val().trim();
-            //alert(type + txtSearch)
-            Search(type, txtSearch);
-        });
+        
 
         function setDateLimit() {
             // Get today's date
@@ -593,7 +592,7 @@
                         $.each(response, function(key, schedule) {
                             // console.log(Bus['BusID']);
 
-                            let row = '<tr data-scheduleid="' + schedule['ScheduleID'] + '" data-date="' + schedule['Date'] + '" data-time="' + schedule['Formatted_time'] + '" data-routeid="' + schedule['RouteID'] +  '" data-fromcity="' + schedule['FromCity'] +  '" data-tocity="' + schedule['ToCity'] +'" data-busid="' + schedule['BusID'] +'" data-busno="' + schedule['BusNumber'] +'">' +
+                            let row = '<tr data-scheduleid="' + schedule['ScheduleID'] + '" data-date="' + schedule['Date'] + '" data-time="' + schedule['Formatted_time'] + '" data-routeid="' + schedule['RouteID'] + '" data-fromcity="' + schedule['FromCity'] + '" data-tocity="' + schedule['ToCity'] + '" data-busid="' + schedule['BusID'] + '" data-busno="' + schedule['BusNumber'] + '">' +
                                 '<th scope="row">' + schedule['ScheduleID'] + '</th>' +
                                 '<td>' + schedule['Date'] + '</td>' +
                                 '<td>' + schedule['Formatted_time'] + '</td>' +
@@ -651,7 +650,7 @@
 
                             // Delete modal content and show the modal
                             $('#ScheduleID').text('\tScheduleID    : ' + ScheduleID);
-                            $('#Routeinfo').text('\tRoute  : ' + FromCity +' - ' + ToCity );
+                            $('#Routeinfo').text('\tRoute  : ' + FromCity + ' - ' + ToCity);
                             $('#BusNo').text('\tBus No  : ' + BusNumber);
 
                             // console.log('\tRoute  : ' + FromCity +' - ' + ToCity );
@@ -672,7 +671,7 @@
                             var BusNumber = $row.data('busno');
 
                             $('#ActiveScheduleID').text('\tScheduleID    : ' + ScheduleID);
-                            $('#ActiveRouteinfo').text('\tRoute  : ' + FromCity +' - ' + ToCity );
+                            $('#ActiveRouteinfo').text('\tRoute  : ' + FromCity + ' - ' + ToCity);
                             $('#ActiveBusNo').text('\tBus No  : ' + BusNumber);
 
                             $('#confirmActive').data('scheduleid', ScheduleID);
@@ -783,7 +782,7 @@
             });
         }
 
-        function AddScheduleValidation(RouteID, BusID, Date, Time) {
+        function ScheduleValidation(RouteID, BusID, Date, Time) {
             $('.errMsg').text('');
             var IsValid = true;
 
@@ -876,26 +875,30 @@
             });
         }
 
-        function Search(type,txtSearch){
+        function Search(type, txtSearch) {
+            console.log("Serach:\n", type, txtSearch);
             $('.ScheduleData').empty();
 
             $.ajax({
                 type: "GET",
                 url: "http://localhost/testweb/GitHub/EzBus-Expressway-Online-Sheat-Booking-Web/process.php", // Correct URL to Bus.php
                 data: {
-                    action: 'getScheduleData',
+                    action: 'SearchSchedule',
                     'Type': type,
+                    'txtSearch': txtSearch,
                 },
                 dataType: 'json',
                 success: function(response) {
                     console.log("Data received:\n", response);
+                    // $('.ScheduleData').empty();
+
                     if (response.message) {
                         $('.ScheduleData').append('<tr><td colspan="6" class="text-center fw-bold ">' + response.message + '</td></tr>');
                     } else {
                         $.each(response, function(key, schedule) {
                             // console.log(Bus['BusID']);
 
-                            let row = '<tr data-scheduleid="' + schedule['ScheduleID'] + '" data-date="' + schedule['Date'] + '" data-time="' + schedule['Formatted_time'] + '" data-routeid="' + schedule['RouteID'] +  '" data-fromcity="' + schedule['FromCity'] +  '" data-tocity="' + schedule['ToCity'] +'" data-busid="' + schedule['BusID'] +'" data-busno="' + schedule['BusNumber'] +'">' +
+                            let row = '<tr data-scheduleid="' + schedule['ScheduleID'] + '" data-date="' + schedule['Date'] + '" data-time="' + schedule['Formatted_time'] + '" data-routeid="' + schedule['RouteID'] + '" data-fromcity="' + schedule['FromCity'] + '" data-tocity="' + schedule['ToCity'] + '" data-busid="' + schedule['BusID'] + '" data-busno="' + schedule['BusNumber'] + '">' +
                                 '<th scope="row">' + schedule['ScheduleID'] + '</th>' +
                                 '<td>' + schedule['Date'] + '</td>' +
                                 '<td>' + schedule['Formatted_time'] + '</td>' +
@@ -953,7 +956,7 @@
 
                             // Delete modal content and show the modal
                             $('#ScheduleID').text('\tScheduleID    : ' + ScheduleID);
-                            $('#Routeinfo').text('\tRoute  : ' + FromCity +' - ' + ToCity );
+                            $('#Routeinfo').text('\tRoute  : ' + FromCity + ' - ' + ToCity);
                             $('#BusNo').text('\tBus No  : ' + BusNumber);
 
                             // console.log('\tRoute  : ' + FromCity +' - ' + ToCity );
@@ -974,7 +977,7 @@
                             var BusNumber = $row.data('busno');
 
                             $('#ActiveScheduleID').text('\tScheduleID    : ' + ScheduleID);
-                            $('#ActiveRouteinfo').text('\tRoute  : ' + FromCity +' - ' + ToCity );
+                            $('#ActiveRouteinfo').text('\tRoute  : ' + FromCity + ' - ' + ToCity);
                             $('#ActiveBusNo').text('\tBus No  : ' + BusNumber);
 
                             $('#confirmActive').data('scheduleid', ScheduleID);
@@ -983,14 +986,48 @@
                     }
                 },
                 error: function(xhr, status, error) {
-                    console.error("Error fetching Bus data: " + status + " - " + error);
+                    console.error("Error fetching Schedule data: " + status + " - " + error);
                 }
             });
         }
 
+        function UpdateSchedule(ScheduleID, U_RouteInput, U_BusInput, U_date, U_time) {
+            console.log(ScheduleID, U_RouteInput, U_BusInput, U_date, U_time);
+            $.ajax({
+                type: "POST",
+                url: "http://localhost/testweb/GitHub/EzBus-Expressway-Online-Sheat-Booking-Web/process.php",
+                data: {
+                    action: 'updateSchedule',
+                    'ScheduleID': ScheduleID,
+                    'U_RouteID': U_RouteInput,
+                    'U_BusID': U_BusInput,
+                    'U_Date': U_date,
+                    'U_Time': U_time,
+                },
+                dataType: 'json',
+                success: function(response) {
+                    console.log("Data sent:\n", response);
 
+                    if (response.success) {
+                        $('#EditScheduleModal').modal('hide');
+                        //Clear Form
+                        $('.form-control').val('');
+                        GetScheduleData($('#activeStatus').val().trim());
+                        showToast('Success', response.message, 'success');
+                    } else {
+                        showToast('Error', response.message, 'error');
+                        if (response.message === "Schedule is already exists.") {
+                            $('#Driver_err').text("Schedule is already exists.");
+                        }
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error adding Schedule: " + status + " - " + error);
+                    showToast('Error', "An error occurred: " + status + " - " + error, 'error');
+                }
 
-
+            });
+        }
 
         function showToast(title, message, type) {
             const borderClass = type === 'success' ? 'toast-success' : 'toast-error';

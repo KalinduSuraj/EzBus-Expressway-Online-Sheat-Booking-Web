@@ -7,6 +7,10 @@ require_once __DIR__ . "/BackEnd/Driver.php";
 require_once __DIR__ . "/BackEnd/Route.php";
 require_once __DIR__ . "/BackEnd/Schedule.php";
 require_once __DIR__ . "/BackEnd/Bus.php";
+require_once __DIR__ . "/BackEnd/Passenger.php";
+require_once __DIR__ . "/BackEnd/Booking.php";
+
+
 
 ini_set('display_errors', 0);
 ini_set('log_errors', 1);
@@ -707,26 +711,60 @@ if (isset($_GET['action']) && $_GET['action'] == 'SearchSchedule') {
     $txtSearch = $_GET['txtSearch'];
     
     $Schedule=new Schedule(); 
-    $Schedule-> Search($type,$txtSearch);
+    $Schedule-> SearchSchedule($type,$txtSearch);
     exit();
 }
 
+if (isset($_POST['action']) && $_POST['action'] == 'updateSchedule') {
+    
+    $ScheduleID = $_POST['ScheduleID'];
+    $U_RouteID= $_POST['U_RouteID'];
+    $U_BusID = $_POST['U_BusID'];
+    $U_Date = $_POST['U_Date'];
+    $U_Time = $_POST['U_Time'];
 
+    $Schedule = new Schedule();
+    try {
+        $result = $Schedule->UpdateSchedule( $ScheduleID, $U_RouteID,  $U_BusID,  $U_Date, $U_Time);
 
+        if ($result) {
+            echo json_encode(['success' => true, 'message' => 'Schedule updateed successfully']);
+        }
+    } catch (Exception $e) {
+        error_log("Error: " . $e->getMessage());
+        echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+    }
 
+    exit();
+}
 
+/*------------------------------------------------------------------------------------------------------------------*/
+if (isset($_GET['action']) && $_GET['action'] == 'getPassengerData') {
+    //echo $return = "getScheduleData";
+    $type = $_GET['Type'];
+    $Passenger=new Passenger(); 
+    $Passenger-> ViewPassenger($type);
+    exit();
+}
 
+if (isset($_GET['action']) && $_GET['action'] == 'searchPassenger') {
+    
+    $type = $_GET['Type'];
+    $txtSearch = $_GET['txtSearch'];
+    
+    $Passenger=new Passenger(); 
+    $Passenger-> SearchPassenger($type,$txtSearch);
+    exit();
+}
 
-
-
-
-
-
-
-
-
-
-
+/*------------------------------------------------------------------------------------------------------------------*/
+if (isset($_GET['action']) && $_GET['action'] == 'getBookingData') {
+    //echo $return = "getBookingData";
+    $type = $_GET['Type'];
+    $Booking=new Booking(); 
+    $Booking-> ViewBooking($type);
+    exit();
+}
 
 
 
