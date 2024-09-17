@@ -52,7 +52,7 @@ class Admin extends User
                 throw new Exception("Failed to insert into admin: " . $stmtAdmin->error);
             }
 
-            // Commit the transaction if both inserts were successful
+            
             mysqli_commit($conn);
             return true;
         } catch (Exception $e) {
@@ -281,4 +281,5 @@ class Admin extends User
             echo json_encode(['success' => false, 'message' => $e->getMessage()]);
         }
     }
+    
 }

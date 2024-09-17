@@ -10,7 +10,72 @@ class Route{
         $this->db->connect();
     }
 
-    //Generate New Route ID
+    public function AddRoute(string $From, string $To,string $Price){
+        $con = $this->db->getConnection();
+        try {
+            mysqli_begin_transaction($con);
+
+            $routeID = $this->generateNewRouteID();
+            if (!$routeID) {
+                throw new Exception("Failed to generate a new Route ID.");
+            }
+
+            $checkRouteQuery = "SELECT * FROM route WHERE FromCity = ? AND ToCity = ? ";
+            $stmtRoute = $con->prepare($checkRouteQuery);
+            $stmtRoute->bind_param("ss", $From,$To);
+            $stmtRoute->execute();
+            $resultRoute = $stmtRoute->get_result();
+
+            if ($resultRoute->num_rows > 0) {
+                throw new Exception("Route already exists.");
+            }
+
+            // Insert queries
+            $query1 = "INSERT INTO route(RouteID, FromCity,ToCity,Price,AdminID) VALUES(?,?,?,?,?)";
+            $stmt = $con->prepare($query1);
+            $LogedUserID = "A001";
+            $stmt->bind_param("sssds", $routeID, $From, $To, $Price, $LogedUserID);
+            if (!$stmt->execute()) {
+                throw new Exception("Failed to insert into Driver: " . $stmt->error);
+            }
+            $stmt->close();
+            return true;
+        } catch (Exception $e) {
+            error_log($e->getMessage(), 3, '/Backend/error.log');
+            echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+        } finally {
+            $this->db->disconnect();
+        }
+    }
+
+    public function Update(string $RouteID, string $U_Price){
+        $con = $this->db->getConnection();
+        try {
+            mysqli_begin_transaction($con);
+
+            $query1 = "UPDATE route SET Price = ? WHERE RouteID = ? ";
+            $stmt = $con->prepare($query1);
+            $stmt->bind_param("ds", $U_Price ,$RouteID);
+            if (!$stmt->execute()) {
+                throw new Exception("Failed to Update into Driver: " . $stmt->error);
+            }
+            if ($stmt->affected_rows > 0) {
+                $stmt->close();
+                return true;
+            } else {
+                throw new Exception("No rows were updated for RouteID: " . $RouteID);
+            }
+            mysqli_commit($con);
+            $stmt->close();
+            return true;
+        } catch (Exception $e) {
+            error_log($e->getMessage(), 3, '/Backend/error.log');
+            echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+        } finally {
+            $this->db->disconnect();
+        }
+    }
+
     public function generateNewRouteID()
     {
         $conn = $this->db->getConnection();
@@ -44,10 +109,10 @@ class Route{
         }
     }
 
-    public function ViewRouter(string $type)
+    public function ViewRoute(string $type)
     {
         try {
-            $query = "SELECT * FROM router WHERE status = ? ORDER BY RouterID ASC";
+            $query = "SELECT * FROM route WHERE status = ? ORDER BY RouteID ASC";
             $stmt = $this->db->getConnection()->prepare($query);
             $stmt->bind_param("s", $type);
             $stmt->execute();
@@ -64,7 +129,6 @@ class Route{
                 header('Content-type: application/json');
                 echo json_encode(['success' => false, 'message' => 'No Record Found']);
             }
-
             $stmt->close();
         } catch (Exception $e) {
             error_log($e->getMessage(), 3, '/Backend/error.log');
@@ -72,22 +136,22 @@ class Route{
         }
     }
 
-    public function ChangeStatusRouter(string $routerID, string $status)
+    public function ChangeStatusRoute(string $RouteID, string $status)
     {
         $conn = $this->db->getConnection();
         try {
             mysqli_begin_transaction($conn);
 
-            // Deactive from Router table
-            $stmt2 = $conn->prepare("UPDATE  Router SET status='$status' WHERE RouterID= ? ");
-            $stmt2->bind_param("s", $routerID);
+            // Deactive from Route table
+            $stmt2 = $conn->prepare("UPDATE  route SET status='$status' WHERE RouteID= ? ");
+            $stmt2->bind_param("s", $RouteID);
             $res2 = $stmt2->execute();
 
             if (!$res2) {
                 if ($status == 0) {
-                    throw new Exception("Failed to Deactivate Router: " . mysqli_error($conn));
+                    throw new Exception("Failed to Deactivate Route: " . mysqli_error($conn));
                 } else {
-                    throw new Exception("Failed to Activate Router: " . mysqli_error($conn));
+                    throw new Exception("Failed to Activate Route: " . mysqli_error($conn));
                 }
             }
             return true;
@@ -103,11 +167,11 @@ class Route{
     {
         $conn = $this->db->getConnection();
         try {
-            $query = "SELECT * FROM route WHERE status = ?  AND (FromCity LIKE ? OR ToCity LIKE ? ) ORDER BY RouteID ASC";
+            $query = "SELECT * FROM route WHERE status = ?  AND (FromCity LIKE ? OR ToCity LIKE ? OR RouteID LIKE ? ) ORDER BY RouteID ASC";
 
             $stmt = $conn->prepare($query);
             $searchTerm = '%' . $txtSearch . '%';
-            $stmt->bind_param("sss", $type, $searchTerm, $searchTerm);
+            $stmt->bind_param("ssss", $type, $searchTerm, $searchTerm,$searchTerm);
             $stmt->execute();
 
             $result = $stmt->get_result();

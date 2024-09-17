@@ -92,7 +92,7 @@
 
         /* Main */
         main {
-            padding: 24px 20px 20px 20px;
+            padding: 5px 20px 20px 20px;
             width: 100%;
         }
 
@@ -130,10 +130,10 @@
             <li><a href="#" class="active">Route</a></li>
         </ul>
     </main>
-    
+
     <div class="row g-3 col-sm-6 p-0  ">
         <div class="col-auto">
-            <a href="#" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#AddRouteModal">
+            <a href="#" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#AddRouteModal" id="AddRouteModelButton">
                 <i class="bi bi-plus-lg"></i><span>Add Route</span>
             </a>
         </div>
@@ -147,15 +147,15 @@
             </select>
         </div>
     </div>
-    <div class="mt-5">
+    <div class="mt-3">
         <table class="table table-hover table-striped " border="1.5" id="RouteViewTable">
             <thead>
                 <tr class="table-success ">
-                    <th scope="col" width='20%'>#</th>
-                    <th scope="col" width='20%'>From</th>
-                    <th scope="col" width='20%'>To</th>
-                    <th scope="col" width='20%'>Ticket Price</th>
-                    <th width='20%' class=""></th>
+                    <th scope="col" width="22%">#</th>
+                    <th scope="col" width="22%">From</th>
+                    <th scope="col" width="22%">To</th>
+                    <th scope="col" width="22%">Ticket Price</th>
+                    <th> <!-- Action --></th>
                 </tr>
             </thead>
             <tbody class="RouteData">
@@ -167,7 +167,10 @@
             </tbody>
     </div>
 
-
+    <!-- Toast container -->
+    <div id="toastContainer" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+        <!-- Toasts will be appended here -->
+    </div>
 
     <!-- Add Route Form -->
     <div class="modal fade" id="AddRouteModal" tabindex="-1" aria-labelledby="AddRouteModalLabel" aria-hidden="true">
@@ -181,7 +184,7 @@
                             <div class="col text-center ">
                                 <b>
                                     <label class="form-label">Route ID : </label>
-                                    <label class="form-label" id="ShowRouteID">R00</label>
+                                    <label class="form-label" id="ShowRouteID"><!-- Show Route ID --></label>
                                 </b>
                             </div>
                         </div>
@@ -200,6 +203,9 @@
                                 <span class="errMsg" id="to_err"></span>
                             </div>
                         </div>
+                        <div class="col"> 
+                            <span class="errMsg" id="route_err"></span>
+                        </div>
                         <div class="col">
                             <label class="form-label">Ticket Price</label>
                             <input type="text" class="form-control" name="price" id="price" placeholder="100.00">
@@ -207,7 +213,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="reset" class="btn btn-secondary btn-outline-danger text-dark" data-bs-dismiss="modal">Cancel</button>
+                        <button type="reset" class="btn btn-secondary btn-outline-danger text-dark" data-bs-dismiss="modal" id="AddFormCancel">Cancel</button>
                         <button type="button" class="btn btn-success" id="AddRoute">Add Route</button>
                     </div>
                 </form>
@@ -215,105 +221,630 @@
         </div>
     </div>
 
-
-
-
-    <!----delete-modal start--------->
-    <div class="modal " tabindex="-1" id="Delete" role="dialog">
-        <div class="modal-dialog" role="document">
+    <!-- Edit Route Form -->
+    <div class="modal fade" id="EditRouteModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="EditRouteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Delete Routes</h5>
-                </div>
-                <div class="modal-body">
-                    <p>Are you sure you want to delete this Records</p>
-                    <p class="text-warning"><small>this action Cannot be Undone,</small></p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" onclick="document.getElementById('Delete').style.display='none'" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-danger" onclick="document.getElementById('Delete').style.display='none'" id="DeleteRoute">Delete</button>
-                </div>
+                <form action="" method="post" style="width: 100%; min-width: 300px;">
+                    <div class="modal-header flex-column align-items-center mb-0">
+                        <h5 class="modal-title" id="EditRouteModalLabel">Update New Route</h5>
+                        <p class="text-muted text-center mb-3">Complete the form below to Update a new Route</p>
+                        <div class="row mb-0 w-100 pb-0">
+                            <div class="col text-center ">
+                                <b>
+                                    <label class="form-label">Route ID : </label>
+                                    <label class="form-label" id="EditFormRouteID"><!-- Show Route ID --></label>
+                                </b>
+                            </div>
+                        </div>
+                        <button type="button" class="btn-close position-absolute end-0 top-0 m-2" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row mb-3">
+                            <div class="col">
+                                <label class="form-label">From :</label>
+                                <input type="text" class="form-control" name="U_from" id="U_from" placeholder="Galle" disabled>
+                                <span class="errMsg" id="U_from_err"></span>
+                            </div>
+                            <div class="col">
+                                <label class="form-label">To :</label>
+                                <input type="text" class="form-control" name="U_to" id="U_to" placeholder="Kadawatha" disabled>
+                                <span class="errMsg" id="U_to_err"></span>
+                            </div>
+                        </div>
+                        <div class="col"> 
+                            <span class="errMsg" id="U_route_err"></span>
+                        </div>
+                        <div class="col">
+                            <label class="form-label">Ticket Price</label>
+                            <input type="text" class="form-control" name="U_price" id="U_price" placeholder="100.00">
+                            <span class="errMsg" id="U_price_err"></span>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="reset" class="btn btn-secondary btn-outline-danger text-dark" data-bs-dismiss="modal" id="EditFormCancel">Cancel</button>
+                        <button type="button" class="btn btn-success" id="UpdateRoute">Update Route</button>
+                    </div>
+                </form>
             </div>
-
-
         </div>
     </div>
+
+    <!-- Delete Modal -->
+    <div class="modal fade" id="Delete" tabindex="-1" role="dialog" aria-labelledby="DeleteLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header custom-modal-header">
+                    <h5 class="modal-title" id="DeleteLabel">Deactive Route</h5>
+                    <button type="button" class="btn-close position-absolute end-0 top-0 m-2" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body mb-0">
+                    <p>Are you sure you want to deactive this Route?</p>
+                    <div class="ml-5">
+                        <b>
+
+                            <label id="RouteID"></label><br>
+                            <label id="From"></label><br>
+                            <label id="To"></label>
+
+                        </b>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" id="confirmDelete">Deactive</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Active Modal -->
+    <div class="modal fade" id="ActiveModel" tabindex="-1" data-bs-backdrop="static" role="dialog" aria-labelledby="ActiveLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header custom-modal-header-active">
+                    <h5 class="modal-title" id="ActiveLabel">Active Route</h5>
+                    <button type="button" class="btn-close position-absolute end-0 top-0 m-2" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body mb-0">
+                    <p>Are you sure you want to Active this Route ?</p>
+                    <div class="ml-5">
+                        <b>
+
+                            <label id="ActiveRouteID"></label><br>
+                            <label id="ActiveFrom"></label><br>
+                            <label id="ActiveTo"></label>
+
+                        </b>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-success" id="confirmActive">Active</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <script>
-        function clearErr() {
-            $('.errMsg').text('');
-        }
-
         $(document).ready(function() {
-            $('#AddRoute').on('click', function(event) {
-                // alert("click");
-                event.preventDefault(); // Prevent the form from submitting normally
-                // Clear previous error messages
-                clearErr();
+            var type = $('#activeStatus').val().trim();
+            // console.log(type);
+            GetRouteData(type);
+        });
 
-                var isValid = true;
+        $('#activeStatus').change(function() {
+            var type = $('#activeStatus').val().trim();
+            GetRouteData(type);
+        });
 
-                var from = $('#from').val().trim();
-                var to = $('#to').val().trim();
-                var price = $('#price').val().trim();
+        $('#txtSearch').keyup(function() {
+            var type = $('#activeStatus').val().trim();
+            var txtSearch = $('#txtSearch').val().trim();
+            //alert(type + txtSearch)
+            Search(type, txtSearch);
+        });
 
+        $('#AddRouteModelButton').on('click', function(event) {
+            SetRouteID();
+        });
+
+        $('#AddFormCancel').on('click', function(event) {
+            event.preventDefault();
+            $('.errMsg').text('');
+            $('.form-control').val('');
+
+        });
+
+        $('#EditFormCancel').on('click', function(event) {
+            event.preventDefault();
+            $('.errMsg').text('');
+            $('.form-control').val('');
+
+        });
+
+        $('#AddRoute').on('click', function(event) {
+            // alert("click");
+            event.preventDefault(); // Prevent the form from submitting normally
+
+            var from = $('#from').val().trim();
+            var to = $('#to').val().trim();
+            var price = $('#price').val().trim();
+
+            var isValid = AddRouteValidation(from, to, price)
+            if (isValid == true) {
+                //alert(isValid);
+                AddRoute(from, to, price);
+            } else {
+                console.log("Check Your Inputs");
+            }
+
+        });
+
+        // click in Update Route button 
+        $('#UpdateRoute').on('click', function() {
+            // alert("click");
+            event.preventDefault();
+
+            var routeID = $('#EditFormRouteID').text();
+            var U_price = $('#U_price').val().trim();
+
+            var isValid = UpdateRouteValidation(U_price);
+            if (isValid == true) {
+                console.log(routeID);
+                EditRoute(routeID, U_price);
+            } else {
+                console.log("Check Your Details");
+            }
+        });
+
+        $('#confirmDelete').on('click', function(event) {
+            var routeID = $(this).data('routeid');
+            var status = 0;
+            ChangeStatus(routeID, status);
+            $('#Delete').modal('hide');
+        })
+
+        // click in confirm Active button
+        $('#confirmActive').on('click', function() {
+            var routeID = $(this).data('routeid');
+            var status = 1;
+            ChangeStatus(routeID, status);
+            $('#ActiveModel').modal('hide');
+        });
+
+        //Add Route Validation Function
+        function AddRouteValidation(from, to, price) {
+            // Clear previous error messages
+            $('.errMsg').text('');
+            var isValid = true;
+            try {
                 //Simple validation
                 if (from === '') {
                     $('#from_err').text('Required');
                     isValid = false;
-                    return;
+
                 }
                 if (to === '') {
                     $('#to_err').text('Required');
                     isValid = false;
-                    return;
+
                 }
                 if (price == '') {
                     $('#price_err').text('Enter Ticket Price');
                     isValid = false;
-                    return;
-                }
 
-                if (isValid == true) {
-                    alert(isValid);
-                }
+                } else if (price <= 0) {
+                    $('#price_err').text('Enter Valide Ticket Price');
+                    isValid = false;
 
+                }
+            } catch (err) {
+                alert("Somthing Went Wrong........\n" + err);
+            } finally {
+                return isValid;
+            }
+
+        }
+
+        //Add Route Validation Function
+        function UpdateRouteValidation(U_price) {
+            $('.errMsg').text('');
+            var isValid = true;
+            try {
+                if (U_price == '') {
+                    $('#U_price_err').text('Enter Ticket Price');
+                    isValid = false;
+
+                } else if (U_price <= 0) {
+                    $('#U_price_err').text('Enter Valide Ticket Price');
+                    isValid = false;
+
+                }
+            } catch (err) {
+                alert("Somthing Went Wrong........\n" + err);
+            } finally {
+                return isValid;
+            }
+
+        }
+
+        //Add Route Data
+        function AddRoute(from, to, price) {
+            $.ajax({
+                type: "POST",
+                url: "http://localhost/testweb/GitHub/EzBus-Expressway-Online-Sheat-Booking-Web/process.php",
+                data: {
+                    action: 'addRoute',
+                    'From': from,
+                    'To': to,
+                    'Price': price,
+                },
+                dataType: 'json',
+                success: function(response) {
+                    console.log("Data sent:\n", response);
+                    // console.log("response.success:\n", response.success);
+
+                    if (response.success) {
+                        $('#AddRouteModal').modal('hide');
+                        //Clear Form
+                        $('.form-control').val('');
+                        GetRouteData($('#activeStatus').val().trim());
+                        showToast('Success', response.message, 'success');
+                    } else {
+                        showToast('Error', response.message, 'error');
+                        if (response.message === "Route already exists.") {
+                            $('#route_err').text('Route already exists');
+                        }
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error adding Route: " + status + " - " + error);
+                    showToast('Error', "An error occurred: " + status + " - " + error, 'error');
+                }
+            });
+        }
+
+        function ChangeStatus(routeID, status) {
+            //alert("Delete " + RouteID);
+            $.ajax({
+                type: "POST",
+                url: "http://localhost/testweb/GitHub/EzBus-Expressway-Online-Sheat-Booking-Web/process.php",
+                data: {
+                    action: 'ChangeStatusRoute',
+                    'RouteID': routeID,
+                    'Status': status,
+                },
+                dataType: 'json',
+                success: function(response) {
+                    console.log("ID sent:\n Response : ", response);
+                    if (response.success) {
+                        //alert("Route delete successfully");
+                        GetRouteData($('#activeStatus').val().trim()); // Refresh the Route list
+                        showToast('Success', response.message, 'success');
+                    } else {
+                        if ($status == 0) {
+                            showToast('Error', response.message || "Failed to Deactivate Route", 'error');
+                        } else {
+                            showToast('Error', response.message || "Failed to Activate Route", 'error');
+                        }
+
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error Deactivate Route: " + status + " - " + error);
+                    showToast('Error', "An error occurred: " + status + " - " + error, 'error');
+                }
             });
 
+        }
 
-            $('#AddSchedule').on('click', function(event) {
-                // alert("click");
-                event.preventDefault(); // Prevent the form from submitting normally
-                // Clear previous error messages
-                clearErr();
+        function GetRouteData(type) {
+            $('.RouteData').empty();
+            $.ajax({
+                type: "GET",
+                url: "http://localhost/testweb/GitHub/EzBus-Expressway-Online-Sheat-Booking-Web/process.php",
+                data: {
+                    action: 'getRouteData',
+                    'Type': type,
+                },
+                dataType: 'json',
+                success: function(response) {
+                    console.log("Data received:\n", response);
+                    if (response.message) {
+                        $('.RouteData').append('<tr><td colspan="6" class="text-center fw-bold ">' + response.message + '</td></tr>');
+                    } else {
+                        $.each(response, function(key, route) {
+                            // console.log(Route['RouteID']);
 
-                var isValid = true;
+                            let row = '<tr data-routeid="' + route['RouteID'] + '" data-from="' + route['FromCity'] + '" data-to="' + route['ToCity'] + '" data-price="' + route['Price'] + '">' +
+                                '<th scope="row">' + route['RouteID'] + '</th>' +
+                                '<td>' + route['FromCity'] + '</td>' +
+                                '<td>' + route['ToCity'] + '</td>' +
+                                '<td>' + route['Price'] + '</td>';
 
-                var date = $('#date').val().trim();
-                var time = $('#time').val().trim();
+                            if (route['status'] == 1) {
+                                row += '<td class="ms-auto d-flex gap-2">' +
+                                    '<a href="#" class="edit-btn"  ><i class="bi bi-pencil-square btn btn-sm btn-outline-success pt-0 pb-0" data-bs-toggle="tooltip" data-bs-placement="top" title="View & Edit"></i></a>' +
+                                    '<a href="#" class="delete-btn"><i class="bi bi-trash btn btn-sm btn-outline-danger pt-0 pb-0" data-bs-toggle="tooltip" data-bs-placement="top" title="Deactive this User"></i></a>' +
+                                    '</td>';
+                            }
+                            if (route['status'] == 0) {
+                                row += '<td class="ms-auto d-flex gap-2">' +
+                                    '<a href="#" class="active-btn btn btn-sm btn-outline-success pt-0 pb-0 g-2"><i class="bi bi-check2-square" data-bs-toggle="tooltip" data-bs-placement="top" title="Active this User">Active</i></a>' +
+                                    '</td>';
+                            }
+                            // Close the table row
+                            row += '</tr>';
 
-                //Simple validation
-                if (date === '') {
-                    $('#date_err').text('Date is Required');
-                    isValid = false;
-                    return;
+                            $('.RouteData').append(row);
+
+                        });
+
+                        // Attach click event handler to Edit buttons
+                        $('.edit-btn').on('click', function(e) {
+                            e.preventDefault();
+                            var $row = $(this).closest('tr');
+
+                            var routeID = $row.data('routeid');
+                            var from = $row.data('from');
+                            var to = $row.data('to');
+                            var price = $row.data('price');
+
+                            // console.log(routeID ,from,to,price);
+
+                            $('#EditRouteModal').modal('show');
+                            // Update modal content and show the modal
+                            $('#EditFormRouteID').text(routeID);
+                            $('#U_from').val(from);
+                            $('#U_to').val(to);
+                            $('#U_price').val(price);
+
+                        });
+
+                        // Attach click event handler to delete buttons
+                        $('.delete-btn').on('click', function(e) {
+                            e.preventDefault();
+                            var $row = $(this).closest('tr');
+
+                            var routeID = $row.data('routeid');
+                            var from = $row.data('from');
+                            var to = $row.data('to');
+
+                            // Delete modal content and show the modal
+                            $('#RouteID').text('\tID    : ' + routeID);
+                            $('#From').text('\tFrom  : ' + from);
+                            $('#To').text('\tTo  : ' + to);
+
+                            $('#confirmDelete').data('routeid', routeID);
+                            $('#Delete').modal('show');
+
+
+                        });
+
+                        $('.active-btn').on('click', function(e) {
+                            e.preventDefault();
+                            var $row = $(this).closest('tr');
+
+                            var routeID = $row.data('routeid');
+                            var from = $row.data('from');
+                            var to = $row.data('to');
+
+                            // Update modal content and show the modal
+                            $('#ActiveRouteID').text('\tID    : ' + RouteID);
+                            $('#ActiveFrom').text('\tFrom  : ' + from);
+                            $('#ActiveTo').text('\tTo  : ' + to);
+
+                            $('#confirmActive').data('routeid', routeID);
+                            $('#ActiveModel').modal('show');
+                        });
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error fetching route data: " + status + " - " + error);
+                    console.log(xhr.responseText);
                 }
-                if (time === '') {
-                    $('#time_err').text('Time is Required');
-                    isValid = false;
-                    return;
-                }
-
-
-                if (isValid == true) {
-                    alert(isValid);
-                }
-
             });
+        }
 
-            $('#DeleteRoute').on('click', function(event) {
-                alert("Delete")
-            })
-        })
+        function Search(type, txtSearch) {
+            $('.RouteData').empty(); //Clear Conductor Data View
+
+            $.ajax({
+                type: "GET",
+                url: "http://localhost/testweb/GitHub/EzBus-Expressway-Online-Sheat-Booking-Web/process.php",
+                data: {
+                    action: 'SearchRoute',
+                    'Type': type,
+                    'txtSearch': txtSearch,
+                },
+                dataType: 'json',
+                success: function(response) {
+                    console.log("Data received:\n", response);
+                    if (response.message) {
+                        $('.RouteData').append('<tr><td colspan="6" class="text-center fw-bold ">' + response.message + '</td></tr>');
+                    } else {
+                        $.each(response, function(key, route) {
+                            // console.log(Route['RouteID']);
+
+                            let row = '<tr data-routeid="' + route['RouteID'] + '" data-from="' + route['FromCity'] + '" data-to="' + route['ToCity'] + '" data-price="' + route['Price'] + '">' +
+                                '<th scope="row">' + route['RouteID'] + '</th>' +
+                                '<td>' + route['FromCity'] + '</td>' +
+                                '<td>' + route['ToCity'] + '</td>' +
+                                '<td>' + route['Price'] + '</td>';
+
+                            if (route['status'] == 1) {
+                                row += '<td class="ms-auto d-flex gap-2">' +
+                                    '<a href="#" class="edit-btn"  ><i class="bi bi-pencil-square btn btn-sm btn-outline-success pt-0 pb-0" data-bs-toggle="tooltip" data-bs-placement="top" title="View & Edit"></i></a>' +
+                                    '<a href="#" class="delete-btn"><i class="bi bi-trash btn btn-sm btn-outline-danger pt-0 pb-0" data-bs-toggle="tooltip" data-bs-placement="top" title="Deactive this User"></i></a>' +
+                                    '</td>';
+                            }
+                            if (route['status'] == 0) {
+                                row += '<td class="ms-auto d-flex gap-2">' +
+                                    '<a href="#" class="active-btn btn btn-sm btn-outline-success pt-0 pb-0 g-2"><i class="bi bi-check2-square" data-bs-toggle="tooltip" data-bs-placement="top" title="Active this User">Active</i></a>' +
+                                    '</td>';
+                            }
+                            // Close the table row
+                            row += '</tr>';
+
+                            $('.RouteData').append(row);
+
+                        });
+
+                        // Attach click event handler to Edit buttons
+                        $('.edit-btn').on('click', function(e) {
+                            e.preventDefault();
+                            var $row = $(this).closest('tr');
+
+                            var routeID = $row.data('routeid');
+                            var from = $row.data('from');
+                            var to = $row.data('to');
+                            var price = $row.data('price');
+
+                            // console.log(routeID ,from,to,price);
+
+                            $('#EditRouteModal').modal('show');
+                            // Update modal content and show the modal
+                            $('#EditFormRouteID').text(routeID);
+                            $('#U_from').val(from);
+                            $('#U_to').val(to);
+                            $('#U_price').val(price);
+
+                        });
+
+                        // Attach click event handler to delete buttons
+                        $('.delete-btn').on('click', function(e) {
+                            e.preventDefault();
+                            var $row = $(this).closest('tr');
+
+                            var routeID = $row.data('routeid');
+                            var from = $row.data('from');
+                            var to = $row.data('to');
+
+                            // Delete modal content and show the modal
+                            $('#RouteID').text('\tID    : ' + routeID);
+                            $('#From').text('\tFrom  : ' + from);
+                            $('#To').text('\tTo  : ' + to);
+
+                            $('#confirmDelete').data('routeid', routeID);
+                            $('#Delete').modal('show');
+
+
+                        });
+
+                        $('.active-btn').on('click', function(e) {
+                            e.preventDefault();
+                            var $row = $(this).closest('tr');
+
+                            var routeID = $row.data('routeid');
+                            var from = $row.data('from');
+                            var to = $row.data('to');
+
+                            // Update modal content and show the modal
+                            $('#ActiveRouteID').text('\tID    : ' + RouteID);
+                            $('#ActiveFrom').text('\tFrom  : ' + from);
+                            $('#ActiveTo').text('\tTo  : ' + to);
+
+                            $('#confirmActive').data('routeid', routeID);
+                            $('#ActiveModel').modal('show');
+                        });
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error fetching route data: " + status + " - " + error);
+                }
+            });
+        }
+
+        // Fetch the new Route ID
+        function SetRouteID() {
+
+            $.ajax({
+                type: "GET",
+                url: "http://localhost/testweb/GitHub/EzBus-Expressway-Online-Sheat-Booking-Web/process.php",
+                data: {
+                    action: 'getNextRouteID'
+                },
+                dataType: 'json',
+                success: function(response) {
+                    console.log(response.newRouteID);
+                    if (response.success) {
+                        // Update the Route ID in the modal
+                        $('#ShowRouteID').text(response.newRouteID);
+                    } else {
+                        showToast('Error', response.message || "Failed to fetch new Route ID", 'error');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error fetching new Route ID: " + status + " - " + error);
+                    showToast('Error', "An error occurred: " + status + " - " + error, 'error');
+                }
+            });
+        }
+
+        // Function to show Bootstrap toast
+        function showToast(title, message, type) {
+            const borderClass = type === 'success' ? 'toast-success' : 'toast-error';
+            const headerClass = type === 'success' ? 'toast-header-success' : 'toast-header-error';
+            const time = new Date().toLocaleTimeString();
+            const toastHTML = `
+                <div class="toast ${borderClass}" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-header ${headerClass}">
+                        <img src="..." class="rounded me-2" alt="...">
+                        <strong class="me-auto">${title}</strong>
+                        <small class="text-muted">${time}</small>
+                        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                    <div class="toast-body">
+                        ${message}
+                    </div>
+                </div>
+            `;
+
+            const toastContainer = $('#toastContainer');
+            toastContainer.append(toastHTML);
+            const newToast = toastContainer.find('.toast').last();
+            new bootstrap.Toast(newToast).show();
+
+            // Initialize and show the toast with a 5-second display time
+            new bootstrap.Toast(newToast, {
+                delay: 5000
+            }).show();
+        }
+
+        function EditRoute(routeID, U_price) {
+            $.ajax({
+                type: "POST",
+                url: "http://localhost/testweb/GitHub/EzBus-Expressway-Online-Sheat-Booking-Web/process.php",
+                data: {
+                    action: 'updateRoute',
+                    'RouteID': routeID,
+                    'Price': U_price,
+                },
+                dataType: 'json', // Expect JSON response from the server
+                success: function(response) {
+                    console.log("Data sent:\n", response);
+
+                    if (response.success) {
+                        //alert("Route Update successfully");
+
+                        $('#EditRouteModal').modal('hide');
+                        GetRouteData($('#activeStatus').val().trim()); // Refresh the Route list
+                        showToast('Success', response.message, 'success');
+                    } else {
+                        showToast('Error', response.message || "Failed to Update Route", 'error');
+                        if (response.message === "Route already exists.") {
+                            $('#U_route_err').text('Route already exists');
+                        }
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error Updateing Route: " + status + " - " + error);
+                    showToast('Error', "An error occurred: " + status + " - " + error, 'error');
+                }
+            });
+        }
     </script>
 </body>
 

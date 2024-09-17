@@ -92,7 +92,7 @@
 
         /* Main */
         main {
-            padding: 24px 20px 20px 20px;
+            padding: 5px 20px 20px 20px;
             width: 100%;
         }
 
@@ -155,7 +155,7 @@
             </select>
         </div>
     </div>
-    <div class="mt-5">
+    <div class="mt-3">
         <table class="table table-hover table-striped " border="1.5" id="ConductorViewTable">
             <thead>
                 <tr class="table-success ">
@@ -239,7 +239,7 @@
     </div>
 
     <!-- Edit Conductor Form -->
-    <div class="modal fade" id="EditConductorModal" tabindex="-1" aria-labelledby="EditConductorModalLabel" aria-hidden="true">
+    <div class="modal fade" id="EditConductorModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="EditConductorModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <form action="" method="post" style="width: 100%; min-width: 300px;">

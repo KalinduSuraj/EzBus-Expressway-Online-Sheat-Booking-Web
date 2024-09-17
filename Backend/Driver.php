@@ -87,7 +87,7 @@ class Driver
         }
     }
 
-    public function Update(string $DriverID,string $U_name, string $U_nic, string $U_contact)
+    public function Update(string $DriverID, string $U_name, string $U_nic, string $U_contact)
     {
         $con = $this->db->getConnection();
         try {
@@ -104,27 +104,38 @@ class Driver
             $oldNIC = $row1['NIC'];
             $oldContact = $row1['Contact'];
 
-            if($oldName !== $U_name){
-                $stmt4 = $con->prepare("UPDATE driver SET Name = ? WHERE DriverID = ?");
-                $stmt4->bind_param("ss", $U_name, $DriverID);
-                if (!$stmt4->execute()) {
+            if ($oldName !== $U_name) {
+                $stmt1 = $con->prepare("UPDATE driver SET Name = ? WHERE DriverID = ?");
+                $stmt1->bind_param("ss", $U_name, $DriverID);
+                if (!$stmt1->execute()) {
                     throw new Exception("Failed to update Name for user: $DriverID");
                 }
             }
 
-            if($oldNIC !== $U_nic){
-                $stmt4 = $con->prepare("UPDATE driver SET NIC = ? WHERE DriverID = ?");
-                $stmt4->bind_param("ss", $U_nic, $DriverID);
-                if (!$stmt4->execute()) {
-                    throw new Exception("Failed to update Name for user: $DriverID");
+
+
+            if ($oldNIC !== $U_nic) {
+                $checkEmailQuery = "SELECT NIC FROM driver WHERE NIC = ?";
+                $stmtEmail = $con->prepare($checkEmailQuery);
+                $stmtEmail->bind_param("s", $U_nic);
+                $stmtEmail->execute();
+                $resultEmail = $stmtEmail->get_result();
+
+                if ($resultEmail->num_rows > 0) {
+                    throw new Exception("NIC already exists");
+                }
+                $stmt3 = $con->prepare("UPDATE driver SET NIC = ? WHERE DriverID = ?");
+                $stmt3->bind_param("ss", $U_nic, $DriverID);
+                if (!$stmt3->execute()) {
+                    throw new Exception("Failed to update NIC for user: $DriverID");
                 }
             }
 
-            if($oldContact !== $U_contact){
+            if ($oldContact !== $U_contact) {
                 $stmt4 = $con->prepare("UPDATE driver SET Contact = ? WHERE DriverID = ?");
                 $stmt4->bind_param("ss", $U_contact, $DriverID);
                 if (!$stmt4->execute()) {
-                    throw new Exception("Failed to update Name for user: $DriverID");
+                    throw new Exception("Failed to update Contact for user: $DriverID");
                 }
             }
 
@@ -196,14 +207,14 @@ class Driver
 
     public function Search(string $type, string $txtSearch)
     {
-        
+
         $conn = $this->db->getConnection();
         try {
-            $query = "SELECT * FROM driver WHERE status = ?  AND (Name LIKE ? OR NIC LIKE ? ) ORDER BY DriverID ASC";
+            $query = "SELECT * FROM driver WHERE status = ?  AND (DriverID LIKE ? OR Name LIKE ? OR NIC LIKE ? ) ORDER BY DriverID ASC";
 
             $stmt = $conn->prepare($query);
             $searchTerm = '%' . $txtSearch . '%';
-            $stmt->bind_param("sss", $type, $searchTerm, $searchTerm);
+            $stmt->bind_param("ssss", $type, $searchTerm,$searchTerm, $searchTerm);
             $stmt->execute();
 
             $result = $stmt->get_result();
@@ -226,5 +237,4 @@ class Driver
             echo json_encode(['success' => false, 'message' => $e->getMessage()]);
         }
     }
-
 }
