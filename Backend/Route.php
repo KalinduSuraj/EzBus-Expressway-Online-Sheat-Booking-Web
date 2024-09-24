@@ -10,7 +10,7 @@ class Route{
         $this->db->connect();
     }
 
-    public function AddRoute(string $From, string $To,string $Price){
+    public function AddRoute(string $From, string $To,string $Price,string $AdminID){
         $con = $this->db->getConnection();
         try {
             mysqli_begin_transaction($con);
@@ -33,8 +33,8 @@ class Route{
             // Insert queries
             $query1 = "INSERT INTO route(RouteID, FromCity,ToCity,Price,AdminID) VALUES(?,?,?,?,?)";
             $stmt = $con->prepare($query1);
-            $LogedUserID = "A001";
-            $stmt->bind_param("sssds", $routeID, $From, $To, $Price, $LogedUserID);
+            
+            $stmt->bind_param("sssds", $routeID, $From, $To, $Price, $AdminID);
             if (!$stmt->execute()) {
                 throw new Exception("Failed to insert into Driver: " . $stmt->error);
             }

@@ -1,3 +1,15 @@
+<?php
+session_start(); // Start the session
+
+// Check if the user is logged in and is a Conductor
+if (isset($_SESSION['logedUser'])&& $_SESSION['logedUser']['UserType']==="Admin") {
+    $userID = $_SESSION['logedUser']['AdminID'];
+    $name =$_SESSION['logedUser']['Name'];
+} else {
+    header("Location: ../index.html");
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -552,6 +564,7 @@
                     'Email': email,
                     'Contact': contact,
                     'Password': password,
+                    'AdminID':"<?php echo $userID; ?>",
                 },
                 dataType: 'json',
                 success: function(response) {

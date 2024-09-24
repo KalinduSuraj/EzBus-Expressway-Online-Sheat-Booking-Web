@@ -1,3 +1,15 @@
+<?php
+session_start(); // Start the session
+
+// Check if the user is logged in and is a Conductor
+if (isset($_SESSION['logedUser'])&& $_SESSION['logedUser']['UserType']==="Admin") {
+    $userID = $_SESSION['logedUser']['ID'];
+    $name =$_SESSION['logedUser']['Name'];
+} else {
+    header("Location: ../index.html");
+    exit();
+}
+?>
 
 <style>
     h1 {

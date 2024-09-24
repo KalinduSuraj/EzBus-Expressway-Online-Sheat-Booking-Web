@@ -48,7 +48,7 @@ class Driver
     }
 
     //Add Driver
-    public function AddDriver(string $name, string $nic, string $contact)
+    public function AddDriver(string $name, string $nic, string $contact, string $AdminID)
     {
         $con = $this->db->getConnection();
         try {
@@ -72,8 +72,8 @@ class Driver
             // Insert queries
             $query1 = "INSERT INTO driver(DriverID, Name,Contact,NIC,AdminID) VALUES(?,?,?,?,?)";
             $stmt = $con->prepare($query1);
-            $LogedUserID = "A001";
-            $stmt->bind_param("sssss", $driverID, $name, $contact, $nic, $LogedUserID);
+           
+            $stmt->bind_param("sssss", $driverID, $name, $contact, $nic, $AdminID);
             if (!$stmt->execute()) {
                 throw new Exception("Failed to insert into Driver: " . $stmt->error);
             }

@@ -1,3 +1,16 @@
+<?php
+session_start(); // Start the session
+
+// Check if the user is logged in and is a Conductor
+if (isset($_SESSION['logedUser'])&& $_SESSION['logedUser']['UserType']==="Admin") {
+    $userID = $_SESSION['logedUser']['AdminID'];
+    $name =$_SESSION['logedUser']['Name'];
+} else {
+    header("Location: ../index.html");
+    exit();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -332,7 +345,7 @@
             <!-- Bookings -->
             <li><a href="#" id="Booking" data-url="AdminPanel/AdminBookingPanel.php"><i class="bi bi-file-earmark-text icon"></i>Bookings</a></li>
             <!-- Reports -->
-            <li><a href="#" id="Report" data-url="AdminPanel/AdminReportPanel.php"><i class="bi bi-file-earmark-text icon"></i>Reports</a></li>
+            <!-- <li><a href="#" id="Report" data-url="AdminPanel/AdminReportPanel.php"><i class="bi bi-file-earmark-text icon"></i>Reports</a></li> -->
             <!-- <li>
                 <a href="#ReportsMenu" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                     <i class="bi bi-file-earmark-text icon"></i>Reports
@@ -352,9 +365,10 @@
     <section id="content">
         <!-- Navbar Start-->
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <div class="container-fluid">
+            <div class="container-fluid gap-5">
                 <!-- Toggle Sidebar Button -->
                 <i class="bi bi-list toggle-sidebar"></i>
+                <span class="text-muted"><b># <span><?php echo $userID; ?></span></b></span>
 
 
                 <!-- Navbar Items Aligned to the Right -->
@@ -363,14 +377,14 @@
                     <!-- Show Name -->
                     <div class="text-muted pt-2 text-capitalize d-flex">
                         <h6>Hi, </h6>
-                        <h6 id="ShowUserName">Kalindu Suraj</h6>
+                        <h6 id="ShowUserName"><?php echo $name; ?></h6>
                     </div>
                     <!-- Divider -->
                     <span class="divider"></span>
 
                     <!-- Bell Icon with Badge -->
                     <a href="#" class="nav-link" data-bs-toggle="offcanvas" data-bs-target="#Notification" aria-controls="Notification" id="notificationView">
-                        <i class='bx bxs-bell bx-tada-hover icon'></i>
+                        <!-- <i class='bx bxs-bell bx-tada-hover icon'></i> -->
                         <!-- <span class="badge"></span> -->
                     </a>
 
@@ -383,7 +397,7 @@
                             <img src="src/profile.png" alt="Profile">
                         </a>
                         <ul class="collapse list-unstyled profile-link" id="ProfileMenu">
-                            <li><a href="#" id="Profile" data-url="AdminPanel/AdminProfilePanel.php"><i class="bi bi-person-circle icon"></i>Profile</a></li>
+                            <!-- <li><a href="#" id="Profile" data-url="AdminPanel/AdminProfilePanel.php"><i class="bi bi-person-circle icon"></i>Profile</a></li> -->
                             <li><a href="#" id="logout" onclick="confirmLogout()"><i class='bx bx-log-out bx-fade-left icon'></i>Log out</a></li>
                         </ul>
                     </div>
@@ -398,16 +412,27 @@
 
             </section>
         </main>
+        <!-- Main Close -->
     </section>
 
-    <!-- Notification Offcanvas -->
-    <div class="offcanvas offcanvas-end" tabindex="-1" id="Notification" aria-labelledby="NotificationLabel">
-        <div class="offcanvas-header">
-            <h5 id="NotificationLabel">Notification</h5>
-            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div class="offcanvas-body">
 
+
+    <!-- Logout Confirmation Modal -->
+    <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="logoutModalLabel">Confirm Logout</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to log out?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="confirmLogoutButton">Logout</button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -538,9 +563,38 @@
         });
 
         function confirmLogout() {
-            if (confirm('Are you sure you want to log out?')) {
-                window.location.href = 'index.php';
-            }
+            // Show the logout confirmation modal
+            $('#logoutModal').modal('show');
+
+            // Add event listener for the logout confirmation button
+            $('#confirmLogoutButton').off('click').on('click', function() {
+                // Send an AJAX request to perform the logout action
+                $.ajax({
+                    type: 'POST',
+                    url: 'http://localhost/testweb/GitHub/EzBus-Expressway-Online-Sheat-Booking-Web/process.php', // Your server-side logout handling file
+                    data: {
+                        action: 'logout'
+                    },
+                    dataType: 'json', // Expect JSON response
+                    success: function(response) {
+                        if (response.success) {
+                            $('#logoutModal').modal('hide');
+                            console.log( response.message);
+                            // Uncomment the following line to redirect to login page after successful logout
+                            window.location.href = 'EzBusLogin.php';
+                        } else {
+                            console.error(response.message);
+                        }
+                    },
+                    error: function() {
+                        // Handle any errors
+                        console.error('Logout failed.');
+                    }
+                });
+            });
+
+
+
         }
     </script>
 

@@ -4,7 +4,7 @@ require_once __DIR__ . "/User.php";
 class Admin extends User
 {
 
-    public function register(string $name, string $password, string $contact, string $email)
+    public function register(string $name, string $password, string $contact, string $email,string $creator)
     {
         $conn = $this->db->getConnection();
         try {
@@ -23,7 +23,7 @@ class Admin extends User
             }
 
             // Check if email already exists
-            $checkEmailQuery = "SELECT Email FROM user_account WHERE Email = ?";
+            $checkEmailQuery = "SELECT Email FROM user_account WHERE Email = ? AND UserType='Admin'";
             $stmtEmail = $conn->prepare($checkEmailQuery);
             $stmtEmail->bind_param("s", $email);
             $stmtEmail->execute();
@@ -44,17 +44,17 @@ class Admin extends User
             }
 
             // Insert into admin
-            $insertAdminQuery = "INSERT INTO admin(AdminID, UserID, Creator) VALUES (?, ?, ?)"; 
+            $insertAdminQuery = "INSERT INTO admin(AdminID, UserID, Creator) VALUES (?, ?, ?)";
             $stmtAdmin = $conn->prepare($insertAdminQuery);
-            $LogedUserID = "A001";
-            $stmtAdmin->bind_param("sss", $adminID, $userID,$LogedUserID);
+            
+            $stmtAdmin->bind_param("sss", $adminID, $userID, $creator);
             if (!$stmtAdmin->execute()) {
                 throw new Exception("Failed to insert into admin: " . $stmtAdmin->error);
             }
 
-            
+
             mysqli_commit($conn);
-            return true;
+            return $adminID;
         } catch (Exception $e) {
             mysqli_rollback($conn);
             echo json_encode(['success' => false, 'message' => $e->getMessage()]);
@@ -211,8 +211,8 @@ class Admin extends User
                 throw new Exception("Database query failed: " . mysqli_error($conn));
             }
 
-            $row = mysqli_fetch_assoc($result);
-            $lastID = $row ? $row['AdminID'] : null;
+            // $row = mysqli_fetch_assoc($result);
+            $lastID = mysqli_fetch_assoc($result)['AdminID'];
 
             if ($lastID) {
                 // Ensure the prefix is correctly ignored
@@ -284,5 +284,57 @@ class Admin extends User
             echo json_encode(['success' => false, 'message' => $e->getMessage()]);
         }
     }
-    
+
+    public function ChangePW(string $ID, string $Password)
+    {
+        $conn = $this->db->getConnection();
+        try {
+            // Begin transaction
+            mysqli_begin_transaction($conn);
+
+            // Check AdminID exists
+            $stmt = $conn->prepare("SELECT UserID FROM admin WHERE AdminID = ?");
+            $stmt->bind_param("s", $ID);
+            $stmt->execute();
+            $res = $stmt->get_result();
+
+            if (!$res) {
+                throw new Exception("Database query failed: " . mysqli_error($conn));
+            }
+
+            if ($res->num_rows == 0) {
+                throw new Exception("AdminID does not exist.");
+            }
+
+            // Get the UserID
+            $row = mysqli_fetch_assoc($res);
+            $userID = $row['UserID'];
+
+            // Update password in user_account table
+            $stmt2 = $conn->prepare("UPDATE user_account SET Password = ? WHERE UserID = ?");
+            $stmt2->bind_param("ss", $Password, $userID);
+            $res2 = $stmt2->execute();
+
+            if (!$res2) {
+                throw new Exception("Failed to update password: " . mysqli_error($conn));
+            }
+
+            $stmt3 = $conn->prepare("UPDATE admin SET PasswordStatus = '0' WHERE AdminID = ?");
+            $stmt3->bind_param("s", $ID);
+            $res3 = $stmt3->execute();
+
+            if (!$res3) {
+                throw new Exception("Failed to update password: " . mysqli_error($conn));
+            }
+
+            mysqli_commit($conn);
+            return true;
+        } catch (Exception $e) {
+            mysqli_rollback($conn);  // Rollback transaction in case of failure
+            error_log($e->getMessage());
+            return false;
+        } finally {
+            $this->db->disconnect();
+        }
+    }
 }

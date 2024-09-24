@@ -1,3 +1,13 @@
+<?php
+session_start(); // Start the session
+
+// Check if the user is logged in and is a Conductor
+if (isset($_SESSION['logedUser']) && ($_SESSION['logedUser']['UserType'] === "Admin") ||  $_SESSION['logedUser']['UserType'] === "Counter") {
+} else {
+    header("Location: ../index.html");
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -169,7 +179,7 @@
         <table class="table table-hover table-striped " border="1.5" id="BookingViewTable">
             <thead>
                 <tr class="table-success ">
-                    <th scope="col">Booking ID</th>
+                    <th scope="col">#</th>
                     <th scope="col">Booked Time</th>
                     <th scope="col">Name</th>
                     <th scope="col">Contact</th>
@@ -177,8 +187,10 @@
                     <th scope="col">Date</th>
                     <th scope="col">Time</th>
                     <th scope="col">Bus No:</th>
+                    <th scope="col">Seat No:</th>
                     <th scope="col">Allocator</th>
                     <th scope="col">Status</th>
+                    <th scope="col"></th>
                 </tr>
             </thead>
             <tbody class="BookingData">
@@ -189,6 +201,11 @@
 
             </tbody>
         </table>
+    </div>
+
+    <!-- Toast container -->
+    <div id="toastContainer" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+        <!-- Toasts will be appended here -->
     </div>
 
     <script>
@@ -224,11 +241,11 @@
                     console.log("Data sent:\n", response);
                     if (response.message) {
 
-                        $('.BookingData').append('<tr><td colspan="9" class="text-center fw-bold ">' + response.message + '</td></tr>');
+                        $('.BookingData').append('<tr><td colspan="10" class="text-center fw-bold ">' + response.message + '</td></tr>');
                     } else {
                         $.each(response, function(key, booking) {
                             // Start building the table row
-                            let row = '<tr >' +
+                            let row = '<tr data-bookingid="' + booking['BookingID'] + '" >' +
                                 '<th scope="row">' + booking['BookingID'] + '</th>' +
                                 '<td>' + booking['BookedTime'] + '</td>' +
                                 '<td>' + booking['Name'] + '</td>' +
@@ -236,7 +253,8 @@
                                 '<td>' + booking['FromCity'] + '-' + booking['ToCity'] + '</td>' +
                                 '<td>' + booking['Date'] + '</td>' +
                                 '<td>' + booking['Formatted_time'] + '</td>' +
-                                '<td>' + booking['BusNumber'] + '</td>';
+                                '<td>' + booking['BusNumber'] + '</td>' +
+                                '<td>' + booking['SeatNo'] + '</td>';
 
                             if (booking['PassengerID'] !== null) {
                                 row += '<td>' + booking['PassengerID'] + '</td>';
@@ -246,11 +264,19 @@
                             // row += '<td>' + booking['BookingStatus'] + '</td>';
 
                             if (booking['BookingStatus'] === "Booked") {
-                                row += '<td><span class="badge rounded-pill text-bg-info">Booked</span></td>';
+                                row += '<td><span class="badge rounded-pill text-bg-info"> Booked </span></td>';
                             } else if (booking['BookingStatus'] === "Conform") {
                                 row += '<td><span class="badge rounded-pill text-bg-success text-dark">Conform</span></td>';
                             } else if (booking['BookingStatus'] === "Canceled") {
                                 row += '<td><span class="badge rounded-pill text-bg-danger text-dark">Canceled</span></td>';
+                            }
+
+                            if (booking['BookingStatus'] === "Booked") {
+                                row += '<td class="ms-auto d-flex gap-2">' +
+                                    '<a href="#" class="cancel-btn btn btn-sm btn-outline-danger pt-0 pb-0 g-2"><i class="bi bi-x-square" data-bs-toggle="tooltip" data-bs-placement="top" title="Cancel this Booking"></i></a>' +
+                                    '</td>';
+                            } else {
+                                row += '<td class="ms-auto d-flex gap-2"></td>';
                             }
 
                             row += '</tr>';
@@ -276,6 +302,16 @@
                                 $this.find('i').removeClass('bi-eye-slash').addClass('bi-eye');
                             }
                         });
+                        $('.cancel-btn').on('click', function(e) {
+                            e.preventDefault();
+                            var $row = $(this).closest('tr');
+
+                            var bookingID = $row.data('bookingid');
+                            if (cancelBooking(bookingID)) {
+                                showToast('Success', bookingID + " Is Canceld Sucessful", 'success');
+                            }
+
+                        });
 
                     }
 
@@ -287,39 +323,59 @@
         }
 
         function Search(type, txtSearch) {
-            //alert(type);
-            $('.BookingData').empty(); // Clear Admin Data View
-            const hiddenPassword = '*'.repeat(10);
+            $('.BookingData').empty();
             $.ajax({
                 type: "GET",
                 url: "http://localhost/testweb/GitHub/EzBus-Expressway-Online-Sheat-Booking-Web/process.php",
                 dataType: "json",
                 data: {
-                    action: 'searchPassenger',
+                    action: 'searchBooking',
                     'Type': type,
                     'txtSearch': txtSearch,
                 },
                 success: function(response) {
                     console.log("Data sent:\n", response);
-                    if (response.message) {
-
-                        $('.BookingData').append('<tr><td colspan="6" class="text-center fw-bold ">' + response.message + '</td></tr>');
-                    } else {
-                        $.each(response, function(key, passenger) {
+                    if (response && response.message) {
+                        $('.BookingData').append('<tr><td colspan="10" class="text-center fw-bold ">' + response.message + '</td></tr>');
+                    } else if (response) {
+                        $.each(response, function(key, booking) {
                             // Start building the table row
-                            let row = '<tr >' +
-                                '<th scope="row">' + passenger['PassengerID'] + '</th>' +
-                                '<td>' + passenger['Name'] + '</td>' +
-                                '<td>' + passenger['Email'] + '</td>' +
-                                '<td>' + passenger['Contact'] + '</td>' +
-                                '<td>' +
-                                '<span class="hidden-password">' + hiddenPassword + '</span>' +
-                                '<span class="actual-password d-none">' + passenger['Password'] + '</span>' +
-                                '<a href="#" class="toggle-password ms-2"><i class="bi bi-eye-slash"></i></a>' +
-                                '</td>' +
-                                '</tr>';
+                            let row = '<tr data-bookingid="' + booking['BookingID'] + '" >' +
+                                '<th scope="row">' + booking['BookingID'] + '</th>' +
+                                '<td>' + booking['BookedTime'] + '</td>' +
+                                '<td>' + booking['Name'] + '</td>' +
+                                '<td>' + booking['Contact'] + '</td>' +
+                                '<td>' + booking['FromCity'] + '-' + booking['ToCity'] + '</td>' +
+                                '<td>' + booking['Date'] + '</td>' +
+                                '<td>' + booking['Formatted_time'] + '</td>' +
+                                '<td>' + booking['BusNumber'] + '</td>' +
+                                '<td>' + booking['SeatNo'] + '</td>';
 
-                            // Append the built row to the table
+                            if (booking['PassengerID'] !== null) {
+                                row += '<td>' + booking['PassengerID'] + '</td>';
+                            } else if (booking['CounterID'] !== null) {
+                                row += '<td>' + booking['CounterID'] + '</td>';
+                            }
+                            // row += '<td>' + booking['BookingStatus'] + '</td>';
+
+                            if (booking['BookingStatus'] === "Booked") {
+                                row += '<td><span class="badge rounded-pill text-bg-info"> Booked </span></td>';
+                            } else if (booking['BookingStatus'] === "Conform") {
+                                row += '<td><span class="badge rounded-pill text-bg-success text-dark">Conform</span></td>';
+                            } else if (booking['BookingStatus'] === "Canceled") {
+                                row += '<td><span class="badge rounded-pill text-bg-danger text-dark">Canceled</span></td>';
+                            }
+
+                            if (booking['BookingStatus'] === "Booked") {
+                                row += '<td class="ms-auto d-flex gap-2">' +
+                                    '<a href="#" class="cancel-btn btn btn-sm btn-outline-danger pt-0 pb-0 g-2"><i class="bi bi-x-square" data-bs-toggle="tooltip" data-bs-placement="top" title="Cancel this Booking"></i></a>' +
+                                    '</td>';
+                            } else {
+                                row += '<td class="ms-auto d-flex gap-2"></td>';
+                            }
+
+                            row += '</tr>';
+
                             $('.BookingData').append(row);
                         });
                         // Toggle password visibility
@@ -341,14 +397,58 @@
                                 $this.find('i').removeClass('bi-eye-slash').addClass('bi-eye');
                             }
                         });
+                        $('.cancel-btn').on('click', function(e) {
+                            e.preventDefault();
+                            var $row = $(this).closest('tr');
+
+                            var bookingID = $row.data('bookingid');
+                            if (cancelBooking(bookingID)) {
+                                showToast('Success', bookingID + " Is Canceld Sucessful", 'success');
+                            }
+
+                        });
 
                     }
 
                 },
                 error: function(xhr, status, error) {
-                    console.error("Error fetching passenger data: " + status + " - " + error);
+                    console.error("Error fetching Booking data: " + status + " - " + error);
                 }
             });
+        }
+
+        function cancelBooking(bookingID) {
+            console.log(bookingID + "Canceled");
+            return true;
+        }
+
+        function showToast(title, message, type) {
+            const borderClass = type === 'success' ? 'toast-success' : 'toast-error'; //asing the boder color as msg type
+            const headerClass = type === 'success' ? 'toast-header-success' : 'toast-header-error';
+            const time = new Date().toLocaleTimeString();
+            const toastHTML = `
+                <div class="toast ${borderClass}" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-header ${headerClass}">
+                        <img src="..." class="rounded me-2" alt="...">
+                        <strong class="me-auto">${title}</strong>
+                        <small class="text-muted">${time}</small>
+                        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                    <div class="toast-body">
+                        ${message}
+                    </div>
+                </div>
+            `;
+
+            const toastContainer = $('#toastContainer');
+            toastContainer.append(toastHTML);
+            const newToast = toastContainer.find('.toast').last();
+            new bootstrap.Toast(newToast).show();
+
+            // Initialize and show the toast with a 5-second display time
+            new bootstrap.Toast(newToast, {
+                delay: 10000
+            }).show();
         }
     </script>
 </body>

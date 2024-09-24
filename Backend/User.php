@@ -11,39 +11,127 @@ abstract class User
         $this->db->connect();
     }
 
-    public function login(String $password, String $key)
+    public function login(String $key, String $password, String $Type)
     {
+        $conn = $this->db->getConnection();
         try {
-            $sql = "";
+            $table = ''; // Initialize table variable
+            $UserTypeID='';
+            // Determine whether the login is via Email or Contact
             if (strpos($key, "@")) {
-                $sql = "Select UserType from user_account where Email='$key' and Password='$password'";
+                // For Email login
+                $table = "passengerview";
+                $query = "SELECT * FROM $table WHERE Email = ? AND Password = ? ";
+                $userID = $key;
+            } else if ($Type == "Passenger") {
+                // For Contact login for passengers
+                $table = "passengerview";
+                $query = "SELECT * FROM $table WHERE Contact = ? AND Password = ? ";
+                $userID = $key;
             } else {
-                $sql = "Select UserType from user_account where Contact='$key' and Password='$password'";
-            }
-            $result = mysqli_query($this->db->getConnection(), $sql);
-            if (mysqli_num_rows($result) == 1) {
-                $row = mysqli_fetch_array($result);
-                $userType = $row["UserType"];
-                echo "<script>console.log('Login successful');</script>";
-                //!sessions----------------------------------------
-
-                if ($userType == "Passneger") {
-                    //*Passenger Panel
-
-                } else if ($userType == 'Admin') {
-                    //*Admin Panel
-                } elseif ($userType == "Counter") {
-                    //*Counter Panel
-                } elseif ($userType == "Conductor") {
-                    //*Conductor Panel
+                $UserTypeID=$key;
+                // For Admin, Counter, and Conductor, get UserID first
+                switch ($Type) {
+                    case "Admin":
+                        $table = "adminview";
+                        $getUserIDQuery = "SELECT UserID FROM admin WHERE AdminID = ?";
+                        break;
+                    case "Counter":
+                        $table = "counterview";
+                        $getUserIDQuery = "SELECT UserID FROM counter WHERE CounterID = ?";
+                        break;
+                    case "Conductor":
+                        $table = "conductorview";
+                        $getUserIDQuery = "SELECT UserID FROM conductor WHERE ConductorID = ?";
+                        break;
                 }
+
+                // Get the UserID first
+                $stmt = $conn->prepare($getUserIDQuery);
+                $stmt->bind_param("s", $key);
+                $stmt->execute();
+                $res = $stmt->get_result();
+
+                if (!$res) {
+                    throw new Exception("Database query failed: " . mysqli_error($conn));
+                }
+
+                if ($res->num_rows == 0) {
+                    throw new Exception("ID does not exist.");
+                }
+
+                // Get the UserID
+                $row = mysqli_fetch_assoc($res);
+                $userID = $row['UserID'];
+
+                // Prepare the login query after UserID is fetched
+                $query = "SELECT * FROM $table WHERE UserID = ? AND Password = ? ";
+            }
+
+            // Prepare the main login query
+            $stmt = $conn->prepare($query);
+            $stmt->bind_param("ss", $userID, $password);
+
+            // error_log($query, 3, '/Backend/error.log');
+            if (!$stmt->execute()) {
+                throw new Exception("Failed to execute query: " . $stmt->error);
+            }
+
+            $result = $stmt->get_result();
+
+            if ($result->num_rows == 1) {
+                $user = $result->fetch_assoc();
+                // $user['ID'] = $UserTypeID; // Add ID to the response
+                $user['UserType'] = $Type;
+                return $user; // Return the user details
             } else {
-                echo "<script>console.log('Login Fail');</script>";
+                return false; // Login failed
             }
         } catch (Exception $e) {
-            echo $e;
+            error_log($e->getMessage(), 3, '/Backend/error.log');
+            throw new Exception("An error occurred while logging in.");
         }
     }
+
+
+
+
+    // public function login(String $key, String $password)
+    // {
+    //     $conn = $this->db->getConnection();
+    //     try {
+    //         $res_array = [];
+    //         if (strpos($key, "@")) {
+    //             $query = "Select UserType from user_account where Email= ? and Password= ? ";
+
+    //         } else {
+    //             $query = "Select UserType from user_account where Contact= ? and Password= ? ";
+    //         }
+
+    //         $stmt = $conn->prepare($query);
+    //         $stmt->bind_param("ss", $key, $password);
+
+    //         if (!$stmt->execute()) {
+    //             throw new Exception("Failed to User Login: " . $stmt->error);
+    //         }
+    //         $result = $stmt->get_result();
+    //         $stmt->close();
+    //         if ($result->num_rows == 0) {
+    //             array_push($res_array, $result);
+
+    //             //!sessions----------------------------------------
+    //             header('Content-type: application/json');
+    //             echo json_encode($res_array);
+    //         } else {
+    //             header('Content-type: application/json');
+    //             echo json_encode(['success' => false, 'message' => 'Incorrect User Name or Contact ']);
+    //         }
+    //     } catch (Exception $e) {
+    //         error_log($e->getMessage(), 3, '/Backend/error.log');
+    //         header('Content-type: application/json');
+    //         echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+    //     }
+    // }
     //function register(String $name, String $password, String $contact, String $email){}
 
     public function userIDIncrement()
@@ -72,24 +160,4 @@ abstract class User
             return null;
         }
     }
-    // protected function userIDIncrement(){
-
-    //     try{
-    //         $sql= "Select Max(UserID) from user_account";
-    //         $r = mysqli_query($this->db->getConnection(), $sql);
-    //         if ($row = mysqli_fetch_array($r)) {
-    //             $maxId = $row["UserID"];
-    //             $numericPart = intval(substr($maxId, 1));
-    //             $newNumericPart = $numericPart + 1;
-
-    //             $userID = 'U' . str_pad($newNumericPart, 3, '0', STR_PAD_LEFT);
-    //         } else {
-    //             $userID = 'U001';
-    //         }
-    //         return $userID;
-    //     }catch(Exception $e){
-    //         return null;
-    //     }
-    // }
-
 }
