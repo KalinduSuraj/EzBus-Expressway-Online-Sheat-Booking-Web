@@ -1,0 +1,16 @@
+{
+    "require": {
+        "phpmailer/phpmailer": "^6.9",
+        "google/apiclient": "2.16",
+        "stripe/stripe-php": "^15.10",
+        "endroid/qr-code": "^5.1",
+        "notifylk/notify-php": "*@dev",
+        "khanamiryan/qrcode-detector-decoder": "^2.0"
+    },
+    "repositories": [
+        {
+          "type": "git",
+          "url": "https://github.com/notifylk/notify-php.git"
+        }
+      ]
+}

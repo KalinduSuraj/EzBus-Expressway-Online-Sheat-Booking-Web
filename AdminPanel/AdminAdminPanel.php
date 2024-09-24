@@ -1,3 +1,15 @@
+<?php
+session_start(); // Start the session
+
+// Check if the user is logged in and is a Conductor
+if (isset($_SESSION['logedUser'])&& $_SESSION['logedUser']['UserType']==="Admin") {
+    $userID = $_SESSION['logedUser']['AdminID'];
+    $name =$_SESSION['logedUser']['Name'];
+} else {
+    header("Location: ../index.html");
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -556,6 +568,7 @@
 
         //Add Admin Data
         function AddAdmin(name, email, contact, password) {
+            console.log('<?php echo $userID ?>')
             $.ajax({
                 type: "POST",
                 url: "http://localhost/testweb/GitHub/EzBus-Expressway-Online-Sheat-Booking-Web/process.php",
@@ -565,6 +578,7 @@
                     'Email': email,
                     'Contact': contact,
                     'Password': password,
+                    'AdminID':"<?php echo $userID ?>",
                 },
                 dataType: 'json', // Expect JSON response from the server
                 success: function(response) {

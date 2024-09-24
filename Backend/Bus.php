@@ -47,7 +47,7 @@ class Bus
     }
 
     //Add Bus
-    public function AddBus(string $BusNumber, string $NoOfSeat, string $DriverID, string $ConductorID)
+    public function AddBus(string $BusNumber, string $NoOfSeat, string $DriverID, string $ConductorID,string $AdminID)
     {
         $con = $this->db->getConnection();
         try {
@@ -111,8 +111,7 @@ class Bus
             // Insert queries
             $query1 = "INSERT INTO Bus(BusID, BusNumber,NoOfSeat,DriverID,ConductorID,AdminID) VALUES(?,?,?,?,?,?)";
             $stmt = $con->prepare($query1);
-            $LogedUserID = "A001";
-            $stmt->bind_param("ssssss", $BusID, $BusNumber, $NoOfSeat, $DriverID, $ConductorID, $LogedUserID);
+            $stmt->bind_param("ssssss", $BusID, $BusNumber, $NoOfSeat, $DriverID, $ConductorID, $AdminID);
             if (!$stmt->execute()) {
                 throw new Exception("Failed to insert into Bus: " . $stmt->error);
             }
